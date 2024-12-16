@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://djcm0jgmhfoqw"]
+
+[ext_resource type="Script" path="res://Scenes/Bullet/Bullet.cs" id="1_1kl7w"]
+[ext_resource type="Texture2D" uid="uid://bonlrwqihq7e" path="res://Graphics/Asteroids.png" id="2_6t52a"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2jvkt"]
+atlas = ExtResource("2_6t52a")
+region = Rect2(480, 288, 32, 32)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_jaqsg"]
+radius = 5.09902
+
+[node name="Bullet" type="Area2D"]
+script = ExtResource("1_1kl7w")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("AtlasTexture_2jvkt")
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_jaqsg")
+metadata/_edit_lock_ = true
