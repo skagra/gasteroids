@@ -1,22 +1,18 @@
-[gd_scene load_steps=4 format=3 uid="uid://b1eel53t16o63"]
+[gd_scene load_steps=4 format=3 uid="uid://bib7qcvmmilfn"]
 
 [ext_resource type="Script" path="res://Scenes/Asteroid/Asteroid.cs" id="1_ak4hp"]
-[ext_resource type="Texture2D" uid="uid://c8fpnkolyxtro" path="res://icon.svg" id="1_c42jk"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_apwr3"]
-radius = 74.0
+[sub_resource type="AtlasTexture" id="AtlasTexture_408o0"]
 
-[node name="Asteroid" type="RigidBody2D"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_oivln"]
+atlas = SubResource("AtlasTexture_408o0")
+region = Rect2(418, 158, 98, 74)
+
+[node name="Asteroid" type="Area2D"]
 collision_mask = 2
-gravity_scale = 0.0
-angular_velocity = 0.349066
-angular_damp_mode = 1
 script = ExtResource("1_ak4hp")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_apwr3")
-metadata/_edit_lock_ = true
-
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_c42jk")
-metadata/_edit_lock_ = true
+texture = SubResource("AtlasTexture_oivln")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]

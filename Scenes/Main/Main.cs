@@ -1,13 +1,18 @@
 using Godot;
-using System;
 using System.Collections.Generic;
+
+namespace Asteroids;
 
 public partial class Main : Node
 {
+	private AsteroidField _asteroidField;
+
 	private RigidBody2D _player;
 
-	private readonly PackedScene _asteroidScene = GD.Load<PackedScene>("res://Scenes/Asteroid/Asteroid.tscn");
+	//private readonly PackedScene _asteroidScene = GD.Load<PackedScene>("res://Scenes/Asteroid/Asteroid.tscn");
 	private readonly PackedScene _bulletScene = GD.Load<PackedScene>("res://Scenes/Bullet/Bullet.tscn");
+
+	private readonly AsteroidField _asteroidFieldScene = new();
 
 	private readonly List<Bullet> _dormantBullets = new();
 	private readonly List<ActiveBullet> _activeBullets = new();
@@ -21,17 +26,21 @@ public partial class Main : Node
 	private int _bulletCount = 5;
 	public override void _EnterTree()
 	{
-		// var instance = _asteroidScene.Instantiate<RigidBody2D>();
-		// instance.Position = new Vector2(600, 300);
-		// AddChild(instance);
-
 		// Missiles
 		for (var i = 0; i < _bulletCount; i++)
 		{
 			var dormantBullet = _bulletScene.Instantiate<Bullet>();
+			dormantBullet.Name = $"Bullet #{i + 1}";
 			_dormantBullets.Add(dormantBullet);
-			//AddChild(dormantBullet);
 		}
+	}
+
+	private void OnExploded()
+	{
+		GD.Print("In OnExploded in Main");
+		GetNode<Player>("Player").Deactivate();
+		var vp = GetViewport().GetVisibleRect();
+		GetNode<Player>("Player").Activate(new Vector2(vp.Size.X / 2.0f, vp.Size.Y / 2.0f));
 	}
 
 	private ulong _bulletDurationMs = 1000;
@@ -53,7 +62,7 @@ public partial class Main : Node
 		}
 	}
 
-	private void OnPlayerShoot(Vector2 position, Vector2 shipLinearVelocity, float shipRotation) // lv should be speed instead
+	private void OnPlayerShoot(Vector2 position, Vector2 shipLinearVelocity, float shipRotation)
 	{
 		if (_dormantBullets.Count > 0)
 		{
@@ -71,10 +80,14 @@ public partial class Main : Node
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		GD.Print(GetParent().GetType().Name);
+
+		AddChild(_asteroidFieldScene);
+		_asteroidFieldScene.CreateSheet(10, new Rect2(0, 0, 0, 0), false);
+
 		_player = GetNode<RigidBody2D>("Player");
 		var vp = GetViewport().GetVisibleRect();
-		_player.Position = new Vector2(vp.Size.X / 2.0f, vp.Size.Y / 2.0f);
-
+		GetNode<Player>("Player").Activate(new Vector2(vp.Size.X / 2.0f, vp.Size.Y / 2.0f));
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

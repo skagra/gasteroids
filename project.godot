@@ -15,10 +15,14 @@ run/main_scene="res://Scenes/Main/Main.tscn"
 config/features=PackedStringArray("4.3", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+Screen="*res://Scripts/Screen.cs"
+
 [display]
 
-window/size/viewport_width=1920
-window/size/viewport_height=1080
+window/size/viewport_width=1024
+window/size/viewport_height=768
 window/stretch/scale_mode="integer"
 window/vsync/vsync_mode=0
 
@@ -53,3 +57,7 @@ Fire={
 
 2d_physics/layer_1="Asteroids"
 2d_physics/layer_2="Player"
+
+[rendering]
+
+environment/defaults/default_clear_color=Color(0, 0, 0, 1)

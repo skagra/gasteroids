@@ -1,21 +1,31 @@
 using Godot;
-using System;
 
-public partial class Asteroid : RigidBody2D
+namespace Asteroids;
+
+public partial class Asteroid : Area2D
 {
-	// Called when the node enters the scene tree for the first time.
+	[Signal]
+	public delegate void CollidedEventHandler(Asteroid asteroid, Node2D collidedWith);
+
+	public Vector2 LinearVelocity { get; set; }
+	public float AngularVelocity { get; set; }
+
 	public override void _Ready()
 	{
-		BodyEntered += Entered;
+		GD.Print("Asteroid ready!");
+		AreaEntered += Entered;
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+		Position += LinearVelocity * (float)delta;
+		Position = Screen.Instance.ClampToViewport(Position, GetViewport());
+		Rotation += AngularVelocity * (float)delta;
 	}
-	private void Entered(Node a3d)
-	{
-		GD.Print("Asteroid Detected Collision");
 
+	private void Entered(Area2D collidedWith)
+	{
+		GD.Print("Asteroid Entered");
+		EmitSignal(SignalName.Collided, this, collidedWith);
 	}
 }

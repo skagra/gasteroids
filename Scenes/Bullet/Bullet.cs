@@ -1,5 +1,6 @@
 using Godot;
-using System;
+
+namespace Asteroids;
 
 public partial class Bullet : Area2D
 {

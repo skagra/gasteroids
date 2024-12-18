@@ -1,3 +1,19 @@
 {
-    "godotTools.editorPath.godot4": "c:\\Development\\Gadot\\DotNet\\Godot_v4.3-stable_mono_win64.exe"
+    "godotTools.editorPath.godot4": "c:\\Development\\Gadot\\DotNet\\Godot_v4.3-stable_mono_win64.exe",
+    "cSpell.words": [
+        "deadzone",
+        "Gadot",
+        "gasteroids",
+        "Monitorable",
+        "oivln",
+        "qcvmmilfn",
+        "tscn",
+        "vsync"
+    ],
+    "files.exclude": {
+        ".godot": true,
+        "**/*.tscn": true,
+        "**/*.import": true,
+        "project.godot": true
+    }
 }
