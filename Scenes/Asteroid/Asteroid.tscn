@@ -14,5 +14,7 @@ script = ExtResource("1_ak4hp")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = SubResource("AtlasTexture_oivln")
+metadata/_edit_lock_ = true
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+metadata/_edit_lock_ = true

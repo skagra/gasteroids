@@ -13,7 +13,7 @@ public partial class Player : RigidBody2D
 	private const string _ANIMATION_EXPLOSION = "Explosion";
 
 	[Signal]
-	public delegate void ShootEventHandler(Vector2 position, Vector2 shipLinearVelocity, float shipRotation);
+	public delegate void ShootEventHandler(Vector2 shipPosition, Vector2 shipLinearVelocity, float shipRotation);
 
 	[Signal]
 	public delegate void ExplodingEventHandler();
@@ -22,7 +22,7 @@ public partial class Player : RigidBody2D
 	public delegate void ExplodedEventHandler();
 
 	[Signal]
-	public delegate void CollidedEventHandler(Node2D collidedWith);
+	public delegate void CollidedEventHandler(Player player, Node collidedWith);
 
 	[ExportCategory("General Settings")]
 	[Export]
@@ -32,6 +32,7 @@ public partial class Player : RigidBody2D
 
 	private Area2D _area2D;
 	private AnimatedSprite2D _sprite;
+	private CollisionPolygon2D _collisionPolygon;
 	private Vector2 _spriteSize;
 	private AudioStreamPlayer2D _thrustAudioStream;
 	private AudioStreamPlayer2D _shootAudioStream;
@@ -45,6 +46,7 @@ public partial class Player : RigidBody2D
 	public override void _Ready()
 	{
 		_area2D = GetNode<Area2D>("Area2D");
+		_collisionPolygon = _area2D.GetNode<CollisionPolygon2D>("CollisionPolygon2D");
 		_sprite = _area2D.GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 		_thrustAudioStream = _area2D.GetNode<AudioStreamPlayer2D>("ThrustAudioPlayer");
 		_shootAudioStream = _area2D.GetNode<AudioStreamPlayer2D>("ShootAudioPlayer");
@@ -56,7 +58,19 @@ public partial class Player : RigidBody2D
 
 		_savedLinearDamp = LinearDamp;
 
-		Deactivate();
+		if (GetParent() is not Window)
+		{
+			Deactivate();
+		}
+		else
+		{
+			Activate();
+		}
+	}
+
+	public void Activate()
+	{
+		Activate(GetViewportRect().Size * 0.5f);
 	}
 
 	public void Activate(Vector2 position)
@@ -69,8 +83,7 @@ public partial class Player : RigidBody2D
 		LinearDamp = _savedLinearDamp;
 
 		_area2D.Rotation = 0f;
-		_area2D.Monitorable = true;
-		_area2D.Monitoring = true;
+		_collisionPolygon.Disabled = false;
 
 		_sprite.SetAnimation(_ANIMATION_THRUST);
 
@@ -91,14 +104,10 @@ public partial class Player : RigidBody2D
 		GD.Print("Deactivating");
 
 		Hide();
-
-		_area2D.Monitorable = true;
-		_area2D.Monitoring = true;
-
+		_collisionPolygon.Disabled = true;
 		SetProcess(false);
 		SetPhysicsProcess(false);
 		SetProcessInput(false);
-
 		_isActive = false;
 	}
 
@@ -184,27 +193,26 @@ public partial class Player : RigidBody2D
 
 	private void RotateCWPressed(double delta)
 	{
-		_area2D.Rotation += (_rotationSpeed * (float)delta);
+		_area2D.Rotation += _rotationSpeed * (float)delta;
 	}
 
 	private void RotateACWPressed(double delta)
 	{
-		_area2D.Rotation += (-_rotationSpeed * (float)delta);
+		_area2D.Rotation += -_rotationSpeed * (float)delta;
 	}
 
 	private void Entered(Area2D collidedWith)
 	{
 		if (_isActive)
 		{
-			EmitSignal(SignalName.Collided, collidedWith);
+			EmitSignal(SignalName.Collided, this, collidedWith);
 
 			if (!_hasCollidedThisFrame && !_isExploding)
 			{
 				_hasCollidedThisFrame = true;
 				_isExploding = true;
 
-				_area2D.SetDeferred(Area2D.PropertyName.Monitorable, false);
-				_area2D.SetDeferred(Area2D.PropertyName.Monitoring, false);
+				_collisionPolygon.SetDeferred(CollisionPolygon2D.PropertyName.Disabled, true);
 
 				LinearDamp = _savedLinearDamp;
 				_sprite.Play(_ANIMATION_EXPLOSION);

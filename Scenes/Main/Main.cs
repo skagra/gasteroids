@@ -82,12 +82,18 @@ public partial class Main : Node
 	{
 		GD.Print(GetParent().GetType().Name);
 
+		_asteroidFieldScene.Collision += AsteroidCollision;
 		AddChild(_asteroidFieldScene);
-		_asteroidFieldScene.CreateSheet(10, new Rect2(0, 0, 0, 0), false);
+		_asteroidFieldScene.CreateField(10, new Rect2(0, 0, 0, 0), false);
 
 		_player = GetNode<RigidBody2D>("Player");
 		var vp = GetViewport().GetVisibleRect();
 		GetNode<Player>("Player").Activate(new Vector2(vp.Size.X / 2.0f, vp.Size.Y / 2.0f));
+	}
+
+	private void AsteroidCollision(Asteroid asteroid, AsteroidSize size, Node collidedWith)
+	{
+		GD.Print($"Asteroid collision in main size={size} collided with={collidedWith.GetType().Name}");
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

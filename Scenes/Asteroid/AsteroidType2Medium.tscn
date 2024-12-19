@@ -11,6 +11,8 @@ region = Rect2(90, 160, 96, 96)
 
 [node name="Sprite2D" parent="." index="0"]
 texture = SubResource("AtlasTexture_5tb3i")
+metadata/_edit_lock_ = true
 
 [node name="CollisionPolygon2D" parent="." index="1"]
 polygon = PackedVector2Array(-26, -13, -26, 7, -15, 25, 13, 26, 24, 13, 25, -13, 6, -27, -13, -27)
+metadata/_edit_lock_ = true

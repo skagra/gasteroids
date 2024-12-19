@@ -7,20 +7,20 @@ namespace Asteroids;
 public partial class AsteroidField : Node
 {
 	[Signal]
-	public delegate void CollisionEventHandler(Asteroid asteroid, AsteroidSize size);
+	public delegate void CollisionEventHandler(Asteroid asteroid, AsteroidSize size, Node collidedWith);
 
 	[Signal]
 	public delegate void FieldClearedEventHandler();
 
 	private class AsteroidDetails
 	{
-		// The asteroid GameObject
+		// The asteroid
 		public Asteroid Asteroid { get; set; }
 
 		// Size of the asteroid
 		public AsteroidSize AsteroidSize { get; set; }
 
-		// Flag the asteroid GameObject for destruction on the next cycle
+		// Flag the asteroid for destruction on the next cycle
 		public bool ReadyForCleanUp { get; set; } = false;
 	}
 
@@ -32,6 +32,7 @@ public partial class AsteroidField : Node
 	public float MaxRadiansPerSecond { get; set; } = 3.0f;
 
 	private const string _ASTEROID_SCENE_BASE = "res://Scenes/Asteroid/";
+
 	private readonly List<PackedScene> _largeAsteroidPrefabs =
 		new() { GD.Load<PackedScene>($"{_ASTEROID_SCENE_BASE}AsteroidType1Large.tscn"),
 				GD.Load<PackedScene>($"{_ASTEROID_SCENE_BASE}AsteroidType2Large.tscn"),
@@ -44,6 +45,8 @@ public partial class AsteroidField : Node
 		new() { GD.Load<PackedScene>($"{_ASTEROID_SCENE_BASE}AsteroidType1Small.tscn"),
 				GD.Load<PackedScene>($"{_ASTEROID_SCENE_BASE}AsteroidType2Small.tscn"),
 				GD.Load<PackedScene>($"{_ASTEROID_SCENE_BASE}AsteroidType3Small.tscn") };
+
+	private readonly PackedScene _asteroidExplosion = GD.Load<PackedScene>($"{_ASTEROID_SCENE_BASE}AsteroidExplosion.tscn");
 
 	// List of all active asteroids
 	private readonly List<AsteroidDetails> _activeAsteroids = new();
@@ -67,8 +70,13 @@ public partial class AsteroidField : Node
 
 	}
 
+	public override void _Process(double delta)
+	{
+		CleanUpFlaggedAsteroids();
+	}
+
 	// Clear active asteroid list and destroy all associated GameObjects
-	private void ClearAsteroids()
+	public void DestroyField()
 	{
 		foreach (var asteroid in _activeAsteroids)
 		{
@@ -79,9 +87,9 @@ public partial class AsteroidField : Node
 
 	// Create a sheet of large asteroids with random position, velocity and angular velocity,
 	// while avoiding the exclusionZone Rect
-	public void CreateSheet(int numAsteroids, Rect2 exclusionZone, bool onlyLarge = true)
+	public void CreateField(int numAsteroids, Rect2 exclusionZone, bool onlyLarge = true)
 	{
-		ClearAsteroids();
+		DestroyField();
 		for (var i = 0; i < numAsteroids; i++)
 		{
 			if (onlyLarge)
@@ -137,7 +145,6 @@ public partial class AsteroidField : Node
 		_activeAsteroids.Add(asteroidDetails);
 		AddChild(asteroid);
 
-		GD.Print($"Added asteroid at {asteroid.Position}");
 		return asteroidDetails;
 	}
 
@@ -157,9 +164,6 @@ public partial class AsteroidField : Node
 
 		return asteroidDetails;
 	}
-
-
-	private readonly PackedScene _asteroidExplosion = GD.Load<PackedScene>("res://Scenes/Asteroid/AsteroidExplosion.tscn");
 
 	// Split the given asteroid into two smaller asteroids if the asteroid is Large or Medium,
 	// and play the associated explosion audio
@@ -209,30 +213,19 @@ public partial class AsteroidField : Node
 
 		if (asteroidDetails != null)
 		{
-			if (asteroidDetails.AsteroidSize != AsteroidSize.Small)
-			{
-
-			}
 			if (!asteroidDetails.ReadyForCleanUp)
 			{
 				// Deactivate, flag for clean up and split into two smaller asteroids
 				asteroidDetails.ReadyForCleanUp = true;
 				SplitAsteroid(asteroidDetails);
-				// TODO Disable asteroid?
+				EmitSignal(SignalName.Collision, asteroid, (int)asteroidDetails.AsteroidSize, collidedWith.GetParent());
 			}
 		}
 		else
 		{
-
+			// TODO ERROR
 		}
 	}
-
-
-
-
-
-
-
 
 	// Delete flagged entries from _activeAsteroids and destroy the associated GameObject for each.
 	// Asteroids are not deleted immediately on collision as more than one collision may occur in a
@@ -250,16 +243,11 @@ public partial class AsteroidField : Node
 
 			}
 		}
-		// If all asteroids have been destroyed then raise the associated event
-		// if (_activeAsteroids.Count <= 0)
-		// {
-		// 	OnFieldCleared?.Invoke();
-		// }
-	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
-		CleanUpFlaggedAsteroids();
+		// If all asteroids have been destroyed then raise the associated event
+		if (_activeAsteroids.Count <= 0)
+		{
+			EmitSignal(SignalName.FieldCleared);
+		}
 	}
 }

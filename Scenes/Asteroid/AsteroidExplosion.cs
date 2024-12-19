@@ -13,8 +13,12 @@ public partial class AsteroidExplosion : AnimatedSprite2D
 
 	public override void _Ready()
 	{
+		if (GetParent() is Window)
+		{
+			Position = GetViewportRect().Size * 0.5f;
+		}
+
 		Play();
-		GD.Print($"AV {AngularVelocity}");
 	}
 
 	public override void _Process(double delta)
