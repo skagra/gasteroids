@@ -8,11 +8,10 @@ atlas = ExtResource("2_ewppc")
 region = Rect2(91, 159, 94, 94)
 
 [node name="AsteroidType3Medium" instance=ExtResource("1_grqoh")]
+_testingLinearVelocity = Vector2(0, 0)
 
 [node name="Sprite2D" parent="." index="0"]
 texture = SubResource("AtlasTexture_qwqqc")
-metadata/_edit_lock_ = true
 
 [node name="CollisionPolygon2D" parent="." index="1"]
 polygon = PackedVector2Array(-26, -10, -27, 7, -15, 28, 12, 27, 25, 16, 26, -12, 6, -26, -14, -26)
-metadata/_edit_lock_ = true

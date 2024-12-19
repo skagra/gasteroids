@@ -1,15 +1,21 @@
-[gd_scene load_steps=3 format=3 uid="uid://cifhe0rwlvr3b"]
+[gd_scene load_steps=6 format=3 uid="uid://cifhe0rwlvr3b"]
 
 [ext_resource type="Script" path="res://Scenes/Main/Main.cs" id="1_4mmwa"]
 [ext_resource type="PackedScene" uid="uid://df2pgmqfvt5ul" path="res://Scenes/Player/Player.tscn" id="2_fuwta"]
+[ext_resource type="PackedScene" uid="uid://nu2biysl40aq" path="res://Ui/Ui.tscn" id="2_m8vvq"]
+[ext_resource type="PackedScene" uid="uid://bx0l2shyhmj8q" path="res://Scenes/AsteroidField/AsteroidField.tscn" id="3_37sgv"]
+[ext_resource type="PackedScene" uid="uid://d0lj1vtc141qv" path="res://Scenes/BulletController/BulletController.tscn" id="4_abpdt"]
 
 [node name="Main" type="Node" groups=["Player"]]
 script = ExtResource("1_4mmwa")
+
+[node name="Ui" parent="." instance=ExtResource("2_m8vvq")]
 
 [node name="Player" parent="." instance=ExtResource("2_fuwta")]
 position = Vector2(6, 28)
 collision_mask = 1
 _thrustForce = 500
 
-[connection signal="Exploded" from="Player" to="." method="OnExploded"]
-[connection signal="Shoot" from="Player" to="." method="OnPlayerShoot"]
+[node name="AsteroidField" parent="." instance=ExtResource("3_37sgv")]
+
+[node name="BulletController" parent="." instance=ExtResource("4_abpdt")]

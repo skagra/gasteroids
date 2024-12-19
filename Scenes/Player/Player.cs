@@ -145,11 +145,13 @@ public partial class Player : RigidBody2D
 				RotateACWPressed(delta);
 			}
 		}
-		Position = Screen.Instance.ClampToViewport(Position, GetViewport());
+		Position = Screen.Instance.ClampToViewport(Position);
 	}
 
 	private void FirePressed()
 	{
+		GD.Print("Fire Pressed");
+
 		_shootAudioStream.Play();
 
 		EmitSignal(SignalName.Shoot,

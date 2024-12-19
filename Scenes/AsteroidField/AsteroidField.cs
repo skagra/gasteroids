@@ -24,12 +24,25 @@ public partial class AsteroidField : Node
 		public bool ReadyForCleanUp { get; set; } = false;
 	}
 
+	[ExportCategory("Main")]
+
+	[ExportGroup("Speed")]
+	[Export]
 	public float MinSpeed { get; set; } = 5;
+	[Export]
 	public float MaxSpeed { get; set; } = 200;
 
+	[ExportGroup("Rotation")]
+	[Export]
 	public bool IsRotationEnabled { get; set; } = true;
-	public float MinRadiansPerSecond { get; set; } = 0.5f;
+	[Export]
+	public float MinRadiansPerSecond { get; set; } = -0.3f;
+	[Export]
 	public float MaxRadiansPerSecond { get; set; } = 3.0f;
+
+	[ExportCategory("Testing")]
+	[Export(PropertyHint.Range, "0,100,")]
+	private int _testingNumAsteroids = 10;
 
 	private const string _ASTEROID_SCENE_BASE = "res://Scenes/Asteroid/";
 
@@ -68,6 +81,10 @@ public partial class AsteroidField : Node
 		_audioStreamPlayerBangSmall.Stream = _bangSmall;
 		AddChild(_audioStreamPlayerBangSmall);
 
+		if (GetParent() is Window)
+		{
+			CreateField(_testingNumAsteroids, new Rect2(0, 0, 0, 0), false);
+		}
 	}
 
 	public override void _Process(double delta)
@@ -138,13 +155,14 @@ public partial class AsteroidField : Node
 		asteroid.AngularVelocity = (float)(IsRotationEnabled ? GD.RandRange(MinRadiansPerSecond, MaxRadiansPerSecond) : 0f);
 
 		// Using deferred mode as Gadot objects to setting the new Asteroid position otherwise
-		asteroid.Connect("Collided", new Callable(this, "CollidedWithAsteroid"), (int)ConnectFlags.Deferred);
+		// asteroid.Connect("Collided", new Callable(this, "CollidedWithAsteroid"), (int)ConnectFlags.Deferred);
+		asteroid.Collided += CollidedWithAsteroid;
 
 		// Return the created asteroid and associated information
 		var asteroidDetails = new AsteroidDetails { Asteroid = asteroid, AsteroidSize = size, ReadyForCleanUp = false };
 		_activeAsteroids.Add(asteroidDetails);
-		AddChild(asteroid);
-
+		//AddChild(asteroid);
+		CallDeferred(MethodName.AddChild, asteroid);
 		return asteroidDetails;
 	}
 
@@ -169,7 +187,6 @@ public partial class AsteroidField : Node
 	// and play the associated explosion audio
 	private void SplitAsteroid(AsteroidDetails asteroid)
 	{
-
 		switch (asteroid.AsteroidSize)
 		{
 			case AsteroidSize.Large:
@@ -194,7 +211,8 @@ public partial class AsteroidField : Node
 			asteroidExplosion.Position = asteroid.Asteroid.Position;
 			asteroidExplosion.AngularVelocity = asteroid.Asteroid.AngularVelocity;
 			asteroidExplosion.LinearVelocity = asteroid.Asteroid.LinearVelocity;
-			AddChild(asteroidExplosion);
+			// AddChild(asteroidExplosion);
+			CallDeferred(MethodName.AddChild, asteroidExplosion);
 			asteroidExplosion.ExplosionCompleted += DestroyExplosion;
 		}
 	}
@@ -239,6 +257,7 @@ public partial class AsteroidField : Node
 			if (asteroidDetails.ReadyForCleanUp)
 			{
 				RemoveChild(asteroidDetails.Asteroid);
+				asteroidDetails.Asteroid.QueueFree();
 				_activeAsteroids.RemoveAt(asteroidIndex);
 
 			}

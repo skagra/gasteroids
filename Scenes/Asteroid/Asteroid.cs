@@ -11,6 +11,12 @@ public partial class Asteroid : Area2D
 	public Vector2 LinearVelocity { get; set; }
 	public float AngularVelocity { get; set; }
 
+	[ExportCategory("Testing")]
+	[Export]
+	private Vector2 _testingLinearVelocity;
+	[Export]
+	float _testingAngularVelocity;
+
 	public override void _Ready()
 	{
 		GD.Print("Asteroid ready!");
@@ -19,15 +25,15 @@ public partial class Asteroid : Area2D
 		if (GetParent() is Window)
 		{
 			Position = GetViewportRect().Size * 0.5f;
-			LinearVelocity = new Vector2(20, 30);
-			AngularVelocity = 2.0f;
+			LinearVelocity = _testingLinearVelocity;
+			AngularVelocity = _testingAngularVelocity;
 		}
 	}
 
 	public override void _Process(double delta)
 	{
 		Position += LinearVelocity * (float)delta;
-		Position = Screen.Instance.ClampToViewport(Position, GetViewport());
+		Position = Screen.Instance.ClampToViewport(Position);
 		Rotation += AngularVelocity * (float)delta;
 	}
 

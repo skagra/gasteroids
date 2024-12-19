@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://bx0l2shyhmj8q"]
+
+[ext_resource type="Script" path="res://Scenes/AsteroidField/AsteroidField.cs" id="1_8u110"]
+
+[node name="AsteroidField" type="Node"]
+script = ExtResource("1_8u110")
+MinRadiansPerSecond = -3.0
+_testingNumAsteroids = 5

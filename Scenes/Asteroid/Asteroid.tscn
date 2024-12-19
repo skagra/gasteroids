@@ -11,6 +11,8 @@ region = Rect2(418, 158, 98, 74)
 [node name="Asteroid" type="Area2D"]
 collision_mask = 2
 script = ExtResource("1_ak4hp")
+_testingLinearVelocity = Vector2(40, 40)
+_testingAngularVelocity = 2.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = SubResource("AtlasTexture_oivln")

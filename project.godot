@@ -30,6 +30,10 @@ window/vsync/vsync_mode=0
 
 project/assembly_name="GadotNet"
 
+[gui]
+
+theme/custom="res://Base Theme.tres"
+
 [input]
 
 Thrust={

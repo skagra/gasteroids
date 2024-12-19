@@ -1,20 +1,21 @@
 using Godot;
-using System;
 
 namespace Asteroids;
 
 public partial class Screen : Node
 {
     public static Screen Instance { get; private set; }
+    public Viewport _viewport;
 
     public override void _Ready()
     {
         Instance = this;
+        _viewport = GetViewport();
     }
 
-    public Vector2 ClampToViewport(Vector2 position, Viewport viewport)
+    public Vector2 ClampToViewport(Vector2 position)
     {
-        var viewportRect = viewport.GetVisibleRect();
+        var viewportRect = _viewport.GetVisibleRect();
 
         if (position.X > viewportRect.End.X)
         {
@@ -35,5 +36,10 @@ public partial class Screen : Node
         }
 
         return position;
+    }
+
+    public Vector2 GetCentre()
+    {
+        return _viewport.GetVisibleRect().Size * 0.5f;
     }
 }

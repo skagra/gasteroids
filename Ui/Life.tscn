@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://nc2qrtjc4erq"]
+
+[ext_resource type="Texture2D" uid="uid://bonlrwqihq7e" path="res://Graphics/Asteroids.png" id="1_uva3m"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ts1ca"]
+atlas = ExtResource("1_uva3m")
+region = Rect2(210, 256, 75, 64)
+
+[node name="Life" type="Sprite2D"]
+position = Vector2(32, 38)
+rotation = 4.71239
+texture = SubResource("AtlasTexture_ts1ca")

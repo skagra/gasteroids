@@ -1,104 +1,88 @@
 using Godot;
-using System.Collections.Generic;
-
 namespace Asteroids;
 
 public partial class Main : Node
 {
 	private AsteroidField _asteroidField;
+	private BulletController _bulletController;
+	private Player _player;
+	private Score _score;
+	private Lives _lives;
+	private Label _gameOverLabel;
 
-	private RigidBody2D _player;
-
-	//private readonly PackedScene _asteroidScene = GD.Load<PackedScene>("res://Scenes/Asteroid/Asteroid.tscn");
-	private readonly PackedScene _bulletScene = GD.Load<PackedScene>("res://Scenes/Bullet/Bullet.tscn");
-
-	private readonly AsteroidField _asteroidFieldScene = new();
-
-	private readonly List<Bullet> _dormantBullets = new();
-	private readonly List<ActiveBullet> _activeBullets = new();
-
-	private sealed class ActiveBullet
+	public override void _Ready()
 	{
-		public Bullet Bullet { get; set; }
-		public ulong SpawnTime { get; set; }
+		_player = GetNode<Player>("Player");
+		_bulletController = GetNode<BulletController>("BulletController");
+		_asteroidField = GetNode<AsteroidField>("AsteroidField");
+		_score = GetNode<Score>("Ui/Score");
+		_lives = GetNode<Lives>("Ui/Lives");
+		_gameOverLabel = GetNode<Label>("Ui/Game Over");
+
+		_bulletController.Collided += OnBulletSignalCollided;
+
+		_asteroidField.Collision += OnAsteroidSignalCollided;
+		_asteroidField.CreateField(10, new Rect2(0, 0, 0, 0), false);
+
+		var vp = GetViewport().GetVisibleRect();
+		_player.Exploding += OnPlayerSignalExploding;
+		_player.Exploded += OnPlayerSignalExploded;
+		_player.Shoot += OnPlayerSignalShoot;
+		_player.Activate(Screen.Instance.GetCentre());
+
+		_lives.SetLives(3);
 	}
 
-	private int _bulletCount = 5;
-	public override void _EnterTree()
+	public override void _Process(double delta)
 	{
-		// Missiles
-		for (var i = 0; i < _bulletCount; i++)
+	}
+
+	private void OnPlayerSignalExploded()
+	{
+		GD.Print("In OnExploded in Main");
+		_player.Deactivate();
+		if (!_gameOver)
 		{
-			var dormantBullet = _bulletScene.Instantiate<Bullet>();
-			dormantBullet.Name = $"Bullet #{i + 1}";
-			_dormantBullets.Add(dormantBullet);
+			// This is safe wrt signal delivery order
+			// as there is a game between "Exploding" and "Exploded"
+			_player.Activate(Screen.Instance.GetCentre());
 		}
 	}
 
-	private void OnExploded()
-	{
-		GD.Print("In OnExploded in Main");
-		GetNode<Player>("Player").Deactivate();
-		var vp = GetViewport().GetVisibleRect();
-		GetNode<Player>("Player").Activate(new Vector2(vp.Size.X / 2.0f, vp.Size.Y / 2.0f));
-	}
+	private bool _gameOver = false;
 
-	private ulong _bulletDurationMs = 1000;
-	private void ClearUpBullets()
+	private void OnPlayerSignalExploding()
 	{
-		// Move missiles that have timed out to dormant state
-		for (var bulletIndex = _activeBullets.Count - 1; bulletIndex >= 0; bulletIndex--)
+		if (_lives.Value > 0)
 		{
-			var activeBullet = _activeBullets[bulletIndex];
-
-			// Has the missile aged out?
-			if (Time.GetTicksMsec() - activeBullet.SpawnTime > _bulletDurationMs)
+			_lives.RemoveLife();
+			if (_lives.Value == 0)
 			{
-				// Make the missile dormant
-				_dormantBullets.Add(activeBullet.Bullet);
-				RemoveChild(activeBullet.Bullet);
-				_activeBullets.RemoveAt(bulletIndex);
+				GD.Print("GAME OVER");
+				_gameOver = true;
+				_gameOverLabel.Show();
 			}
 		}
 	}
 
-	private void OnPlayerShoot(Vector2 position, Vector2 shipLinearVelocity, float shipRotation)
+	private void OnPlayerSignalShoot(Vector2 position, Vector2 shipLinearVelocity, float shipRotation)
 	{
-		if (_dormantBullets.Count > 0)
-		{
-			// Remove missile from the dormant list and add to the active list
-			var newBullet = _dormantBullets[0];
-			_dormantBullets.RemoveAt(0);
-			_activeBullets.Add(new ActiveBullet { Bullet = newBullet, SpawnTime = Time.GetTicksMsec() });
+		GD.Print("Spawning Bullet");
+		_bulletController.SpawnBullet(position, shipLinearVelocity, shipRotation);
+	}
 
-			newBullet.Position = position;
-			newBullet.Velocity = 300f * Vector2.Right.Rotated(shipRotation) + shipLinearVelocity; // TODO - Right vector!
-			AddChild(newBullet);
+	private void OnBulletSignalCollided(Bullet bullet, Node collidedWith)
+	{
+		GD.Print("Missile collision flagged in main");
+		_bulletController.KillBullet(bullet);
+		if (collidedWith is Asteroid asteroid)
+		{
+			_score.Increase(100);
 		}
 	}
 
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
-	{
-		GD.Print(GetParent().GetType().Name);
-
-		_asteroidFieldScene.Collision += AsteroidCollision;
-		AddChild(_asteroidFieldScene);
-		_asteroidFieldScene.CreateField(10, new Rect2(0, 0, 0, 0), false);
-
-		_player = GetNode<RigidBody2D>("Player");
-		var vp = GetViewport().GetVisibleRect();
-		GetNode<Player>("Player").Activate(new Vector2(vp.Size.X / 2.0f, vp.Size.Y / 2.0f));
-	}
-
-	private void AsteroidCollision(Asteroid asteroid, AsteroidSize size, Node collidedWith)
+	private void OnAsteroidSignalCollided(Asteroid asteroid, AsteroidSize size, Node collidedWith)
 	{
 		GD.Print($"Asteroid collision in main size={size} collided with={collidedWith.GetType().Name}");
-	}
-
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
-		ClearUpBullets();
 	}
 }
