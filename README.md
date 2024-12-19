@@ -10,6 +10,6 @@ Unity as a platform so I set about this project to create a version of Asteroids
 
 * [Project Status](docs/status.md)
 * [How to Play](docs/controls.md)
-* [Experiences with Godot] vs Unity (docs/gadot.md)
+* [Experiences with Godot](docs/gadot.md) vs Unity 
 * [Credits](docs/credits.md)
 * [References](docs/references.md)
