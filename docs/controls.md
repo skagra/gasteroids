@@ -12,4 +12,3 @@ Game play is as per the classic arcade game.  Shoot at the asteroids, once all h
 * *Fire* - Left Mouse
 * *Thrust* - Right Mouse
 * *Hyperspace* - ~~Space~~
-  
