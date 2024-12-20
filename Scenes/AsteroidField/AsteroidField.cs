@@ -64,13 +64,16 @@ public partial class AsteroidField : Node
     // List of all active asteroids
     private readonly List<AsteroidDetails> _activeAsteroids = new();
 
-    private AudioStream _bangLarge = GD.Load<AudioStream>("res://Audio/bangLarge.wav");
-    private AudioStream _bangMedium = GD.Load<AudioStream>("res://Audio/bangMedium.wav");
-    private AudioStream _bangSmall = GD.Load<AudioStream>("res://Audio/bangSmall.wav");
+    private const string _ASTEROID_AUDIO_BASE = "res://Audio/";
+    private AudioStream _bangLarge = GD.Load<AudioStream>($"{_ASTEROID_AUDIO_BASE}bangLarge.wav");
+    private AudioStream _bangMedium = GD.Load<AudioStream>($"{_ASTEROID_AUDIO_BASE}bangMedium.wav");
+    private AudioStream _bangSmall = GD.Load<AudioStream>($"{_ASTEROID_AUDIO_BASE}bangSmall.wav");
 
     private readonly AudioStreamPlayer2D _audioStreamPlayerBangLarge = new();
     private readonly AudioStreamPlayer2D _audioStreamPlayerBangMedium = new();
     private readonly AudioStreamPlayer2D _audioStreamPlayerBangSmall = new();
+
+    private int _asteroidId = 1;
 
     public override void _Ready()
     {
@@ -83,7 +86,7 @@ public partial class AsteroidField : Node
 
         if (GetParent() is Window)
         {
-            CreateField(_testingNumAsteroids, new Rect2(0, 0, 0, 0), false);
+            CreateField(_testingNumAsteroids, new Rect2(), false);
         }
     }
 
@@ -106,6 +109,8 @@ public partial class AsteroidField : Node
     // while avoiding the exclusionZone Rect
     public void CreateField(int numAsteroids, Rect2 exclusionZone, bool onlyLarge = true)
     {
+        _asteroidId = 1;
+
         DestroyField();
         for (var i = 0; i < numAsteroids; i++)
         {
@@ -150,6 +155,7 @@ public partial class AsteroidField : Node
 
         // Create the asteroid GameObject and set rotation, linear velocity, angular velocity and location
         var asteroid = astroidScene.Instantiate<Asteroid>();
+        asteroid.Name = $"Asteroid #{_asteroidId++}";
         asteroid.Position = newAsteroidPosition;
         asteroid.LinearVelocity = Vector2.Right.Rotated((float)GD.RandRange(0f, 2f * Math.PI)) * (float)GD.RandRange(MinSpeed, MaxSpeed);
         asteroid.AngularVelocity = (float)(IsRotationEnabled ? GD.RandRange(MinRadiansPerSecond, MaxRadiansPerSecond) : 0f);
@@ -161,7 +167,7 @@ public partial class AsteroidField : Node
         // Return the created asteroid and associated information
         var asteroidDetails = new AsteroidDetails { Asteroid = asteroid, AsteroidSize = size, ReadyForCleanUp = false };
         _activeAsteroids.Add(asteroidDetails);
-        //AddChild(asteroid);
+
         CallDeferred(MethodName.AddChild, asteroid);
         return asteroidDetails;
     }
@@ -211,7 +217,6 @@ public partial class AsteroidField : Node
             asteroidExplosion.Position = asteroid.Asteroid.Position;
             asteroidExplosion.AngularVelocity = asteroid.Asteroid.AngularVelocity;
             asteroidExplosion.LinearVelocity = asteroid.Asteroid.LinearVelocity;
-            // AddChild(asteroidExplosion);
             CallDeferred(MethodName.AddChild, asteroidExplosion);
             asteroidExplosion.ExplosionCompleted += DestroyExplosion;
         }
@@ -225,7 +230,7 @@ public partial class AsteroidField : Node
 
     private void CollidedWithAsteroid(Asteroid asteroid, Node2D collidedWith)
     {
-        GD.Print($"Collision detected in field {collidedWith.GetParent().Name}");
+        GD.Print($"Collision detected in '{this.Name}' with '{collidedWith.Name}'");
 
         var asteroidDetails = _activeAsteroids.Find(ad => ad.Asteroid == asteroid);
 
@@ -236,7 +241,7 @@ public partial class AsteroidField : Node
                 // Deactivate, flag for clean up and split into two smaller asteroids
                 asteroidDetails.ReadyForCleanUp = true;
                 SplitAsteroid(asteroidDetails);
-                EmitSignal(SignalName.Collision, asteroid, (int)asteroidDetails.AsteroidSize, collidedWith.GetParent());
+                EmitSignal(SignalName.Collision, asteroid, (int)asteroidDetails.AsteroidSize, collidedWith);
             }
         }
         else
@@ -259,7 +264,6 @@ public partial class AsteroidField : Node
                 RemoveChild(asteroidDetails.Asteroid);
                 asteroidDetails.Asteroid.QueueFree();
                 _activeAsteroids.RemoveAt(asteroidIndex);
-
             }
         }
 

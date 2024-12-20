@@ -24,7 +24,7 @@ public partial class Bullet : Area2D
 
         if (GetParent() is Window)
         {
-            Position = GetViewportRect().Size * 0.5f;
+            Position = Screen.Instance.GetCentre();
             Velocity = _testingLinearVelocity;
         }
     }
@@ -36,6 +36,8 @@ public partial class Bullet : Area2D
 
     private void Entered(Area2D collidedWith)
     {
+        GD.Print($"Collision detected in '{this.Name}' with '{collidedWith.Name}'");
+
         EmitSignal(SignalName.Collided, this, collidedWith);
     }
 }

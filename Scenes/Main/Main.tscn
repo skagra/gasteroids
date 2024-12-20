@@ -1,13 +1,18 @@
-[gd_scene load_steps=6 format=3 uid="uid://cifhe0rwlvr3b"]
+[gd_scene load_steps=7 format=3 uid="uid://cifhe0rwlvr3b"]
 
 [ext_resource type="Script" path="res://Scenes/Main/Main.cs" id="1_4mmwa"]
 [ext_resource type="PackedScene" uid="uid://df2pgmqfvt5ul" path="res://Scenes/Player/Player.tscn" id="2_fuwta"]
 [ext_resource type="PackedScene" uid="uid://nu2biysl40aq" path="res://Ui/Ui.tscn" id="2_m8vvq"]
 [ext_resource type="PackedScene" uid="uid://bx0l2shyhmj8q" path="res://Scenes/AsteroidField/AsteroidField.tscn" id="3_37sgv"]
 [ext_resource type="PackedScene" uid="uid://d0lj1vtc141qv" path="res://Scenes/BulletController/BulletController.tscn" id="4_abpdt"]
+[ext_resource type="PackedScene" uid="uid://cx6qi3tglyw31" path="res://Scenes/ExclusionZone/ExclusionZone.tscn" id="6_wewr6"]
 
 [node name="Main" type="Node" groups=["Player"]]
 script = ExtResource("1_4mmwa")
+MinSpeed = 150.0
+MaxSpeed = 300.0
+MaxRadiansPerSecond = 2.0
+_isSoundEnabled = false
 
 [node name="Ui" parent="." instance=ExtResource("2_m8vvq")]
 
@@ -19,3 +24,6 @@ _thrustForce = 500
 [node name="AsteroidField" parent="." instance=ExtResource("3_37sgv")]
 
 [node name="BulletController" parent="." instance=ExtResource("4_abpdt")]
+BulletSpeed = 500
+
+[node name="ExclusionZone" parent="." instance=ExtResource("6_wewr6")]

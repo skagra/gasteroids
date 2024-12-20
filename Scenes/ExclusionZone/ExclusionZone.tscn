@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://cx6qi3tglyw31"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7fw66"]
+radius = 34.0147
+
+[node name="ExclusionZone" type="Area2D"]
+collision_layer = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_7fw66")
+metadata/_edit_lock_ = true

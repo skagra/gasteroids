@@ -15,14 +15,17 @@ public partial class BulletController : Node
     private sealed class ActiveBullet
     {
         public Bullet Bullet { get; set; }
-        public ulong SpawnTime { get; set; }
+        public double CountDown { get; set; }
     }
 
     [Export]
     public int BulletCount { get; set; } = 5;
 
     [Export]
-    private ulong BulletDurationMs { get; set; } = 1000;
+    public double BulletDuration { get; set; } = 0.5;
+
+    [Export]
+    public int BulletSpeed { get; set; } = 200;
 
     public override void _Ready()
     {
@@ -38,12 +41,13 @@ public partial class BulletController : Node
 
     public override void _Process(double delta)
     {
-        ClearUpBullets();
+        ClearUpBullets(delta);
     }
 
     private void Entered(Bullet bullet, Node collidedWith)
     {
-        GD.Print("Bullet hit something");
+        GD.Print($"Collision detected in '{this.Name}' with '{collidedWith.Name}'");
+
         // TODO Trap error condition
         var bulletDetails = _activeBullets.Find(bulletDetails => bulletDetails.Bullet == bullet);
         EmitSignal(SignalName.Collided, bullet, collidedWith);
@@ -56,10 +60,10 @@ public partial class BulletController : Node
         {
             var newBullet = _dormantBullets[0];
             _dormantBullets.RemoveAt(0);
-            _activeBullets.Add(new ActiveBullet { Bullet = newBullet, SpawnTime = Time.GetTicksMsec() });
+            _activeBullets.Add(new ActiveBullet { Bullet = newBullet, CountDown = BulletDuration });
 
             newBullet.Position = position;
-            newBullet.Velocity = 300f * Vector2.Right.Rotated(rotation) + linearVelocity; // TODO - Right vector! TODO Hard coded speed
+            newBullet.Velocity = BulletSpeed * Vector2.Right.Rotated(rotation) + linearVelocity; // TODO - Right vector! 
             AddChild(newBullet);
         }
     }
@@ -74,15 +78,15 @@ public partial class BulletController : Node
         _dormantBullets.Add(bullet);
     }
 
-    private void ClearUpBullets()
+    private void ClearUpBullets(double delta)
     {
         // Move missiles that have timed out to dormant state
         for (var bulletIndex = _activeBullets.Count - 1; bulletIndex >= 0; bulletIndex--)
         {
             var activeBullet = _activeBullets[bulletIndex];
-
+            activeBullet.CountDown -= delta;
             // Has the missile aged out?
-            if (Time.GetTicksMsec() - activeBullet.SpawnTime > BulletDurationMs)
+            if (activeBullet.CountDown <= 0)
             {
                 // Make the missile dormant
                 _dormantBullets.Add(activeBullet.Bullet);
