@@ -16,10 +16,11 @@ public partial class Lives : Node2D
 
     public void SetLives(int lives)
     {
-        for (int i = 0; i < lives; i++)
+        foreach (var life in _lives)
         {
-            RemoveLife();
+            life.QueueFree();
         }
+        _lives.Clear();
 
         for (int i = 0; i < lives; i++)
         {
@@ -40,7 +41,7 @@ public partial class Lives : Node2D
     {
         if (_lives.Count > 0)
         {
-            var lifeToRemove = _lives[^1];
+            var lifeToRemove = _lives[_lives.Count - 1];
             _lives.RemoveAt(_lives.Count - 1);
             lifeToRemove.QueueFree();
         }

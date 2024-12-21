@@ -1,10 +1,9 @@
-[gd_scene load_steps=54 format=3 uid="uid://df2pgmqfvt5ul"]
+[gd_scene load_steps=53 format=3 uid="uid://df2pgmqfvt5ul"]
 
 [ext_resource type="Script" path="res://Scenes/Player/Player.cs" id="1_15men"]
 [ext_resource type="Texture2D" uid="uid://bg6wnum516ph2" path="res://Scenes/Player/Ships.png" id="3_68gp0"]
 [ext_resource type="Texture2D" uid="uid://by7m6mvty1pbg" path="res://Scenes/Player/Ship Explosion Sheet.png" id="3_alkm8"]
 [ext_resource type="AudioStream" uid="uid://dn7tvu54ng11q" path="res://Audio/thrust.wav" id="4_wcoay"]
-[ext_resource type="AudioStream" uid="uid://cjguhew4n5igs" path="res://Audio/fire.wav" id="5_2fxe3"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_i21em"]
 atlas = ExtResource("3_alkm8")
@@ -375,11 +374,6 @@ metadata/_edit_lock_ = true
 stream = ExtResource("4_wcoay")
 bus = &"Fx"
 area_mask = 0
-metadata/_edit_lock_ = true
-
-[node name="ShootAudioPlayer" type="AudioStreamPlayer2D" parent="Area2D"]
-stream = ExtResource("5_2fxe3")
-bus = &"Fx"
 metadata/_edit_lock_ = true
 
 [connection signal="animation_finished" from="Area2D/AnimatedSprite2D" to="." method="AnimationComplete"]

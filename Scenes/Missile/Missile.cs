@@ -2,10 +2,10 @@ using Godot;
 
 namespace Asteroids;
 
-public partial class Bullet : Area2D
+public partial class Missile : Area2D
 {
     [Signal]
-    public delegate void CollidedEventHandler(Bullet asteroid, Node collidedWith);
+    public delegate void CollidedEventHandler(Missile asteroid, Node collidedWith);
 
     public Vector2 Velocity { get; set; } = Vector2.Right;
 

@@ -1,0 +1,13 @@
+[gd_scene load_steps=4 format=3 uid="uid://c55fufwvjpgs4"]
+
+[ext_resource type="Script" path="res://Scenes/Beats/Beats.cs" id="1_2n4wo"]
+[ext_resource type="AudioStream" uid="uid://bygvtgyyidg7q" path="res://Audio/beat1.wav" id="2_qnysp"]
+[ext_resource type="AudioStream" uid="uid://d25x1arvrh28q" path="res://Audio/beat2.wav" id="3_tgqly"]
+
+[node name="Beats" type="Node"]
+script = ExtResource("1_2n4wo")
+_beat1 = ExtResource("2_qnysp")
+_beat2 = ExtResource("3_tgqly")
+_gapDelta = 0.05
+_increaseSpeedThreshold = 10.0
+_minGap = 0.05

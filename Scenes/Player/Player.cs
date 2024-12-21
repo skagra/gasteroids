@@ -35,7 +35,6 @@ public partial class Player : RigidBody2D
     private CollisionPolygon2D _collisionPolygon;
     private Vector2 _spriteSize;
     private AudioStreamPlayer2D _thrustAudioStream;
-    private AudioStreamPlayer2D _shootAudioStream;
 
     private float _savedLinearDamp;
 
@@ -49,7 +48,6 @@ public partial class Player : RigidBody2D
         _collisionPolygon = _area2D.GetNode<CollisionPolygon2D>("CollisionPolygon2D");
         _sprite = _area2D.GetNode<AnimatedSprite2D>("AnimatedSprite2D");
         _thrustAudioStream = _area2D.GetNode<AudioStreamPlayer2D>("ThrustAudioPlayer");
-        _shootAudioStream = _area2D.GetNode<AudioStreamPlayer2D>("ShootAudioPlayer");
 
         _area2D.AreaEntered += Entered;
 
@@ -146,13 +144,15 @@ public partial class Player : RigidBody2D
             }
         }
         Position = Screen.Instance.ClampToViewport(Position);
+        // if (LinearVelocity.Length() > 500)
+        // {
+        //     LinearVelocity = LinearVelocity.Normalized() * 500f;
+        // } // TODO
     }
 
     private void FirePressed()
     {
         GD.Print("Fire Pressed");
-
-        _shootAudioStream.Play();
 
         EmitSignal(SignalName.Shoot,
             // Current position + long dimension of spite in the direction of its rotation

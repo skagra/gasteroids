@@ -2,7 +2,7 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://beiuhc3donqv6"
+uid="uid://pfyq1utd07y3"
 path="res://.godot/imported/Hyperspace Bold.otf-6f2f60b1fa9d57c38a97c3a8f106d6fd.fontdata"
 
 [deps]
@@ -28,7 +28,14 @@ Fallbacks=null
 fallbacks=[]
 Compress=null
 compress=true
-preload=[]
+preload=[{
+"chars": [],
+"glyphs": [],
+"name": "New Configuration",
+"size": Vector2i(16, 0)
+}]
 language_support={}
 script_support={}
-opentype_features={}
+opentype_features={
+1801810542: 0
+}

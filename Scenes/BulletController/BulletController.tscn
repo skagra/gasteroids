@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://d0lj1vtc141qv"]
-
-[ext_resource type="Script" path="res://Scenes/BulletController/BulletController.cs" id="1_2yk4v"]
-
-[node name="BulletController" type="Node"]
-script = ExtResource("1_2yk4v")

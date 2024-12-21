@@ -5,8 +5,8 @@ Game play is as per the classic arcade game.  Shoot at the asteroids, once all h
 
 ## Controls
 
-* *Start Game* - ~~1~~
-* *Quit Game* - ~~Escape~~
+* *Start Game* - 1
+* *Quit Game* - Escape
 * *Rotate ACW* - A
 * *Rotate CW* - S
 * *Fire* - Left Mouse

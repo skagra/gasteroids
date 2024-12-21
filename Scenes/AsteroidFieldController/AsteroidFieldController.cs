@@ -4,7 +4,7 @@ using Godot;
 
 namespace Asteroids;
 
-public partial class AsteroidField : Node
+public partial class AsteroidFieldController : Node
 {
     [Signal]
     public delegate void CollisionEventHandler(Asteroid asteroid, AsteroidSize size, Node collidedWith);
@@ -110,7 +110,7 @@ public partial class AsteroidField : Node
     public void CreateField(int numAsteroids, Rect2 exclusionZone, bool onlyLarge = true)
     {
         _asteroidId = 1;
-
+        GD.Print($"Creating {numAsteroids} asteroids");
         DestroyField();
         for (var i = 0; i < numAsteroids; i++)
         {

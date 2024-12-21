@@ -1,0 +1,108 @@
+[gd_scene load_steps=3 format=3 uid="uid://b6kmyi73lblks"]
+
+[ext_resource type="Script" path="res://Config/Config.cs" id="1_xkbts"]
+[ext_resource type="Theme" uid="uid://bgfii5oeawryi" path="res://Themes/Dialog.tres" id="2_vhhoi"]
+
+[node name="Config" type="CanvasLayer"]
+script = ExtResource("1_xkbts")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -215.5
+offset_top = -203.0
+offset_right = 215.5
+offset_bottom = 203.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_vhhoi")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"DialogHeading"
+text = "Settings
+"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 500)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Sound Category Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_type_variation = &"DialogCategory"
+text = "Sound"
+
+[node name="Sound Enabled Container" type="HBoxContainer" parent="PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Sound Enabled Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Sound Enabled Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Sound Enabled"
+
+[node name="Sound Enabled" type="CheckBox" parent="PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Sound Enabled Container"]
+layout_mode = 2
+
+[node name="Asteroids Category Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"DialogCategory"
+text = "ASTEROIDS"
+
+[node name="Rotation Enabled Container" type="HBoxContainer" parent="PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Rotation Enabled Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 2
+
+[node name="Asteroids Rotation Enabled Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Rotation Enabled Container/GridContainer"]
+layout_mode = 2
+text = "Rotation Enabled
+"
+
+[node name="Asteroids Rotation Enabled" type="CheckBox" parent="PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Rotation Enabled Container/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="Asteroids Starting Quantity Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Rotation Enabled Container/GridContainer"]
+layout_mode = 2
+text = "Starting Quantity"
+
+[node name="Asteroids Starting Quantity" type="SpinBox" parent="PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Rotation Enabled Container/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+min_value = 4.0
+max_value = 20.0
+value = 4.0
+alignment = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 1
+
+[node name="Cancel Button" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "Cancel"
+
+[node name="OK Button" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "OK"

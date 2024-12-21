@@ -1,18 +1,18 @@
 [gd_scene load_steps=5 format=3 uid="uid://djcm0jgmhfoqw"]
 
-[ext_resource type="Script" path="res://Scenes/Bullet/Bullet.cs" id="1_1kl7w"]
-[ext_resource type="Texture2D" uid="uid://bonlrwqihq7e" path="res://Graphics/Asteroids.png" id="2_6t52a"]
+[ext_resource type="Script" path="res://Scenes/Missile/Missile.cs" id="1_1qvwk"]
+[ext_resource type="Texture2D" uid="uid://bonlrwqihq7e" path="res://Graphics/Asteroids.png" id="2_moky6"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2jvkt"]
-atlas = ExtResource("2_6t52a")
+atlas = ExtResource("2_moky6")
 region = Rect2(480, 288, 32, 32)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_jaqsg"]
 radius = 5.09902
 
-[node name="Bullet" type="Area2D"]
+[node name="Missile" type="Area2D"]
 collision_layer = 2
-script = ExtResource("1_1kl7w")
+script = ExtResource("1_1qvwk")
 _testingLinearVelocity = Vector2(100, 100)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

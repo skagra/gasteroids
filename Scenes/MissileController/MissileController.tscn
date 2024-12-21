@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://d0lj1vtc141qv"]
+
+[ext_resource type="Script" path="res://Scenes/MissileController/MissileController.cs" id="1_2yk4v"]
+[ext_resource type="AudioStream" uid="uid://cjguhew4n5igs" path="res://Audio/fire.wav" id="2_gt2jk"]
+
+[node name="MissileController" type="Node"]
+script = ExtResource("1_2yk4v")
+
+[node name="ShootAudioPlayer" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_gt2jk")

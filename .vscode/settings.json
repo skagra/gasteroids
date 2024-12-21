@@ -11,6 +11,10 @@
         "tscn",
         "vsync"
     ],
+    "cSpell.ignorePaths": [
+        "**/*.tscn",
+        "**/*.godot"
+    ],
     "files.exclude": {
         ".godot": true,
         "**/*.tscn": true,
