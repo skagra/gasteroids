@@ -35,10 +35,12 @@ public partial class AsteroidFieldController : Node
     [ExportGroup("Rotation")]
     [Export]
     public bool IsRotationEnabled { get; set; } = true;
-    [Export]
-    public float MinRadiansPerSecond { get; set; } = -0.3f;
-    [Export]
-    public float MaxRadiansPerSecond { get; set; } = 3.0f;
+    // [Export]
+    // public float MinRadiansPerSecond { get; set; } = -0.3f;
+    // [Export]
+    // public float MaxRadiansPerSecond { get; set; } = 3.0f;
+
+    public float RotationMaxRadiansPerSecond { get; set; } = 3.0f;
 
     [ExportCategory("Testing")]
     [Export(PropertyHint.Range, "0,100,")]
@@ -158,7 +160,8 @@ public partial class AsteroidFieldController : Node
         asteroid.Name = $"Asteroid #{_asteroidId++}";
         asteroid.Position = newAsteroidPosition;
         asteroid.LinearVelocity = Vector2.Right.Rotated((float)GD.RandRange(0f, 2f * Math.PI)) * (float)GD.RandRange(MinSpeed, MaxSpeed);
-        asteroid.AngularVelocity = (float)(IsRotationEnabled ? GD.RandRange(MinRadiansPerSecond, MaxRadiansPerSecond) : 0f);
+        GD.Print($"About to spawn Asteroid with IsRotationEnabled={IsRotationEnabled}");
+        asteroid.AngularVelocity = IsRotationEnabled ? (float)GD.RandRange(-RotationMaxRadiansPerSecond, RotationMaxRadiansPerSecond) : 0f;
 
         // Using deferred mode as Gadot objects to setting the new Asteroid position otherwise
         // asteroid.Connect("Collided", new Callable(this, "CollidedWithAsteroid"), (int)ConnectFlags.Deferred);

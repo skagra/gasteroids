@@ -6,14 +6,13 @@
         "gasteroids",
         "Mathf",
         "Monitorable",
-        "oivln",
-        "qcvmmilfn",
         "tscn",
         "vsync"
     ],
     "cSpell.ignorePaths": [
         "**/*.tscn",
-        "**/*.godot"
+        "**/*.godot",
+        ".vscode/**"
     ],
     "files.exclude": {
         ".godot": true,

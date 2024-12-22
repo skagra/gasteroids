@@ -22,7 +22,7 @@ public partial class MissileController : Node
     public int MissileCount { get; set; } = 5;
 
     [Export]
-    public double MissileDuration { get; set; } = 0.5;
+    public float MissileDuration { get; set; } = 0.5f;
 
     [Export]
     public int MissileSpeed { get; set; } = 200;
@@ -31,6 +31,8 @@ public partial class MissileController : Node
 
     public override void _Ready()
     {
+        GD.Print($"In MissileController.Ready MissileCount={MissileCount}");
+
         _shootAudioStream = GetNode<AudioStreamPlayer2D>("ShootAudioPlayer");
 
         // Missiles
@@ -40,8 +42,10 @@ public partial class MissileController : Node
             dormantMissile.Name = $"Missile #{i + 1}";
             _dormantMissiles.Add(dormantMissile);
             dormantMissile.Collided += Entered;
+            AddChild(dormantMissile);
+            DisableMissile(dormantMissile);
         }
-        GD.Print($"Missile durection={MissileDuration}");
+        GD.Print($"Missile direction={MissileDuration}");
     }
 
     public override void _Process(double delta)
@@ -70,17 +74,35 @@ public partial class MissileController : Node
             _activeMissiles.Add(new ActiveMissile { Missile = newMissile, CountDown = MissileDuration });
 
             newMissile.Position = position;
-            newMissile.Velocity = MissileSpeed * Vector2.Right.Rotated(rotation) + linearVelocity; // TODO - Right vector! 
-            AddChild(newMissile);
+            // TODO - Right vector!  XXXX
+            newMissile.Velocity = MissileSpeed * Vector2.Right.Rotated(rotation) + linearVelocity;
+            EnableMissile(newMissile);
         }
+    }
+
+    private static void DisableMissile(Missile missile)
+    {
+        missile.Hide();
+        missile.SetProcess(false);
+        missile.SetPhysicsProcess(false);
+        missile.SetDeferred(Area2D.PropertyName.Monitorable, false);
+        missile.SetDeferred(Area2D.PropertyName.Monitoring, false);
+    }
+
+    private static void EnableMissile(Missile missile)
+    {
+        missile.Show();
+        missile.SetProcess(true);
+        missile.SetPhysicsProcess(true);
+        missile.SetDeferred(Area2D.PropertyName.Monitorable, true);
+        missile.SetDeferred(Area2D.PropertyName.Monitoring, true);
     }
 
     public void KillMissile(Missile missile)
     {
         // TODO - Trap error condition
         var missileDetails = _activeMissiles.Find(missileDetails => missileDetails.Missile == missile);
-        CallDeferred(MethodName.RemoveChild, missile);
-
+        DisableMissile(missile);
         _activeMissiles.Remove(missileDetails);
         _dormantMissiles.Add(missile);
     }
@@ -97,7 +119,7 @@ public partial class MissileController : Node
             {
                 // Make the missile dormant
                 _dormantMissiles.Add(activeMissile.Missile);
-                RemoveChild(activeMissile.Missile);
+                DisableMissile(activeMissile.Missile);
                 _activeMissiles.RemoveAt(missileIndex);
             }
         }

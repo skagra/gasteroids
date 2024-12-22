@@ -49,7 +49,7 @@ public partial class Main : Node
 
     #endregion Inspector configuration values
 
-    // Scores
+    // Score table
     private readonly Dictionary<AsteroidSize, int> _asteroidScores = new();
 
     #region Scene references
@@ -138,6 +138,7 @@ public partial class Main : Node
     public override void _Ready()
     {
         SetupSceneReferences();
+        GD.Print($"In main READY missiles count = {_missileController.MissileCount}");
         SetupSceneSignals();
 
         // New ship spawn location
@@ -148,11 +149,15 @@ public partial class Main : Node
         circleShape.Radius = _safeZoneRadius;
         _exclusionZone.Position = _shipSpawnPosition;
 
+        ApplyConfiguration(_config.Settings);
+
         // Sound
         SetSoundEnabled(_soundIsEnabled);
 
         // Waiting to start
         WaitingToPlay();
+
+
     }
 
     #endregion Set up
@@ -242,27 +247,69 @@ public partial class Main : Node
 
     #region Configuration
 
-    private void ShowConfig()
+    private Config.ConfigSettings CollectConfiguration()
     {
-        _config.Show(new Config.ConfigSettings
+        return new Config.ConfigSettings
         {
             SoundEnabled = _soundIsEnabled,
+
+            ShipInvulnerable = _infiniteLives,
+            ShipStartingCount = _livesNewGame,
+            ShipMax = _livesMax,
+            ShipExtraThreshold = _lifeExtraThreshold,
+            ShipAcceleration = _player.ThrustForce,
+            ShipRotationSpeed = _player.RotationSpeed,
+
             AsteroidsRotationEnabled = _asteroidFieldController.IsRotationEnabled,
-            AsteroidsStartingQuantity = _asteroidsCurrentNewGameStart
-        });
+            AsteroidsStartingQuantity = _asteroidsCurrentNewGameStart,
+            AsteroidsMaxStartingQuantity = _asteroidsNewGameMax,
+            AsteroidsMinSpeed = _asteroidFieldController.MinSpeed,
+            AsteroidsMaxSpeed = _asteroidFieldController.MaxSpeed,
+
+            MissilesMax = _missileController.MissileCount,
+            MissilesLifespan = _missileController.MissileDuration
+        };
+    }
+
+    private void ShowConfig()
+    {
+        _config.Show(CollectConfiguration());
+
+        GD.Print($"In main missiles count = {_missileController.MissileCount}");
 
         _gameState = GameState.ShowingConfig;
+    }
+
+    private void ApplyConfiguration(Config.ConfigSettings config)
+    {
+        config.SoundEnabled = _soundIsEnabled;
+
+        _infiniteLives = config.ShipInvulnerable;
+        _livesNewGame = config.ShipStartingCount;
+        _livesMax = config.ShipMax;
+        _lifeExtraThreshold = config.ShipExtraThreshold;
+        _player.ThrustForce = config.ShipAcceleration;
+        _player.RotationSpeed = config.ShipRotationSpeed;
+
+        _asteroidFieldController.IsRotationEnabled = config.AsteroidsRotationEnabled;
+        _asteroidsCurrentNewGameStart = config.AsteroidsStartingQuantity;
+        _asteroidsNewGameMax = config.AsteroidsMaxStartingQuantity;
+        _asteroidFieldController.MinSpeed = config.AsteroidsMinSpeed;
+        _asteroidFieldController.MaxSpeed = config.AsteroidsMaxSpeed;
+
+        _missileController.MissileCount = config.MissilesMax;
+        _missileController.MissileDuration = config.MissilesLifespan;
     }
 
     private void OnConfigOkPressed()
     {
         var config = _config.Settings;
 
-        _soundIsEnabled = config.SoundEnabled;
-        _asteroidFieldController.IsRotationEnabled = config.AsteroidsRotationEnabled;
-        _asteroidsNewGameStart = config.AsteroidsStartingQuantity;
+        ApplyConfiguration(config);
 
         _gameState = GameState.WaitingToPlay;
+
+        GD.Print($"Main OK Pressed has AsteroidsRotationEnabled={config.AsteroidsRotationEnabled} _asteroidFieldController.IsRotationEnabled={_asteroidFieldController.IsRotationEnabled}");
     }
 
     private void OnCancelPressed()
@@ -309,14 +356,7 @@ public partial class Main : Node
 
     private void NewGame()
     {
-        // Asteroids
         _asteroidsCurrentNewGameStart = _asteroidsNewGameStart;
-        _asteroidFieldController.MinSpeed = _asteroidFieldController.MinSpeed;
-        _asteroidFieldController.MaxSpeed = _asteroidFieldController.MaxSpeed;
-        _asteroidFieldController.IsRotationEnabled = _asteroidFieldController.IsRotationEnabled;
-        _asteroidFieldController.MinRadiansPerSecond = _asteroidFieldController.MinRadiansPerSecond;
-        _asteroidFieldController.MaxRadiansPerSecond = _asteroidFieldController.MaxRadiansPerSecond;
-
         _lives.SetLives(_livesNewGame);
         _score.Value = 0;
         _extraLifeThresholdNext = _lifeExtraThreshold;
@@ -342,9 +382,11 @@ public partial class Main : Node
     private void GameOver()
     {
         GD.Print("Game Over");
+
         _gameState = GameState.GameOver;
         _beats.Stop();
         _gameOverLabel.Show();
+
         WaitingToPlay();
     }
 

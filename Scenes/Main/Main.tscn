@@ -20,14 +20,10 @@ _safeZoneRadius = 100
 [node name="Player" parent="." instance=ExtResource("2_fuwta")]
 position = Vector2(6, 28)
 collision_mask = 1
-_thrustForce = 500
 
 [node name="AsteroidFieldController" parent="." instance=ExtResource("3_37sgv")]
 
 [node name="MissileController" parent="." instance=ExtResource("4_abpdt")]
-MissileCount = 10
-MissileDuration = 2.0
-MissileSpeed = 300
 
 [node name="ExclusionZone" parent="." instance=ExtResource("6_wewr6")]
 

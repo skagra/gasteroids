@@ -26,9 +26,9 @@ public partial class Player : RigidBody2D
 
     [ExportCategory("General Settings")]
     [Export]
-    private int _thrustForce = 300;
+    public float ThrustForce { get; set; } = 300;
     [Export]
-    private float _rotationSpeed = 5.0f;
+    public float RotationSpeed { get; set; } = 5.0f;
 
     private Area2D _area2D;
     private AnimatedSprite2D _sprite;
@@ -68,7 +68,7 @@ public partial class Player : RigidBody2D
 
     public void Activate()
     {
-        Activate(GetViewportRect().Size * 0.5f);
+        Activate(Screen.Instance.GetCentre());
     }
 
     public void Activate(Vector2 position)
@@ -167,7 +167,7 @@ public partial class Player : RigidBody2D
         {
             _thrustAudioStream.Play();
         }
-        ApplyCentralForce(_area2D.Transform.X * _thrustForce);
+        ApplyCentralForce(_area2D.Transform.X * ThrustForce);
         LinearDamp = 0f;
         if (!_sprite.IsPlaying())
         {
@@ -195,12 +195,12 @@ public partial class Player : RigidBody2D
 
     private void RotateCWPressed(double delta)
     {
-        _area2D.Rotation += _rotationSpeed * (float)delta;
+        _area2D.Rotation += RotationSpeed * (float)delta;
     }
 
     private void RotateACWPressed(double delta)
     {
-        _area2D.Rotation += -_rotationSpeed * (float)delta;
+        _area2D.Rotation += -RotationSpeed * (float)delta;
     }
 
     private void Entered(Area2D collidedWith)

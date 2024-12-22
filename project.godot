@@ -32,7 +32,8 @@ project/assembly_name="GadotNet"
 
 [gui]
 
-theme/custom="res://Base Theme.tres"
+timers/tooltip_delay_sec=0.25
+theme/custom="res://Themes/Base Theme.tres"
 theme/custom_font="res://Fonts/Hyperspace Bold.otf"
 
 [input]

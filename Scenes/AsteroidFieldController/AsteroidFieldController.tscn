@@ -4,4 +4,5 @@
 
 [node name="AsteroidFieldController" type="Node"]
 script = ExtResource("1_8u110")
-MinRadiansPerSecond = -3.0
+MinSpeed = 75.0
+MaxSpeed = 150.0
