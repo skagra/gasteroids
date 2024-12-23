@@ -43,7 +43,7 @@ public partial class SettingsDialog : CanvasLayer
     private Button _okButton;
 
     // Currently active settings
-    public GameSettings ActiveSettings { get; private set; }
+    public GameSettings ActiveSettings { get; set; }
 
     // Default settings values
     private readonly GameSettings _defaultSettings = new()
@@ -62,7 +62,7 @@ public partial class SettingsDialog : CanvasLayer
         AsteroidsMinSpeed = 100,
         AsteroidsMaxSpeed = 150,
         MissilesMax = 8,
-        MissilesSpeed = 20,
+        MissilesSpeed = 200,
         MissilesLifespan = 1.5f
     };
 

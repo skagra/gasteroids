@@ -165,7 +165,6 @@ public partial class AsteroidFieldController : Node
         asteroid.Name = $"Asteroid #{_asteroidId++}";
         asteroid.Position = newAsteroidPosition;
         asteroid.LinearVelocity = Vector2.Right.Rotated((float)GD.RandRange(0f, 2f * Math.PI)) * (float)GD.RandRange(MinSpeed, MaxSpeed);
-        GD.Print($"About to spawn Asteroid with IsRotationEnabled={IsRotationEnabled}");
         asteroid.AngularVelocity = IsRotationEnabled ? (float)GD.RandRange(0, RotationMaxRadiansPerSecond * 2.0f) - RotationMaxRadiansPerSecond : 0f;
 
         // Using deferred mode as Gadot objects to setting the new Asteroid position otherwise

@@ -34,10 +34,6 @@ public partial class Main : Node
     [Export]
     private int _asteroidsNewSheetDelta = 1;
 
-    // [ExportCategory("Sound")]
-    // [Export]
-    // private bool _soundIsEnabled = true;
-
     [ExportCategory("Misc")]
     [Export]
     private int _safeZoneRadius = 200;
@@ -69,7 +65,6 @@ public partial class Main : Node
     private int _asteroidsCurrentNewGameStart;
     private int _extraLifeThresholdNext;
     private Vector2 _shipSpawnPosition;
-
 
     // Game state machine
     private enum GameState { WaitingToPlay, AwaitingNewShip, Playing, ShowingConfigDialog, ShowingHelpDialog };
@@ -151,8 +146,11 @@ public partial class Main : Node
 
     public override void _Process(double delta)
     {
+        // Ready to spawn new ship
         if (_gameState == GameState.AwaitingNewShip)
         {
+            // But we need to wait until the area around the spawn
+            // point is free from asteroids
             if (!_exclusionZone.HasOverlappingAreas())
             {
                 _gameState = GameState.Playing;
@@ -164,21 +162,27 @@ public partial class Main : Node
 
     private void OnFieldCleared()
     {
+        // Increment number of asteroids to spawn and keep it within permitted range
         _asteroidsCurrentNewGameStart += _asteroidsNewSheetDelta;
         _asteroidsCurrentNewGameStart = Mathf.Clamp(_asteroidsCurrentNewGameStart, 0, _asteroidsNewGameMax);
+
+        // Spawn the new field of asteroids
         _asteroidFieldController.CreateField(_asteroidsCurrentNewGameStart,
             new Rect2(_player.Position.X - _safeZoneRadius, _player.Position.Y - _safeZoneRadius,
                       _safeZoneRadius * 2, _safeZoneRadius * 2),
                       true);
+
+        // Reset beats sounds to slowest pace
         _beats.Reset();
     }
+
     private void OnPlayerExploded()
     {
-        GD.Print("In OnExploded in Main");
-        _player.Deactivate();
-
         if (_gameState == GameState.Playing)
         {
+            // Hide the player/stop processing
+            _player.Deactivate();
+
             // This is safe wrt signal delivery order
             // as there is a gap between "Exploding" and "Exploded"
             _gameState = GameState.AwaitingNewShip;
@@ -188,20 +192,26 @@ public partial class Main : Node
 
     private void OnPlayerExploding()
     {
+        // Just a safety check!
         if (_lives.Value > 0)
         {
+            // Stop playing the beats sounds
             _beats.Stop();
+
+            // If we don't have infinite lives selected then decrement remaining lives
             if (!_infiniteLives)
             {
                 _lives.RemoveLife();
             }
 
+            // If we have no lives left then flag it
             if (_lives.Value == 0)
             {
                 GameOver();
             }
             else
             {
+                // Enable the exclusion zone to ensure the new player spawn will be safe
                 _exclusionZoneCollisionShape.SetDeferred(CollisionShape2D.PropertyName.Disabled, false);
             }
         }
@@ -246,6 +256,7 @@ public partial class Main : Node
             AsteroidsMaxSpeed = _asteroidFieldController.MaxSpeed,
 
             MissilesMax = _missileController.MissileCount,
+            MissilesSpeed = _missileController.MissileSpeed,
             MissilesLifespan = _missileController.MissileDuration
         };
     }
@@ -255,6 +266,7 @@ public partial class Main : Node
         _pushStartLabel.Hide();
         _oneCoinLabel.Hide();
 
+        _settingsDialog.ActiveSettings = CollectConfiguration();
         _settingsDialog.Show();
 
         _gameState = GameState.ShowingConfigDialog;
@@ -289,8 +301,7 @@ public partial class Main : Node
         _pushStartLabel.Show();
         _oneCoinLabel.Show();
 
-        var config = _settingsDialog.ActiveSettings;
-        ApplyConfiguration(config);
+        ApplyConfiguration(_settingsDialog.ActiveSettings);
 
         _gameState = GameState.WaitingToPlay;
     }
@@ -354,21 +365,35 @@ public partial class Main : Node
 
     private void NewGame()
     {
+        // Starting lives
         _asteroidsCurrentNewGameStart = _asteroidsNewGameStart;
         _lives.SetLives(_livesNewGame);
+
+        // Reset score to 0
         _score.Value = 0;
+
+        // Threshold for first extra life
         _extraLifeThresholdNext = _lifeExtraThreshold;
+
+        // Don't need the exclusion zone as we are creating new asteroids
         _exclusionZoneCollisionShape.Disabled = true;
+
+        // Hide UI labels
         _pushStartLabel.Hide();
         _gameOverLabel.Hide();
         _oneCoinLabel.Hide();
+
+        // Create the new asteroid fields
         _asteroidFieldController.CreateField(_asteroidsCurrentNewGameStart,
            new Rect2(_shipSpawnPosition.X - _safeZoneRadius, _shipSpawnPosition.Y - _safeZoneRadius,
                      _safeZoneRadius * 2, _safeZoneRadius * 2),
            true);
+
+        // Start playing the beats sounds
         _beats.Reset();
         _beats.Start();
 
+        // Flag we are ready to spawn a new ship
         _gameState = GameState.AwaitingNewShip;
     }
 
@@ -386,12 +411,12 @@ public partial class Main : Node
         _exclusionZone.Position = _shipSpawnPosition;
     }
 
-    private void SetSoundEnabled(bool enabled)
+    private static void SetSoundEnabled(bool enabled)
     {
         AudioServer.SetBusMute(AudioServer.GetBusIndex("Master"), !enabled);
     }
 
-    private bool GetSoundEnabled()
+    private static bool GetSoundEnabled()
     {
         return !AudioServer.IsBusMute(AudioServer.GetBusIndex("Master"));
     }

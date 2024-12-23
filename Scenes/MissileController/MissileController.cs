@@ -128,15 +128,13 @@ public partial class MissileController : Node
     public void KillMissile(Missile missile)
     {
         var missileDetails = _activeMissiles.Find(missileDetails => missileDetails.Missile == missile);
+
+        // If the missile collides with more than one asteroid in the same frame then this could be null
         if (missileDetails != null)
         {
             DisableMissile(missile);
             _activeMissiles.Remove(missileDetails);
             _dormantMissiles.Add(missile);
-        }
-        else
-        {
-            throw new InvalidOperationException($"Can't find missile details for missile '{missile.Name}'");
         }
     }
 
