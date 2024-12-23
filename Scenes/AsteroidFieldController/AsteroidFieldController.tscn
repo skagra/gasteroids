@@ -1,8 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://bx0l2shyhmj8q"]
+[gd_scene load_steps=5 format=3 uid="uid://bx0l2shyhmj8q"]
 
 [ext_resource type="Script" path="res://Scenes/AsteroidFieldController/AsteroidFieldController.cs" id="1_8u110"]
+[ext_resource type="AudioStream" uid="uid://bqvmcjahvnf6l" path="res://Audio/bangLarge.wav" id="2_tohdg"]
+[ext_resource type="AudioStream" uid="uid://c8c2iyo1wfrq6" path="res://Audio/bangMedium.wav" id="3_qllmd"]
+[ext_resource type="AudioStream" uid="uid://b873xi6y1o0di" path="res://Audio/bangSmall.wav" id="4_bnpmu"]
 
 [node name="AsteroidFieldController" type="Node"]
 script = ExtResource("1_8u110")
 MinSpeed = 75.0
 MaxSpeed = 150.0
+_bangLarge = ExtResource("2_tohdg")
+_bangMedium = ExtResource("3_qllmd")
+_bangSmall = ExtResource("4_bnpmu")

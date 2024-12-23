@@ -1,11 +1,10 @@
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
 using Godot;
 
 namespace Asteroids;
 
 public partial class Beats : Node
 {
+    // Values configuration via the inspector
     [Export]
     private AudioStream _beat1;
     [Export]
@@ -83,7 +82,6 @@ public partial class Beats : Node
                         _increaseSpeedTimer = 0;
                         _currentGap -= _gapDelta;
                         _currentGap = Mathf.Max(_currentGap, _minGap);
-                        GD.Print($"Gap={_currentGap}");
                     }
                 }
             }

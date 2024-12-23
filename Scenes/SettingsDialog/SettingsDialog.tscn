@@ -1,0 +1,339 @@
+[gd_scene load_steps=4 format=3 uid="uid://b6kmyi73lblks"]
+
+[ext_resource type="Script" path="res://Scenes/SettingsDialog/SettingsDialog.cs" id="1_m01os"]
+[ext_resource type="Theme" uid="uid://bgfii5oeawryi" path="res://Themes/Dialog.tres" id="2_bd8pc"]
+[ext_resource type="PackedScene" uid="uid://dj746n7clp03t" path="res://Controls/NumericSpinBox.tscn" id="3_k6nax"]
+
+[node name="Settings Dialog" type="CanvasLayer"]
+script = ExtResource("1_m01os")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -215.5
+offset_top = -203.0
+offset_right = 215.5
+offset_bottom = 203.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_bd8pc")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+
+[node name="Dialog Heading" type="Label" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"DialogHeading"
+text = "Settings
+"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 500)
+layout_mode = 2
+size_flags_vertical = 3
+follow_focus = true
+horizontal_scroll_mode = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Graphics Category Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"DialogCategory"
+text = "Graphics"
+
+[node name="Background Enabled Container" type="HBoxContainer" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Background Enabled Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Background Enabled Container"]
+layout_mode = 2
+size_flags_horizontal = 2
+tooltip_text = "Enable or disable background image"
+mouse_filter = 0
+text = "Show Background"
+
+[node name="Background Enabled" type="CheckBox" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Background Enabled Container"]
+layout_mode = 2
+size_flags_horizontal = 10
+button_pressed = true
+
+[node name="Sound Category Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_type_variation = &"DialogCategory"
+text = "Sound"
+
+[node name="Sound Enabled Container" type="HBoxContainer" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Sound Enabled Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Sound Enabled Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tooltip_text = "Enable or disable sound effects"
+mouse_filter = 0
+text = "Sound Enabled"
+
+[node name="Sound Enabled" type="CheckBox" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Sound Enabled Container"]
+layout_mode = 2
+button_pressed = true
+
+[node name="Player Ship Category Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"DialogCategory"
+text = "Player Ships"
+
+[node name="Ship Category Container" type="GridContainer" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="Ship Infinite Lives Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Ship Category Container"]
+layout_mode = 2
+size_flags_horizontal = 2
+tooltip_text = "Never lose a ship"
+mouse_filter = 0
+text = "Infinite Ships"
+
+[node name="Ship Infinite Lives" type="CheckBox" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Ship Category Container"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="Ship Starting Count Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Ship Category Container"]
+layout_mode = 2
+size_flags_horizontal = 2
+tooltip_text = "The number of ships at the
+beginning of a new game"
+mouse_filter = 0
+text = "Starting Ships"
+
+[node name="Ship Starting Count" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Ship Category Container" instance=ExtResource("3_k6nax")]
+layout_mode = 2
+size_flags_horizontal = 10
+min_value = 3.0
+max_value = 6.0
+value = 3.0
+
+[node name="Ship Max Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Ship Category Container"]
+layout_mode = 2
+size_flags_horizontal = 2
+tooltip_text = "The maximum number of ships that
+may be earned"
+mouse_filter = 0
+text = "Maximum Ships"
+
+[node name="Ship Max" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Ship Category Container" instance=ExtResource("3_k6nax")]
+layout_mode = 2
+size_flags_horizontal = 10
+min_value = 3.0
+max_value = 9.0
+value = 3.0
+
+[node name="Ship Extra Threshold Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Ship Category Container"]
+layout_mode = 2
+size_flags_horizontal = 2
+tooltip_text = "An extra ship is earned every time
+this threshold is passed"
+mouse_filter = 0
+text = "Extra Ship Score Threshold"
+
+[node name="Ship Extra Threshold" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Ship Category Container" instance=ExtResource("3_k6nax")]
+layout_mode = 2
+size_flags_horizontal = 10
+min_value = 1000.0
+value = 10000.0
+
+[node name="Ship Acceleration Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Ship Category Container"]
+layout_mode = 2
+size_flags_horizontal = 2
+tooltip_text = "How quickly your ship accelerates"
+mouse_filter = 0
+text = "Acceleration"
+
+[node name="Ship Acceleration" type="HSlider" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Ship Category Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 100.0
+max_value = 1000.0
+value = 300.0
+
+[node name="Ship Rotation Speed Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Ship Category Container"]
+layout_mode = 2
+size_flags_horizontal = 2
+tooltip_text = "How quickly your ship turns"
+mouse_filter = 0
+text = "Turn Speed"
+
+[node name="Ship Rotation Speed" type="HSlider" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Ship Category Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 1.0
+max_value = 10.0
+step = 0.0
+value = 5.0
+
+[node name="Player Missiles Category Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"DialogCategory"
+text = "Player Missiles"
+
+[node name="Player Missiles Category Container" type="GridContainer" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="Missiles Maximum Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Player Missiles Category Container"]
+layout_mode = 2
+size_flags_horizontal = 2
+tooltip_text = "Maximum number of missiles on 
+the screen at once"
+mouse_filter = 0
+text = "Maximum Quantity"
+
+[node name="Missiles Maximum" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Player Missiles Category Container" instance=ExtResource("3_k6nax")]
+layout_mode = 2
+size_flags_horizontal = 10
+min_value = 5.0
+max_value = 20.0
+value = 8.0
+
+[node name="Missiles Speed Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Player Missiles Category Container"]
+layout_mode = 2
+size_flags_horizontal = 2
+tooltip_text = "Missile speed, relative to ship velocity"
+mouse_filter = 0
+text = "Speed"
+
+[node name="Missiles Speed" type="HSlider" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Player Missiles Category Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+min_value = 20.0
+step = 0.0
+value = 20.0
+
+[node name="Missiles Lifespan Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Player Missiles Category Container"]
+layout_mode = 2
+size_flags_horizontal = 2
+tooltip_text = "Lifespan of a missile"
+mouse_filter = 0
+text = "Lifespan"
+
+[node name="Missiles Lifespan" type="HSlider" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Player Missiles Category Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+min_value = 0.25
+max_value = 4.0
+step = 0.0
+value = 1.5
+
+[node name="Asteroids Category Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"DialogCategory"
+text = "Asteroids"
+
+[node name="Asteroids Category Container" type="GridContainer" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 2
+
+[node name="Asteroids Rotation Enabled Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Asteroids Category Container"]
+layout_mode = 2
+tooltip_text = "Enable or disable asteroid rotation.  Asteroids 
+did not rotate in the original arcade game."
+mouse_filter = 0
+text = "Rotation Enabled
+"
+
+[node name="Asteroids Rotation Enabled" type="CheckBox" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Asteroids Category Container"]
+layout_mode = 2
+size_flags_horizontal = 10
+button_pressed = true
+
+[node name="Asteroids Starting Quantity Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Asteroids Category Container"]
+layout_mode = 2
+tooltip_text = "The number of asteroids at the 
+beginning of a new game"
+mouse_filter = 0
+text = "Starting Quantity"
+
+[node name="Asteroids Starting Quantity" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Asteroids Category Container" instance=ExtResource("3_k6nax")]
+layout_mode = 2
+size_flags_horizontal = 10
+min_value = 4.0
+max_value = 20.0
+value = 4.0
+
+[node name="Asteroids Max Starting Quantity Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Asteroids Category Container"]
+layout_mode = 2
+tooltip_text = "The number of asteroids at the start of each 
+new sheet increases until this limit is reached."
+mouse_filter = 0
+text = "Maximum Starting Quantity"
+
+[node name="Asteroids Max Starting Quantity" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Asteroids Category Container" instance=ExtResource("3_k6nax")]
+layout_mode = 2
+size_flags_horizontal = 10
+min_value = 4.0
+max_value = 20.0
+value = 4.0
+
+[node name="Asteroids Min Speed Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Asteroids Category Container"]
+layout_mode = 2
+tooltip_text = "The minimum speed at which asteroids may travel"
+mouse_filter = 0
+text = "Minimum Speed"
+
+[node name="Asteroids Min Speed" type="HSlider" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Asteroids Category Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+min_value = 75.0
+max_value = 500.0
+step = 0.0
+value = 100.0
+
+[node name="Asteroids Max Speed Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Asteroids Category Container"]
+layout_mode = 2
+tooltip_text = "The maximum speed at which asteroids may travel"
+mouse_filter = 0
+text = "Maximum Speed"
+
+[node name="Asteroids Max Speed" type="HSlider" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Asteroids Category Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+min_value = 75.0
+max_value = 500.0
+value = 150.0
+
+[node name="Buttons Container" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 1
+
+[node name="OK Button" type="Button" parent="PanelContainer/VBoxContainer/Buttons Container"]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "OK"
+
+[node name="Reset Button" type="Button" parent="PanelContainer/VBoxContainer/Buttons Container"]
+layout_mode = 2
+tooltip_text = "Reset all settings to default values"
+text = "Reset"
+
+[node name="Cancel Button" type="Button" parent="PanelContainer/VBoxContainer/Buttons Container"]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "Cancel"

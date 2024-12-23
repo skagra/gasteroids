@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://by7m6mvty1pbg"
-path="res://.godot/imported/Ship Explosion Sheet.png-5cc638ff6791215aa64c29ff0e7918a4.ctex"
+uid="uid://bg6wnum516ph2"
+path="res://.godot/imported/Ships.png-21ea32b57569a88de06d30f59fd1f2cd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Scenes/Player/Ship Explosion Sheet.png"
-dest_files=["res://.godot/imported/Ship Explosion Sheet.png-5cc638ff6791215aa64c29ff0e7918a4.ctex"]
+source_file="res://Graphics/Ships.png"
+dest_files=["res://.godot/imported/Ships.png-21ea32b57569a88de06d30f59fd1f2cd.ctex"]
 
 [params]
 

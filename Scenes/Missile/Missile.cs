@@ -4,14 +4,17 @@ namespace Asteroids;
 
 public partial class Missile : Area2D
 {
+    // Signals
     [Signal]
     public delegate void CollidedEventHandler(Missile asteroid, Node collidedWith);
 
-    public Vector2 Velocity { get; set; } = Vector2.Right;
-
+    // Values configurable via the inspector
     [ExportCategory("Testing")]
     [Export]
     private Vector2 _testingLinearVelocity = Vector2.Zero;
+
+    // Linear velocity
+    public Vector2 Velocity { get; set; } = Vector2.Right;
 
     public override void _Process(double delta)
     {
@@ -24,7 +27,7 @@ public partial class Missile : Area2D
 
         if (GetParent() is Window)
         {
-            Position = Screen.Instance.GetCentre();
+            Position = Screen.Instance.Centre;
             Velocity = _testingLinearVelocity;
         }
     }
@@ -36,8 +39,6 @@ public partial class Missile : Area2D
 
     private void Entered(Area2D collidedWith)
     {
-        GD.Print($"Collision detected in '{this.Name}' with '{collidedWith.Name}'");
-
         EmitSignal(SignalName.Collided, this, collidedWith);
     }
 }

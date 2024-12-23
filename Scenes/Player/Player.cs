@@ -50,6 +50,7 @@ public partial class Player : RigidBody2D
         _thrustAudioStream = _area2D.GetNode<AudioStreamPlayer2D>("ThrustAudioPlayer");
 
         _area2D.AreaEntered += Entered;
+        _sprite.AnimationFinished += AnimationComplete;
 
         // TODO Scaling
         _spriteSize = _sprite.SpriteFrames.GetFrameTexture(_sprite.Animation, _sprite.Frame).GetSize();
@@ -68,13 +69,11 @@ public partial class Player : RigidBody2D
 
     public void Activate()
     {
-        Activate(Screen.Instance.GetCentre());
+        Activate(Screen.Instance.Centre);
     }
 
     public void Activate(Vector2 position)
     {
-        GD.Print($"Activating at {position}");
-
         Position = position;
         LinearVelocity = Vector2.Zero;
         AngularVelocity = 0f;
@@ -99,8 +98,6 @@ public partial class Player : RigidBody2D
 
     public void Deactivate()
     {
-        GD.Print("Deactivating");
-
         Hide();
         _collisionPolygon.Disabled = true;
         SetProcess(false);
@@ -144,16 +141,10 @@ public partial class Player : RigidBody2D
             }
         }
         Position = Screen.Instance.ClampToViewport(Position);
-        // if (LinearVelocity.Length() > 500)
-        // {
-        //     LinearVelocity = LinearVelocity.Normalized() * 500f;
-        // } // TODO
     }
 
     private void FirePressed()
     {
-        GD.Print("Fire Pressed");
-
         EmitSignal(SignalName.Shoot,
             // Current position + long dimension of spite in the direction of its rotation
             Position + ((_spriteSize.X / 2.0f) * Vector2.Right.Rotated(_area2D.Rotation)),
@@ -179,7 +170,6 @@ public partial class Player : RigidBody2D
     {
         if (_sprite.Animation == _ANIMATION_EXPLOSION)
         {
-            GD.Print("Explosion anim complete");
             EmitSignal(SignalName.Exploded);
         }
     }

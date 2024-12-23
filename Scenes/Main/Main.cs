@@ -5,8 +5,7 @@ namespace Asteroids;
 
 public partial class Main : Node
 {
-    #region Inspector configuration values
-
+    // Inspector configuration values
     [ExportCategory("Scores")]
     [Export]
     private int _scoreAsteroidLarge = 20;
@@ -35,9 +34,9 @@ public partial class Main : Node
     [Export]
     private int _asteroidsNewSheetDelta = 1;
 
-    [ExportCategory("Sound")]
-    [Export]
-    private bool _soundIsEnabled = true;
+    // [ExportCategory("Sound")]
+    // [Export]
+    // private bool _soundIsEnabled = true;
 
     [ExportCategory("Misc")]
     [Export]
@@ -47,12 +46,8 @@ public partial class Main : Node
     [Export]
     private bool _infiniteLives = false;
 
-    #endregion Inspector configuration values
-
     // Score table
     private readonly Dictionary<AsteroidSize, int> _asteroidScores = new();
-
-    #region Scene references
 
     // Scene references
     private AsteroidFieldController _asteroidFieldController;
@@ -66,29 +61,19 @@ public partial class Main : Node
     private Area2D _exclusionZone;
     private Beats _beats;
     private CollisionShape2D _exclusionZoneCollisionShape;
-    private Config _config;
-    private ControlsDialog _controlsDialog;
+    private SettingsDialog _settingsDialog;
+    private HelpDialog _helpDialog;
     private Panel _background;
 
-    #endregion Scene references
-
-    #region State
-
+    // State
     private int _asteroidsCurrentNewGameStart;
     private int _extraLifeThresholdNext;
     private Vector2 _shipSpawnPosition;
 
-    #endregion State
-
-    #region Game state machine
 
     // Game state machine
-    private enum GameState { WaitingToPlay, AwaitingNewShip, Playing, /* GameOver */ ShowingConfig, ShowingControls };
+    private enum GameState { WaitingToPlay, AwaitingNewShip, Playing, ShowingConfigDialog, ShowingHelpDialog };
     private GameState _gameState;
-
-    #endregion Game state machine
-
-    #region Set up
 
     public override void _EnterTree()
     {
@@ -96,6 +81,29 @@ public partial class Main : Node
         _asteroidScores[AsteroidSize.Large] = _scoreAsteroidLarge;
         _asteroidScores[AsteroidSize.Medium] = _scoreAsteroidMedium;
         _asteroidScores[AsteroidSize.Small] = _scoreAsteroidSmall;
+    }
+
+    public override void _Ready()
+    {
+        // Scene references
+        SetupSceneReferences();
+
+        // Scenes
+        SetupSceneSignals();
+
+        // New ship spawn location
+        _shipSpawnPosition = Screen.Instance.Centre;
+
+        // Asteroid exclusion zone - ensures ship spawns are safe
+        var circleShape = (CircleShape2D)_exclusionZoneCollisionShape.Shape;
+        circleShape.Radius = _safeZoneRadius;
+        _exclusionZone.Position = _shipSpawnPosition;
+
+        // Apply the default configuration
+        ApplyConfiguration(_settingsDialog.ActiveSettings);
+
+        // Waiting to start
+        WaitingToPlay();
     }
 
     private void SetupSceneReferences()
@@ -112,61 +120,34 @@ public partial class Main : Node
         _exclusionZone = GetNode<Area2D>("ExclusionZone");
         _exclusionZoneCollisionShape = _exclusionZone.GetNode<CollisionShape2D>("CollisionShape2D");
         _beats = GetNode<Beats>("Beats");
-        _config = GetNode<Config>("Config");
-        _controlsDialog = GetNode<ControlsDialog>("Controls Dialog");
+        _settingsDialog = GetNode<SettingsDialog>("Settings Dialog");
+        _helpDialog = GetNode<HelpDialog>("Help Dialog");
         _background = GetNode<Panel>("Background");
     }
 
     private void SetupSceneSignals()
     {
         // Missiles
-        _missileController.Collided += OnMissileSignalCollided;
+        _missileController.Collided += OnMissileCollided;
 
         // Player ship
-        _player.Exploding += OnPlayerSignalExploding;
-        _player.Exploded += OnPlayerSignalExploded;
-        _player.Shoot += OnPlayerSignalShoot;
+        _player.Exploding += OnPlayerExploding;
+        _player.Exploded += OnPlayerExploded;
+        _player.Shoot += OnPlayerShoot;
 
         // Asteroids
-        _asteroidFieldController.Collision += OnAsteroidSignalCollided;
+        _asteroidFieldController.Collision += OnAsteroidCollided;
         _asteroidFieldController.FieldCleared += OnFieldCleared;
 
         // Configuration settings
-        _config.OkPressed += OnConfigOkPressed;
-        _config.Cancel += OnCancelPressed;
+        _settingsDialog.OkPressed += OnConfigDialogOkPressed;
+        _settingsDialog.Cancel += OnConfigDialogCancelPressed;
 
         // Controls
-        _controlsDialog.OkPressed += OnControlsOkPressed;
+        _helpDialog.OkPressed += OnHelpDialogOkPressed;
         // Window resize
         GetTree().GetRoot().SizeChanged += OnResized;
     }
-
-    public override void _Ready()
-    {
-        SetupSceneReferences();
-        GD.Print($"In main READY missiles count = {_missileController.MissileCount}");
-        SetupSceneSignals();
-
-        // New ship spawn location
-        _shipSpawnPosition = Screen.Instance.GetCentre();
-
-        // Asteroid exclusion zone - ensures ship spawns are safe
-        var circleShape = (CircleShape2D)_exclusionZoneCollisionShape.Shape;
-        circleShape.Radius = _safeZoneRadius;
-        _exclusionZone.Position = _shipSpawnPosition;
-
-        ApplyConfiguration(_config.Settings);
-
-        // // Sound
-        // SetSoundEnabled(_soundIsEnabled);
-
-        // Waiting to start
-        WaitingToPlay();
-    }
-
-    #endregion Set up
-
-    #region Game execution
 
     public override void _Process(double delta)
     {
@@ -191,7 +172,7 @@ public partial class Main : Node
                       true);
         _beats.Reset();
     }
-    private void OnPlayerSignalExploded()
+    private void OnPlayerExploded()
     {
         GD.Print("In OnExploded in Main");
         _player.Deactivate();
@@ -205,7 +186,7 @@ public partial class Main : Node
         }
     }
 
-    private void OnPlayerSignalExploding()
+    private void OnPlayerExploding()
     {
         if (_lives.Value > 0)
         {
@@ -226,41 +207,32 @@ public partial class Main : Node
         }
     }
 
-    private void OnPlayerSignalShoot(Vector2 position, Vector2 shipLinearVelocity, float shipRotation)
+    private void OnPlayerShoot(Vector2 position, Vector2 shipLinearVelocity, float shipRotation)
     {
-        GD.Print($"Player collision detected in '{this.Name}'");
         _missileController.SpawnMissile(position, shipLinearVelocity, shipRotation);
     }
 
-    private void OnMissileSignalCollided(Missile missile, Node collidedWith)
+    private void OnMissileCollided(Missile missile, Node collidedWith)
     {
-        GD.Print($"Missile collision detected in '{this.Name}' with '{collidedWith.Name}'");
         _missileController.KillMissile(missile);
     }
 
-    private void OnAsteroidSignalCollided(Asteroid asteroid, AsteroidSize size, Node collidedWith)
+    private void OnAsteroidCollided(Asteroid asteroid, AsteroidSize size, Node collidedWith)
     {
-        GD.Print($"Asteroid collision detected in '{this.Name}' with '{collidedWith.Name}'");
         if (collidedWith is Missile)
         {
             IncreaseScore(_asteroidScores[size]);
         }
     }
 
-    #endregion Game execution
-
-    #region Configuration
-
-    private bool _backgroundEnabled = true; // TODO
-
-    private Config.ConfigSettings CollectConfiguration()
+    private GameSettings CollectConfiguration()
     {
-        return new Config.ConfigSettings
+        return new GameSettings
         {
-            BackgroundEnabled = _backgroundEnabled,
-            SoundEnabled = _soundIsEnabled,
+            BackgroundEnabled = _background.Visible,
+            SoundEnabled = GetSoundEnabled(),
 
-            ShipInvulnerable = _infiniteLives,
+            ShipInfiniteLives = _infiniteLives,
             ShipStartingCount = _livesNewGame,
             ShipMax = _livesMax,
             ShipExtraThreshold = _lifeExtraThreshold,
@@ -278,26 +250,23 @@ public partial class Main : Node
         };
     }
 
-    private void ShowConfig()
+    private void ShowConfigDialog()
     {
         _pushStartLabel.Hide();
         _oneCoinLabel.Hide();
 
-        _config.Show(CollectConfiguration());
+        _settingsDialog.Show();
 
-        GD.Print($"In main missiles count = {_missileController.MissileCount}");
-
-        _gameState = GameState.ShowingConfig;
+        _gameState = GameState.ShowingConfigDialog;
     }
 
-    private void ApplyConfiguration(Config.ConfigSettings config)
+    private void ApplyConfiguration(GameSettings config)
     {
-        _backgroundEnabled = config.BackgroundEnabled;
-        _background.Visible = _backgroundEnabled;
+        _background.Visible = config.BackgroundEnabled;
 
-        SetSoundEnabled(config.SoundEnabled);  // TODO
+        SetSoundEnabled(config.SoundEnabled);
 
-        _infiniteLives = config.ShipInvulnerable;
+        _infiniteLives = config.ShipInfiniteLives;
         _livesNewGame = config.ShipStartingCount;
         _livesMax = config.ShipMax;
         _lifeExtraThreshold = config.ShipExtraThreshold;
@@ -311,34 +280,27 @@ public partial class Main : Node
         _asteroidFieldController.MaxSpeed = config.AsteroidsMaxSpeed;
 
         _missileController.MissileCount = config.MissilesMax;
+        _missileController.MissileSpeed = config.MissilesSpeed;
         _missileController.MissileDuration = config.MissilesLifespan;
     }
 
-    private void OnConfigOkPressed()
+    private void OnConfigDialogOkPressed()
     {
-        GD.Print("Showing push to start");
-
         _pushStartLabel.Show();
         _oneCoinLabel.Show();
 
-        var config = _config.Settings;
+        var config = _settingsDialog.ActiveSettings;
         ApplyConfiguration(config);
 
         _gameState = GameState.WaitingToPlay;
-
-        GD.Print($"Main OK Pressed has AsteroidsRotationEnabled={config.AsteroidsRotationEnabled} _asteroidFieldController.IsRotationEnabled={_asteroidFieldController.IsRotationEnabled}");
     }
 
-    private void OnCancelPressed()
+    private void OnConfigDialogCancelPressed()
     {
         _pushStartLabel.Show();
         _oneCoinLabel.Show();
         _gameState = GameState.WaitingToPlay;
     }
-
-    #endregion Configuration
-
-    #region Waiting to play
 
     private void WaitingToPlay()
     {
@@ -364,35 +326,31 @@ public partial class Main : Node
             }
             else if (inputEvent.IsActionPressed("Config"))
             {
-                ShowConfig();
+                ShowConfigDialog();
             }
             else if (inputEvent.IsActionPressed("Help"))
             {
-                ShowControls();
+                ShowHelpDialog();
             }
         }
     }
 
-    private void ShowControls()
+    private void ShowHelpDialog()
     {
         _oneCoinLabel.Hide();
         _pushStartLabel.Hide();
 
-        _controlsDialog.Show();
-        _gameState = GameState.ShowingControls;
+        _helpDialog.Show();
+        _gameState = GameState.ShowingHelpDialog;
     }
 
-    private void OnControlsOkPressed()
+    private void OnHelpDialogOkPressed()
     {
         _oneCoinLabel.Show();
         _pushStartLabel.Show();
 
         _gameState = GameState.WaitingToPlay;
     }
-
-    #endregion Waiting to play
-
-    #region New game
 
     private void NewGame()
     {
@@ -408,42 +366,34 @@ public partial class Main : Node
            new Rect2(_shipSpawnPosition.X - _safeZoneRadius, _shipSpawnPosition.Y - _safeZoneRadius,
                      _safeZoneRadius * 2, _safeZoneRadius * 2),
            true);
-        SetSoundEnabled(_soundIsEnabled);
         _beats.Reset();
         _beats.Start();
 
         _gameState = GameState.AwaitingNewShip;
     }
 
-    #endregion New game
-
-    #region Game over
-
     private void GameOver()
     {
-        GD.Print("Game Over");
-
-        //_gameState = GameState.GameOver;
         _beats.Stop();
         _gameOverLabel.Show();
 
         WaitingToPlay();
     }
 
-    #endregion Game over
-
     private void OnResized()
     {
-        _shipSpawnPosition = Screen.Instance.GetCentre();
+        _shipSpawnPosition = Screen.Instance.Centre;
         _exclusionZone.Position = _shipSpawnPosition;
     }
 
-    #region Utility methods
     private void SetSoundEnabled(bool enabled)
     {
-        GD.Print($"Setting sound enabled = {enabled}");
-        _soundIsEnabled = enabled;
         AudioServer.SetBusMute(AudioServer.GetBusIndex("Master"), !enabled);
+    }
+
+    private bool GetSoundEnabled()
+    {
+        return !AudioServer.IsBusMute(AudioServer.GetBusIndex("Master"));
     }
 
     private void IncreaseScore(int increase)
@@ -455,6 +405,4 @@ public partial class Main : Node
             _extraLifeThresholdNext += _lifeExtraThreshold;
         }
     }
-
-    #endregion Utility methods
 }

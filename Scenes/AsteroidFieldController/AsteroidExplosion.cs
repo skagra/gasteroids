@@ -1,5 +1,4 @@
 using Godot;
-using System;
 
 namespace Asteroids;
 
@@ -15,8 +14,10 @@ public partial class AsteroidExplosion : AnimatedSprite2D
     {
         if (GetParent() is Window)
         {
-            Position = GetViewportRect().Size * 0.5f;
+            Position = Screen.Instance.Centre;
         }
+
+        AnimationFinished += AnimationCompleted;
 
         Play();
     }
@@ -27,7 +28,8 @@ public partial class AsteroidExplosion : AnimatedSprite2D
         Rotation += AngularVelocity * (float)delta;
     }
 
-    public void AnimationCompleted()
+    // Called back from animation
+    private void AnimationCompleted()
     {
         EmitSignal(SignalName.ExplosionCompleted, this);
     }

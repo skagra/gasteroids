@@ -1,6 +1,8 @@
 using Godot;
 
-public partial class ControlsDialog : CanvasLayer
+namespace Asteroids;
+
+public partial class HelpDialog : CanvasLayer
 {
     [Signal]
     public delegate void OkPressedEventHandler();
@@ -9,7 +11,7 @@ public partial class ControlsDialog : CanvasLayer
 
     public override void _Ready()
     {
-        _okButton = (Button)FindChild("Ok Button");
+        _okButton = (Button)FindChild("OK Button");
         _okButton.Pressed += OkButtonPressed;
 
         if (GetParent() is Window)

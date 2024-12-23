@@ -1,16 +1,35 @@
 using Godot;
+using System;
 using System.Collections.Generic;
 
 namespace Asteroids;
 
 public partial class MissileController : Node
 {
-    private readonly PackedScene _missileScene = GD.Load<PackedScene>("res://Scenes/Missile/Missile.tscn");
-    private readonly List<Missile> _dormantMissiles = new();
-    private readonly List<ActiveMissile> _activeMissiles = new();
-
+    // Signals
     [Signal]
     public delegate void CollidedEventHandler(Missile missile, Node collidedWith);
+
+    // Values configurable via the inspector
+    [Export]
+    public int MissileCount
+    {
+        get { return _missileCount; }
+        set { _missileCount = value; SetUpMissiles(); }
+    }
+
+    [Export]
+    public float MissileDuration { get; set; } = 0.5f;
+
+    [Export]
+    public float MissileSpeed { get; set; } = 200;
+
+    [Export]
+    private AudioStream _missileExplosionSound;
+
+    private int _missileCount = 5;
+
+    private readonly PackedScene _missileScene = GD.Load<PackedScene>("res://Scenes/Missile/Missile.tscn");
 
     private sealed class ActiveMissile
     {
@@ -18,24 +37,37 @@ public partial class MissileController : Node
         public double CountDown { get; set; }
     }
 
-    [Export]
-    public int MissileCount { get; set; } = 5;
+    // Missiles not currently on screen
+    private readonly List<Missile> _dormantMissiles = new();
 
-    [Export]
-    public float MissileDuration { get; set; } = 0.5f;
+    // Missiles on screen
+    private readonly List<ActiveMissile> _activeMissiles = new();
 
-    [Export]
-    public int MissileSpeed { get; set; } = 200;
-
-    private AudioStreamPlayer2D _shootAudioStream;
+    private AudioStreamPlayer2D _shootAudioStream = new();
 
     public override void _Ready()
     {
-        GD.Print($"In MissileController.Ready MissileCount={MissileCount}");
+        // Audio
+        _shootAudioStream.Stream = _missileExplosionSound;
+        AddChild(_shootAudioStream);
+    }
 
-        _shootAudioStream = GetNode<AudioStreamPlayer2D>("ShootAudioPlayer");
+    private void SetUpMissiles()
+    {
+        // Destroy any old missiles
+        foreach (var missile in _activeMissiles)
+        {
+            missile.Missile.QueueFree();
+        }
+        _activeMissiles.Clear();
 
-        // Missiles
+        foreach (var missile in _dormantMissiles)
+        {
+            missile.QueueFree();
+        }
+        _dormantMissiles.Clear();
+
+        // Create new missiles
         for (var i = 0; i < MissileCount; i++)
         {
             var dormantMissile = _missileScene.Instantiate<Missile>();
@@ -45,7 +77,6 @@ public partial class MissileController : Node
             AddChild(dormantMissile);
             DisableMissile(dormantMissile);
         }
-        GD.Print($"Missile direction={MissileDuration}");
     }
 
     public override void _Process(double delta)
@@ -55,10 +86,6 @@ public partial class MissileController : Node
 
     private void Entered(Missile missile, Node collidedWith)
     {
-        GD.Print($"Collision detected in '{this.Name}' with '{collidedWith.Name}'");
-
-        // TODO Trap error condition
-        var missileDetails = _activeMissiles.Find(missileDetails => missileDetails.Missile == missile);
         EmitSignal(SignalName.Collided, missile, collidedWith);
     }
 
@@ -74,7 +101,7 @@ public partial class MissileController : Node
             _activeMissiles.Add(new ActiveMissile { Missile = newMissile, CountDown = MissileDuration });
 
             newMissile.Position = position;
-            // TODO - Right vector!  XXXX
+
             newMissile.Velocity = MissileSpeed * Vector2.Right.Rotated(rotation) + linearVelocity;
             EnableMissile(newMissile);
         }
@@ -100,11 +127,17 @@ public partial class MissileController : Node
 
     public void KillMissile(Missile missile)
     {
-        // TODO - Trap error condition
         var missileDetails = _activeMissiles.Find(missileDetails => missileDetails.Missile == missile);
-        DisableMissile(missile);
-        _activeMissiles.Remove(missileDetails);
-        _dormantMissiles.Add(missile);
+        if (missileDetails != null)
+        {
+            DisableMissile(missile);
+            _activeMissiles.Remove(missileDetails);
+            _dormantMissiles.Add(missile);
+        }
+        else
+        {
+            throw new InvalidOperationException($"Can't find missile details for missile '{missile.Name}'");
+        }
     }
 
     private void ClearUpMissiles(double delta)

@@ -6,12 +6,6 @@ namespace Asteroids;
 
 public partial class AsteroidFieldController : Node
 {
-    [Signal]
-    public delegate void CollisionEventHandler(Asteroid asteroid, AsteroidSize size, Node collidedWith);
-
-    [Signal]
-    public delegate void FieldClearedEventHandler();
-
     private class AsteroidDetails
     {
         // The asteroid
@@ -24,8 +18,15 @@ public partial class AsteroidFieldController : Node
         public bool ReadyForCleanUp { get; set; } = false;
     }
 
-    [ExportCategory("Main")]
+    // Signals
+    [Signal]
+    public delegate void CollisionEventHandler(Asteroid asteroid, AsteroidSize size, Node collidedWith);
 
+    [Signal]
+    public delegate void FieldClearedEventHandler();
+
+    // Values configurable via the inspector
+    [ExportCategory("Main")]
     [ExportGroup("Speed")]
     [Export]
     public float MinSpeed { get; set; } = 5;
@@ -35,19 +36,24 @@ public partial class AsteroidFieldController : Node
     [ExportGroup("Rotation")]
     [Export]
     public bool IsRotationEnabled { get; set; } = true;
-    // [Export]
-    // public float MinRadiansPerSecond { get; set; } = -0.3f;
-    // [Export]
-    // public float MaxRadiansPerSecond { get; set; } = 3.0f;
-
+    [Export]
     public float RotationMaxRadiansPerSecond { get; set; } = 1.0f;
 
+    [ExportGroup("Sounds")]
+    [Export]
+    private AudioStream _bangLarge;
+    [Export]
+    private AudioStream _bangMedium;
+    [Export]
+    private AudioStream _bangSmall;
+
     [ExportCategory("Testing")]
-    [Export(PropertyHint.Range, "0,100,")]
+    [Export]
     private int _testingNumAsteroids = 10;
 
     private const string _ASTEROID_SCENE_BASE = "res://Scenes/Asteroid/";
 
+    // Asteroid scenes
     private readonly List<PackedScene> _largeAsteroidPrefabs =
         new() { GD.Load<PackedScene>($"{_ASTEROID_SCENE_BASE}AsteroidType1Large.tscn"),
                 GD.Load<PackedScene>($"{_ASTEROID_SCENE_BASE}AsteroidType2Large.tscn"),
@@ -61,24 +67,22 @@ public partial class AsteroidFieldController : Node
                 GD.Load<PackedScene>($"{_ASTEROID_SCENE_BASE}AsteroidType2Small.tscn"),
                 GD.Load<PackedScene>($"{_ASTEROID_SCENE_BASE}AsteroidType3Small.tscn") };
 
-    private readonly PackedScene _asteroidExplosion = GD.Load<PackedScene>($"{_ASTEROID_SCENE_BASE}AsteroidExplosion.tscn");
+    // Asteroid explosion
+    private readonly PackedScene _asteroidExplosion = GD.Load<PackedScene>($"res://Scenes/AsteroidFieldController/AsteroidExplosion.tscn");
 
     // List of all active asteroids
     private readonly List<AsteroidDetails> _activeAsteroids = new();
-
-    private const string _ASTEROID_AUDIO_BASE = "res://Audio/";
-    private AudioStream _bangLarge = GD.Load<AudioStream>($"{_ASTEROID_AUDIO_BASE}bangLarge.wav");
-    private AudioStream _bangMedium = GD.Load<AudioStream>($"{_ASTEROID_AUDIO_BASE}bangMedium.wav");
-    private AudioStream _bangSmall = GD.Load<AudioStream>($"{_ASTEROID_AUDIO_BASE}bangSmall.wav");
 
     private readonly AudioStreamPlayer2D _audioStreamPlayerBangLarge = new();
     private readonly AudioStreamPlayer2D _audioStreamPlayerBangMedium = new();
     private readonly AudioStreamPlayer2D _audioStreamPlayerBangSmall = new();
 
+    // Asteroid id used to give spawned asteroids friendly names
     private int _asteroidId = 1;
 
     public override void _Ready()
     {
+        // Set up audio streams
         _audioStreamPlayerBangLarge.Stream = _bangLarge;
         AddChild(_audioStreamPlayerBangLarge);
         _audioStreamPlayerBangMedium.Stream = _bangMedium;
@@ -86,6 +90,7 @@ public partial class AsteroidFieldController : Node
         _audioStreamPlayerBangSmall.Stream = _bangSmall;
         AddChild(_audioStreamPlayerBangSmall);
 
+        // Test mode
         if (GetParent() is Window)
         {
             CreateField(_testingNumAsteroids, new Rect2(), false);
@@ -112,8 +117,8 @@ public partial class AsteroidFieldController : Node
     public void CreateField(int numAsteroids, Rect2 exclusionZone, bool onlyLarge = true)
     {
         _asteroidId = 1;
-        GD.Print($"Creating {numAsteroids} asteroids");
         DestroyField();
+
         for (var i = 0; i < numAsteroids; i++)
         {
             if (onlyLarge)
@@ -129,7 +134,7 @@ public partial class AsteroidFieldController : Node
     }
 
     // Create an asteroid of the given size, with random position, velocity and angular velocity,
-    // while avoiding the exclusionZone Rect.  Add the 
+    // while avoiding the exclusionZone Rect.   
     private AsteroidDetails CreateRandomAsteroid(AsteroidSize size, Rect2 exclusionZone)
     {
         var vp = GetViewport().GetVisibleRect();
@@ -233,8 +238,6 @@ public partial class AsteroidFieldController : Node
 
     private void CollidedWithAsteroid(Asteroid asteroid, Node2D collidedWith)
     {
-        GD.Print($"Collision detected in '{this.Name}' with '{collidedWith.Name}'");
-
         var asteroidDetails = _activeAsteroids.Find(ad => ad.Asteroid == asteroid);
 
         if (asteroidDetails != null)
@@ -249,7 +252,7 @@ public partial class AsteroidFieldController : Node
         }
         else
         {
-            // TODO ERROR
+            throw new InvalidOperationException($"Can't find asteroids details for asteroid id='{asteroid.Name}'");
         }
     }
 

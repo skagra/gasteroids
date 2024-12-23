@@ -1,12 +1,12 @@
 [gd_scene load_steps=6 format=3 uid="uid://nu2biysl40aq"]
 
-[ext_resource type="Script" path="res://Ui/Score.cs" id="1_fmhiy"]
+[ext_resource type="Script" path="res://Scenes/UI/Score.cs" id="1_fmhiy"]
 [ext_resource type="Theme" uid="uid://g6klnwtqqkv5" path="res://Themes/UI.tres" id="1_hihmr"]
-[ext_resource type="Script" path="res://Ui/Lives.cs" id="2_t60xm"]
-[ext_resource type="Script" path="res://Ui/PushStart.cs" id="3_3qr5w"]
+[ext_resource type="Script" path="res://Scenes/UI/Lives.cs" id="2_t60xm"]
+[ext_resource type="Script" path="res://Scenes/UI/PushStart.cs" id="3_3qr5w"]
 [ext_resource type="FontFile" uid="uid://pfyq1utd07y3" path="res://Fonts/Hyperspace Bold.otf" id="3_pgx7u"]
 
-[node name="Ui" type="CanvasLayer"]
+[node name="UI" type="CanvasLayer"]
 
 [node name="Panel" type="Panel" parent="."]
 anchors_preset = 15

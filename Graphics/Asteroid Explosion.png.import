@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bg6wnum516ph2"
-path="res://.godot/imported/Ships.png-cf3ea0ae87637aa476eeb25ae9d9e74b.ctex"
+uid="uid://pef3snaxlbvt"
+path="res://.godot/imported/Asteroid Explosion.png-228716fab423cec41386f9b4807c42d3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Scenes/Player/Ships.png"
-dest_files=["res://.godot/imported/Ships.png-cf3ea0ae87637aa476eeb25ae9d9e74b.ctex"]
+source_file="res://Graphics/Asteroid Explosion.png"
+dest_files=["res://.godot/imported/Asteroid Explosion.png-228716fab423cec41386f9b4807c42d3.ctex"]
 
 [params]
 

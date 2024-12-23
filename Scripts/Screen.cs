@@ -1,3 +1,4 @@
+using System.Reflection.Metadata.Ecma335;
 using Godot;
 
 namespace Asteroids;
@@ -38,8 +39,8 @@ public partial class Screen : Node
         return position;
     }
 
-    public Vector2 GetCentre()
+    public Vector2 Centre
     {
-        return _viewport.GetVisibleRect().Size * 0.5f;
+        get => _viewport.GetVisibleRect().Size * 0.5f;
     }
 }

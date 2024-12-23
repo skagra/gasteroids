@@ -5,7 +5,7 @@ namespace Asteroids;
 
 public partial class Lives : Node2D
 {
-    private PackedScene _lifeScene = GD.Load<PackedScene>("res://Ui/Life.tscn");
+    private PackedScene _lifeScene = GD.Load<PackedScene>("res://Scenes/UI/Life.tscn");
 
     private readonly List<Sprite2D> _lives = new();
 

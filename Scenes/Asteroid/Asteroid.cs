@@ -1,4 +1,3 @@
-using System;
 using Godot;
 
 namespace Asteroids;
@@ -19,12 +18,11 @@ public partial class Asteroid : Area2D
 
     public override void _Ready()
     {
-        GD.Print("Asteroid ready!");
         AreaEntered += Entered;
 
         if (GetParent() is Window)
         {
-            Position = GetViewportRect().Size * 0.5f;
+            Position = Screen.Instance.Centre;
             LinearVelocity = _testingLinearVelocity;
             AngularVelocity = _testingAngularVelocity;
         }
@@ -39,7 +37,6 @@ public partial class Asteroid : Area2D
 
     private void Entered(Area2D collidedWith)
     {
-        GD.Print("Asteroid Entered");
         EmitSignal(SignalName.Collided, this, collidedWith);
     }
 }

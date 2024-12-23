@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dj746n7clp03t"]
 
 [ext_resource type="Script" path="res://Controls/NumericSpinBox.cs" id="1_tf58s"]
-[ext_resource type="AudioStream" uid="uid://dmlvmaf3yjaro" path="res://Controls/error.wav" id="2_enhly"]
+[ext_resource type="AudioStream" uid="uid://dmlvmaf3yjaro" path="res://Audio/error.wav" id="2_enhly"]
 
 [node name="NumericSpinBox" type="SpinBox"]
 max_value = 10000.0
