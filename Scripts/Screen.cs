@@ -10,7 +10,7 @@ public partial class Screen : Node
     public override void _Ready()
     {
         Instance = this;
-        _viewport = GetViewport();
+        _viewport = GetTree().Root.GetViewport();
     }
 
     public Vector2 ClampToViewport(Vector2 position)

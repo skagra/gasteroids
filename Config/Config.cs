@@ -12,7 +12,10 @@ public partial class Config : CanvasLayer
 
     private Button _cancelButton;
     private Button _OKButton;
+
     private CheckBox _soundEnabled;
+
+    private CheckBox _backgroundEnabled;
 
     CheckBox _shipInvulnerable;
     SpinBox _shipStartingCount;
@@ -32,6 +35,8 @@ public partial class Config : CanvasLayer
 
     public class ConfigSettings
     {
+        public bool BackgroundEnabled { get; set; }
+
         public bool SoundEnabled { get; set; }
 
         public bool ShipInvulnerable { get; set; }
@@ -51,11 +56,11 @@ public partial class Config : CanvasLayer
         public float MissilesLifespan { get; set; }
     }
 
-    public ConfigSettings Settings { get; private set; } = new();
+    public ConfigSettings Settings { get; private set; }
 
     public override void _Ready()
     {
-        Hide();
+        _backgroundEnabled = (CheckBox)FindChild("Background Enabled");
 
         _soundEnabled = (CheckBox)FindChild("Sound Enabled");
 
@@ -93,64 +98,65 @@ public partial class Config : CanvasLayer
     {
         Settings = new ConfigSettings
         {
+            BackgroundEnabled = _backgroundEnabled.ButtonPressed,
+
             SoundEnabled = _soundEnabled.ButtonPressed,
 
             ShipInvulnerable = _shipInvulnerable.ButtonPressed,
             ShipStartingCount = (int)_shipStartingCount.Value,
             ShipMax = (int)_shipMax.Value,
             ShipExtraThreshold = (int)_shipExtraThreshold.Value,
-            ShipAcceleration = (float)_shipAcceleration.Value,      // TODO Scaling - set limits on control ...
-            ShipRotationSpeed = (float)_shipRotationSpeed.Value,    // TODO Scaling
+            ShipAcceleration = (float)_shipAcceleration.Value,
+            ShipRotationSpeed = (float)_shipRotationSpeed.Value,
 
             AsteroidsRotationEnabled = _asteroidsRotationEnabled.ButtonPressed,
             AsteroidsStartingQuantity = (int)_asteroidsStartingQuantity.Value,
 
             AsteroidsMaxStartingQuantity = (int)_asteroidsMaxStartingQuantity.Value,
-            AsteroidsMinSpeed = (float)_asteroidsMinSpeed.Value,    // TODO Scaling
-            AsteroidsMaxSpeed = (float)_asteroidsMaxSpeed.Value,    // TODO Scaling
+            AsteroidsMinSpeed = (float)_asteroidsMinSpeed.Value,
+            AsteroidsMaxSpeed = (float)_asteroidsMaxSpeed.Value,
 
             MissilesMax = (int)_missilesMax.Value,
-            MissilesLifespan = (float)_missilesLifespan.Value     // TODO Scaling
+            MissilesLifespan = (float)_missilesLifespan.Value
         };
     }
 
     public void Show(ConfigSettings configSettings)
     {
+        _backgroundEnabled.ButtonPressed = configSettings.BackgroundEnabled;
+
         _soundEnabled.ButtonPressed = configSettings.SoundEnabled;
 
         _shipInvulnerable.ButtonPressed = configSettings.ShipInvulnerable;
         _shipStartingCount.Value = configSettings.ShipStartingCount;
         _shipMax.Value = configSettings.ShipMax;
         _shipExtraThreshold.Value = configSettings.ShipExtraThreshold;
-        _shipAcceleration.Value = configSettings.ShipAcceleration;      // TODO Scaling
-        _shipRotationSpeed.Value = configSettings.ShipRotationSpeed;    // TODO Scaling
+        _shipAcceleration.Value = configSettings.ShipAcceleration;
+        _shipRotationSpeed.Value = configSettings.ShipRotationSpeed;
 
         _asteroidsRotationEnabled.ButtonPressed = configSettings.AsteroidsRotationEnabled;
         _asteroidsStartingQuantity.Value = configSettings.AsteroidsStartingQuantity;
 
         _asteroidsMaxStartingQuantity.Value = configSettings.AsteroidsMaxStartingQuantity;
-        _asteroidsMinSpeed.Value = configSettings.AsteroidsMinSpeed;    // TODO Scaling
-        _asteroidsMaxSpeed.Value = configSettings.AsteroidsMaxSpeed;    // TODO Scaling
+        _asteroidsMinSpeed.Value = configSettings.AsteroidsMinSpeed;
+        _asteroidsMaxSpeed.Value = configSettings.AsteroidsMaxSpeed;
 
         _missilesMax.Value = configSettings.MissilesMax;
-        _missilesLifespan.Value = configSettings.MissilesLifespan;      // TODO Scaling
-        GD.Print($"Main show setting missile life span to be {configSettings.MissilesLifespan}");
-        Visible = true;
+        _missilesLifespan.Value = configSettings.MissilesLifespan;
+
+        Show();
     }
 
     private void OnCancelButtonPressed()
     {
         Hide();
+
         EmitSignal(SignalName.Cancel);
     }
 
     private void OnOkButtonPressed()
     {
-        GD.Print(_soundEnabled.ButtonPressed);
-
         CollectConfigurationFromControls();
-
-        GD.Print($"Config has AsteroidsRotationEnabled={Settings.AsteroidsRotationEnabled}");
         Hide();
 
         EmitSignal(SignalName.OkPressed);

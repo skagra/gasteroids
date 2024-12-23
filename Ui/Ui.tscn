@@ -1,68 +1,83 @@
-[gd_scene load_steps=4 format=3 uid="uid://nu2biysl40aq"]
+[gd_scene load_steps=6 format=3 uid="uid://nu2biysl40aq"]
 
 [ext_resource type="Script" path="res://Ui/Score.cs" id="1_fmhiy"]
+[ext_resource type="Theme" uid="uid://g6klnwtqqkv5" path="res://Themes/UI.tres" id="1_hihmr"]
 [ext_resource type="Script" path="res://Ui/Lives.cs" id="2_t60xm"]
 [ext_resource type="Script" path="res://Ui/PushStart.cs" id="3_3qr5w"]
+[ext_resource type="FontFile" uid="uid://pfyq1utd07y3" path="res://Fonts/Hyperspace Bold.otf" id="3_pgx7u"]
 
 [node name="Ui" type="CanvasLayer"]
 
-[node name="Score" type="Label" parent="."]
-offset_right = 40.0
-offset_bottom = 23.0
+[node name="Panel" type="Panel" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_hihmr")
+
+[node name="Score" type="Label" parent="Panel"]
+layout_mode = 1
+offset_right = 150.0
+offset_bottom = 85.0
 text = "00000"
 horizontal_alignment = 2
 script = ExtResource("1_fmhiy")
 
-[node name="Game Over" type="Label" parent="."]
+[node name="Game Over" type="Label" parent="Panel"]
 visible = false
+layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -22.5
-offset_right = 20.0
-offset_bottom = 22.5
+offset_left = -146.5
+offset_top = -49.0
+offset_right = 146.5
+offset_bottom = 49.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 46
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("3_pgx7u")
+theme_override_font_sizes/font_size = 60
 text = "GAME OVER"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Lives" type="Node2D" parent="."]
-position = Vector2(20, 68)
+[node name="Lives" type="Node2D" parent="Panel"]
+position = Vector2(30, 92)
 scale = Vector2(0.5, 0.5)
 script = ExtResource("2_t60xm")
 
-[node name="One Coin" type="Label" parent="."]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -145.5
-offset_top = -168.0
-offset_right = 145.5
-offset_bottom = -123.0
-grow_horizontal = 2
-grow_vertical = 0
-size_flags_horizontal = 3
-size_flags_vertical = 6
-text = "1 COIN 1 PLAY"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Push Start" type="Label" parent="."]
-visible = false
+[node name="Help" type="Label" parent="Panel"]
+layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -104.0
-offset_top = 100.0
-offset_right = 104.0
-offset_bottom = 145.0
+offset_left = -185.0
+offset_top = 220.0
+offset_right = 185.0
+offset_bottom = 305.0
 grow_horizontal = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+theme_override_font_sizes/font_size = 26
+text = "Push H For Help"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Push Start" type="Label" parent="Panel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -130.0
+offset_top = 150.0
+offset_right = 130.0
+offset_bottom = 235.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("3_pgx7u")
+theme_override_font_sizes/font_size = 46
 text = "PUSH START"
 script = ExtResource("3_3qr5w")

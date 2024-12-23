@@ -67,6 +67,8 @@ public partial class Main : Node
     private Beats _beats;
     private CollisionShape2D _exclusionZoneCollisionShape;
     private Config _config;
+    private ControlsDialog _controlsDialog;
+    private Panel _background;
 
     #endregion Scene references
 
@@ -81,7 +83,7 @@ public partial class Main : Node
     #region Game state machine
 
     // Game state machine
-    private enum GameState { WaitingToPlay, AwaitingNewShip, Playing, GameOver, ShowingConfig };
+    private enum GameState { WaitingToPlay, AwaitingNewShip, Playing, /* GameOver */ ShowingConfig, ShowingControls };
     private GameState _gameState;
 
     #endregion Game state machine
@@ -102,15 +104,17 @@ public partial class Main : Node
         _player = GetNode<Player>("Player");
         _missileController = GetNode<MissileController>("MissileController");
         _asteroidFieldController = GetNode<AsteroidFieldController>("AsteroidFieldController");
-        _score = GetNode<Score>("Ui/Score");
-        _lives = GetNode<Lives>("Ui/Lives");
-        _gameOverLabel = GetNode<Label>("Ui/Game Over");
-        _pushStartLabel = GetNode<PushStart>("Ui/Push Start");
-        _oneCoinLabel = GetNode<Label>("Ui/One Coin");
+        _score = (Score)FindChild("Score");
+        _lives = (Lives)FindChild("Lives");
+        _gameOverLabel = (Label)FindChild("Game Over");
+        _pushStartLabel = (PushStart)FindChild("Push Start");
+        _oneCoinLabel = (Label)FindChild("Help");
         _exclusionZone = GetNode<Area2D>("ExclusionZone");
         _exclusionZoneCollisionShape = _exclusionZone.GetNode<CollisionShape2D>("CollisionShape2D");
         _beats = GetNode<Beats>("Beats");
         _config = GetNode<Config>("Config");
+        _controlsDialog = GetNode<ControlsDialog>("Controls Dialog");
+        _background = GetNode<Panel>("Background");
     }
 
     private void SetupSceneSignals()
@@ -131,6 +135,8 @@ public partial class Main : Node
         _config.OkPressed += OnConfigOkPressed;
         _config.Cancel += OnCancelPressed;
 
+        // Controls
+        _controlsDialog.OkPressed += OnControlsOkPressed;
         // Window resize
         GetTree().GetRoot().SizeChanged += OnResized;
     }
@@ -151,13 +157,11 @@ public partial class Main : Node
 
         ApplyConfiguration(_config.Settings);
 
-        // Sound
-        SetSoundEnabled(_soundIsEnabled);
+        // // Sound
+        // SetSoundEnabled(_soundIsEnabled);
 
         // Waiting to start
         WaitingToPlay();
-
-
     }
 
     #endregion Set up
@@ -247,10 +251,13 @@ public partial class Main : Node
 
     #region Configuration
 
+    private bool _backgroundEnabled = true; // TODO
+
     private Config.ConfigSettings CollectConfiguration()
     {
         return new Config.ConfigSettings
         {
+            BackgroundEnabled = _backgroundEnabled,
             SoundEnabled = _soundIsEnabled,
 
             ShipInvulnerable = _infiniteLives,
@@ -261,7 +268,7 @@ public partial class Main : Node
             ShipRotationSpeed = _player.RotationSpeed,
 
             AsteroidsRotationEnabled = _asteroidFieldController.IsRotationEnabled,
-            AsteroidsStartingQuantity = _asteroidsCurrentNewGameStart,
+            AsteroidsStartingQuantity = _asteroidsNewGameStart,
             AsteroidsMaxStartingQuantity = _asteroidsNewGameMax,
             AsteroidsMinSpeed = _asteroidFieldController.MinSpeed,
             AsteroidsMaxSpeed = _asteroidFieldController.MaxSpeed,
@@ -273,6 +280,9 @@ public partial class Main : Node
 
     private void ShowConfig()
     {
+        _pushStartLabel.Hide();
+        _oneCoinLabel.Hide();
+
         _config.Show(CollectConfiguration());
 
         GD.Print($"In main missiles count = {_missileController.MissileCount}");
@@ -282,7 +292,10 @@ public partial class Main : Node
 
     private void ApplyConfiguration(Config.ConfigSettings config)
     {
-        config.SoundEnabled = _soundIsEnabled;
+        _backgroundEnabled = config.BackgroundEnabled;
+        _background.Visible = _backgroundEnabled;
+
+        SetSoundEnabled(config.SoundEnabled);  // TODO
 
         _infiniteLives = config.ShipInvulnerable;
         _livesNewGame = config.ShipStartingCount;
@@ -292,7 +305,7 @@ public partial class Main : Node
         _player.RotationSpeed = config.ShipRotationSpeed;
 
         _asteroidFieldController.IsRotationEnabled = config.AsteroidsRotationEnabled;
-        _asteroidsCurrentNewGameStart = config.AsteroidsStartingQuantity;
+        _asteroidsNewGameStart = config.AsteroidsStartingQuantity;
         _asteroidsNewGameMax = config.AsteroidsMaxStartingQuantity;
         _asteroidFieldController.MinSpeed = config.AsteroidsMinSpeed;
         _asteroidFieldController.MaxSpeed = config.AsteroidsMaxSpeed;
@@ -303,8 +316,12 @@ public partial class Main : Node
 
     private void OnConfigOkPressed()
     {
-        var config = _config.Settings;
+        GD.Print("Showing push to start");
 
+        _pushStartLabel.Show();
+        _oneCoinLabel.Show();
+
+        var config = _config.Settings;
         ApplyConfiguration(config);
 
         _gameState = GameState.WaitingToPlay;
@@ -314,6 +331,8 @@ public partial class Main : Node
 
     private void OnCancelPressed()
     {
+        _pushStartLabel.Show();
+        _oneCoinLabel.Show();
         _gameState = GameState.WaitingToPlay;
     }
 
@@ -347,7 +366,28 @@ public partial class Main : Node
             {
                 ShowConfig();
             }
+            else if (inputEvent.IsActionPressed("Help"))
+            {
+                ShowControls();
+            }
         }
+    }
+
+    private void ShowControls()
+    {
+        _oneCoinLabel.Hide();
+        _pushStartLabel.Hide();
+
+        _controlsDialog.Show();
+        _gameState = GameState.ShowingControls;
+    }
+
+    private void OnControlsOkPressed()
+    {
+        _oneCoinLabel.Show();
+        _pushStartLabel.Show();
+
+        _gameState = GameState.WaitingToPlay;
     }
 
     #endregion Waiting to play
@@ -383,7 +423,7 @@ public partial class Main : Node
     {
         GD.Print("Game Over");
 
-        _gameState = GameState.GameOver;
+        //_gameState = GameState.GameOver;
         _beats.Stop();
         _gameOverLabel.Show();
 
@@ -399,8 +439,10 @@ public partial class Main : Node
     }
 
     #region Utility methods
-    private static void SetSoundEnabled(bool enabled)
+    private void SetSoundEnabled(bool enabled)
     {
+        GD.Print($"Setting sound enabled = {enabled}");
+        _soundIsEnabled = enabled;
         AudioServer.SetBusMute(AudioServer.GetBusIndex("Master"), !enabled);
     }
 

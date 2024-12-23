@@ -46,6 +46,24 @@ size_flags_vertical = 3
 layout_mode = 2
 size_flags_horizontal = 3
 
+[node name="Graphics Category Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"DialogCategory"
+text = "Graphics"
+
+[node name="Background Enabled Container" type="HBoxContainer" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Background Enabled Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Background Enabled Container"]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "Background Enabled"
+
+[node name="Background Enabled" type="CheckBox" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Background Enabled Container"]
+layout_mode = 2
+size_flags_horizontal = 10
+button_pressed = true
+
 [node name="Sound Category Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 0
@@ -65,6 +83,7 @@ text = "Sound Enabled"
 
 [node name="Sound Enabled" type="CheckBox" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Sound Enabled Container"]
 layout_mode = 2
+button_pressed = true
 
 [node name="Player Ship Category Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -115,7 +134,7 @@ layout_mode = 2
 size_flags_horizontal = 10
 min_value = 3.0
 max_value = 10.0
-value = 3.0
+value = 6.0
 rounded = true
 alignment = 2
 
@@ -191,6 +210,7 @@ text = "Rotation Enabled
 [node name="Asteroids Rotation Enabled" type="CheckBox" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/GridContainer2"]
 layout_mode = 2
 size_flags_horizontal = 10
+button_pressed = true
 
 [node name="Asteroids Starting Quantity Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/GridContainer2"]
 layout_mode = 2
@@ -220,7 +240,7 @@ layout_mode = 2
 size_flags_horizontal = 10
 min_value = 4.0
 max_value = 20.0
-value = 4.0
+value = 20.0
 rounded = true
 alignment = 2
 

@@ -6,9 +6,14 @@ Game play is as per the classic arcade game.  Shoot at the asteroids, once all h
 ## Controls
 
 * *Start Game* - 1
+* *Configuration Settings* - C
+* *Help* - H
 * *Quit Game* - Escape
-* *Rotate ACW* - A
+
+### Game Play
+
 * *Rotate CW* - S
-* *Fire* - Left Mouse
-* *Thrust* - Right Mouse
+* *Rotate ACW* - A
+* *Fire* - Left Mouse Button
+* *Thrust* - Right Mouse Button
 * *Hyperspace* - ~~Space~~

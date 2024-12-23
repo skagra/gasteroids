@@ -1,0 +1,21 @@
+[gd_resource type="Theme" load_steps=5 format=3 uid="uid://g6klnwtqqkv5"]
+
+[ext_resource type="FontFile" uid="uid://kj58adoc044d" path="res://Fonts/Hyperspace.otf" id="1_pfsp0"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ad3gd"]
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_na67a"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_b0vsa"]
+
+[resource]
+default_font = ExtResource("1_pfsp0")
+default_font_size = 36
+Label/fonts/font = ExtResource("1_pfsp0")
+Label/styles/normal = SubResource("StyleBoxEmpty_ad3gd")
+Panel/styles/panel = SubResource("StyleBoxEmpty_na67a")
+PanelContainer/styles/panel = SubResource("StyleBoxEmpty_b0vsa")
