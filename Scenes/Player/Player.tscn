@@ -348,29 +348,29 @@ animations = [{
 }]
 
 [node name="Player" type="RigidBody2D" groups=["Player"]]
-collision_layer = 2
+collision_layer = 0
 collision_mask = 0
 gravity_scale = 0.0
 linear_damp = 0.5
 angular_damp_mode = 1
 script = ExtResource("1_15men")
 
-[node name="Area2D" type="Area2D" parent="."]
+[node name="Player Area2D" type="Area2D" parent="."]
 collision_layer = 2
 metadata/_edit_lock_ = true
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Player Area2D"]
 polygon = PackedVector2Array(24, -2, -22, -14, -22, 14)
 metadata/_edit_lock_ = true
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Area2D"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Player Area2D"]
 sprite_frames = SubResource("SpriteFrames_2k4nc")
 animation = &"Thrust"
 frame = 1
 frame_progress = 1.0
 metadata/_edit_lock_ = true
 
-[node name="ThrustAudioPlayer" type="AudioStreamPlayer2D" parent="Area2D"]
+[node name="ThrustAudioPlayer" type="AudioStreamPlayer2D" parent="Player Area2D"]
 stream = ExtResource("4_wcoay")
 bus = &"Fx"
 area_mask = 0

@@ -44,7 +44,7 @@ public partial class Player : RigidBody2D
 
     public override void _Ready()
     {
-        _area2D = GetNode<Area2D>("Area2D");
+        _area2D = GetNode<Area2D>("Player Area2D");
         _collisionPolygon = _area2D.GetNode<CollisionPolygon2D>("CollisionPolygon2D");
         _sprite = _area2D.GetNode<AnimatedSprite2D>("AnimatedSprite2D");
         _thrustAudioStream = _area2D.GetNode<AudioStreamPlayer2D>("ThrustAudioPlayer");

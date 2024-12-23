@@ -97,6 +97,9 @@ public partial class Main : Node
         // Apply the default configuration
         ApplyConfiguration(_settingsDialog.ActiveSettings);
 
+        // Very first time create some asteroids just for aesthetic reasons
+        _asteroidFieldController.CreateField(15, new Rect2(), false); // TODO Hard coded number of asteroids
+
         // Waiting to start
         WaitingToPlay();
     }
@@ -315,7 +318,7 @@ public partial class Main : Node
 
     private void WaitingToPlay()
     {
-        _asteroidFieldController.CreateField(_asteroidsNewGameStart, new Rect2(), false);
+        // _asteroidFieldController.CreateField(_asteroidsNewGameStart, new Rect2(), false);
         _pushStartLabel.Show();
         _oneCoinLabel.Show();
 

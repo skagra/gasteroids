@@ -119,7 +119,7 @@ text = "Starting Ships"
 [node name="Ship Starting Count" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Ship Category Container" instance=ExtResource("3_k6nax")]
 layout_mode = 2
 size_flags_horizontal = 10
-min_value = 3.0
+min_value = 1.0
 max_value = 6.0
 value = 3.0
 

@@ -71,10 +71,10 @@ public partial class MissileController : Node
         for (var i = 0; i < MissileCount; i++)
         {
             var dormantMissile = _missileScene.Instantiate<Missile>();
-            dormantMissile.Name = $"Missile #{i + 1}";
             _dormantMissiles.Add(dormantMissile);
             dormantMissile.Collided += Entered;
             AddChild(dormantMissile);
+            dormantMissile.Name = $"Missile #{i + 1}";
             DisableMissile(dormantMissile);
         }
     }

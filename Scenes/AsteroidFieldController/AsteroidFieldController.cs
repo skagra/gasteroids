@@ -162,21 +162,27 @@ public partial class AsteroidFieldController : Node
 
         // Create the asteroid GameObject and set rotation, linear velocity, angular velocity and location
         var asteroid = astroidScene.Instantiate<Asteroid>();
-        asteroid.Name = $"Asteroid #{_asteroidId++}";
+
         asteroid.Position = newAsteroidPosition;
         asteroid.LinearVelocity = Vector2.Right.Rotated((float)GD.RandRange(0f, 2f * Math.PI)) * (float)GD.RandRange(MinSpeed, MaxSpeed);
         asteroid.AngularVelocity = IsRotationEnabled ? (float)GD.RandRange(0, RotationMaxRadiansPerSecond * 2.0f) - RotationMaxRadiansPerSecond : 0f;
 
-        // Using deferred mode as Gadot objects to setting the new Asteroid position otherwise
-        // asteroid.Connect("Collided", new Callable(this, "CollidedWithAsteroid"), (int)ConnectFlags.Deferred);
-        asteroid.Collided += CollidedWithAsteroid;
+        asteroid.Collided += OnCollidedWithAsteroid;
 
         // Return the created asteroid and associated information
         var asteroidDetails = new AsteroidDetails { Asteroid = asteroid, AsteroidSize = size, ReadyForCleanUp = false };
         _activeAsteroids.Add(asteroidDetails);
 
-        CallDeferred(MethodName.AddChild, asteroid);
+        // CallDeferred(MethodName.AddChild, asteroid);
+        CallDeferred("AddChildAndName", asteroid);
         return asteroidDetails;
+    }
+
+    private void AddChildAndName(Asteroid asteroid)
+    {
+        AddChild(asteroid);
+        asteroid.Name = $"Asteroid #{_asteroidId++}";
+        GD.Print($"Added asteroid '{asteroid.Name}'");
     }
 
     // Create a random asteroid at the position of the given asteroid
@@ -235,22 +241,32 @@ public partial class AsteroidFieldController : Node
         asteroidExplosion.QueueFree();
     }
 
-    private void CollidedWithAsteroid(Asteroid asteroid, Node2D collidedWith)
+    private void OnCollidedWithAsteroid(Asteroid asteroid, Node2D collidedWith)
     {
+        // This could either be a bullet or an asteroid that's been collided with
+        GD.Print($"Looking for asteroid {asteroid.Name} collided with ${collidedWith.Name}");
         var asteroidDetails = _activeAsteroids.Find(ad => ad.Asteroid == asteroid);
 
         if (asteroidDetails != null)
         {
+            GD.Print($"Found {asteroid.Name}");
             if (!asteroidDetails.ReadyForCleanUp)
             {
                 // Deactivate, flag for clean up and split into two smaller asteroids
                 asteroidDetails.ReadyForCleanUp = true;
+
+                GD.Print($"Flagging asteroid ready for cleanup ${asteroid.Name}");
                 SplitAsteroid(asteroidDetails);
                 EmitSignal(SignalName.Collision, asteroid, (int)asteroidDetails.AsteroidSize, collidedWith);
             }
         }
         else
         {
+            GD.Print("Failed to find '{asteroid.Name}', dumping asteroids table");
+            foreach (var ast in _activeAsteroids)
+            {
+                GD.Print($"{ast.Asteroid.Name} {ast.ReadyForCleanUp}");
+            }
             throw new InvalidOperationException($"Can't find asteroids details for asteroid id='{asteroid.Name}'");
         }
     }
@@ -261,11 +277,13 @@ public partial class AsteroidFieldController : Node
     private void CleanUpFlaggedAsteroids()
     {
         // Remove all flagged entries from _activeAsteroids and Destroy their associated GameObjects 
-        for (var asteroidIndex = _activeAsteroids.Count - 1; asteroidIndex >= 0; asteroidIndex--)
+        var asteroidCount = _activeAsteroids.Count;
+        for (var asteroidIndex = asteroidCount - 1; asteroidIndex >= 0; asteroidIndex--)
         {
             var asteroidDetails = _activeAsteroids[asteroidIndex];
             if (asteroidDetails.ReadyForCleanUp)
             {
+                GD.Print($"Cleaning up ${asteroidDetails.Asteroid.Name}");
                 RemoveChild(asteroidDetails.Asteroid);
                 asteroidDetails.Asteroid.QueueFree();
                 _activeAsteroids.RemoveAt(asteroidIndex);
