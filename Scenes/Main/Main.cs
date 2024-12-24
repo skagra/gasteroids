@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Godot;
 
+
 namespace Asteroids;
 
 public partial class Main : Node
@@ -116,6 +117,8 @@ public partial class Main : Node
 
         // Waiting to start
         WaitingToPlay();
+
+        _player.GravitationalPullCallback = _asteroidFieldController.GetGravitationalVector;
     }
 
     private void SetupSceneReferences()
@@ -271,7 +274,8 @@ public partial class Main : Node
             AsteroidsMaxStartingQuantity = _asteroidsNewGameMax,
             AsteroidsMinSpeed = _asteroidFieldController.MinSpeed,
             AsteroidsMaxSpeed = _asteroidFieldController.MaxSpeed,
-
+            AsteroidsGravityEnabled = _player.GravitationalPullCallback != null,
+            AsteroidsGravitationalConstant = _asteroidFieldController.GravitationalMultiplier,
             MissilesMax = _missileController.MissileCount,
             MissilesSpeed = _missileController.MissileSpeed,
             MissilesLifespan = _missileController.MissileDuration
@@ -307,7 +311,8 @@ public partial class Main : Node
         _asteroidsNewGameMax = config.AsteroidsMaxStartingQuantity;
         _asteroidFieldController.MinSpeed = config.AsteroidsMinSpeed;
         _asteroidFieldController.MaxSpeed = config.AsteroidsMaxSpeed;
-
+        _player.GravitationalPullCallback = config.AsteroidsGravityEnabled ? _asteroidFieldController.GetGravitationalVector : null;
+        _asteroidFieldController.GravitationalMultiplier = config.AsteroidsGravitationalConstant;
         _missileController.MissileCount = config.MissilesMax;
         _missileController.MissileSpeed = config.MissilesSpeed;
         _missileController.MissileDuration = config.MissilesLifespan;

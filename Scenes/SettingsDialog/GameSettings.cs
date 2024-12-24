@@ -19,6 +19,8 @@ public class GameSettings
         AsteroidsMaxStartingQuantity = configSettings.AsteroidsMaxStartingQuantity;
         AsteroidsMinSpeed = configSettings.AsteroidsMinSpeed;
         AsteroidsMaxSpeed = configSettings.AsteroidsMaxSpeed;
+        AsteroidsGravityEnabled = configSettings.AsteroidsGravityEnabled;
+        AsteroidsGravitationalConstant = configSettings.AsteroidsGravitationalConstant;
         MissilesMax = configSettings.MissilesMax;
         MissilesSpeed = configSettings.MissilesSpeed;
         MissilesLifespan = configSettings.MissilesLifespan;
@@ -44,6 +46,8 @@ public class GameSettings
     public int AsteroidsMaxStartingQuantity { get; set; }
     public float AsteroidsMinSpeed { get; set; }
     public float AsteroidsMaxSpeed { get; set; }
+    public bool AsteroidsGravityEnabled { get; set; }
+    public float AsteroidsGravitationalConstant { get; set; }
 
     // Player missiles
     public int MissilesMax { get; set; }

@@ -320,6 +320,32 @@ min_value = 75.0
 max_value = 500.0
 value = 150.0
 
+[node name="Asteroids Gravity Enabled Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Asteroids Category Container"]
+layout_mode = 2
+tooltip_text = "Enable or disable gravitational pull of asteroids"
+mouse_filter = 0
+text = "Gravity Enabled
+"
+
+[node name="Asteroids Gravity Enabled" type="CheckBox" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Asteroids Category Container"]
+layout_mode = 2
+size_flags_horizontal = 10
+button_pressed = true
+
+[node name="Asteroids Gravitational Constant Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Asteroids Category Container"]
+layout_mode = 2
+tooltip_text = "How hard gravity sucks!"
+mouse_filter = 0
+text = "Gravitational Constant"
+
+[node name="Asteroids Gravitational Constant" type="HSlider" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Asteroids Category Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+min_value = 1000.0
+max_value = 2000.0
+value = 1500.0
+
 [node name="Buttons Container" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3

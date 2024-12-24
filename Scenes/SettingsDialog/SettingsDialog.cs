@@ -31,6 +31,8 @@ public partial class SettingsDialog : CanvasLayer
     private SpinBox _asteroidsMaxStartingQuantity;
     private HSlider _asteroidsMinSpeed;
     private HSlider _asteroidsMaxSpeed;
+    private CheckBox _asteroidsGravityEnabled;
+    private HSlider _asteroidGravitationalConstant;
 
     // Missiles
     private SpinBox _missilesMax;
@@ -61,6 +63,8 @@ public partial class SettingsDialog : CanvasLayer
         AsteroidsMaxStartingQuantity = 20,
         AsteroidsMinSpeed = 100,
         AsteroidsMaxSpeed = 150,
+        AsteroidsGravityEnabled = true,
+        AsteroidsGravitationalConstant = 1500,
         MissilesMax = 8,
         MissilesSpeed = 200,
         MissilesLifespan = 1.5f
@@ -85,6 +89,8 @@ public partial class SettingsDialog : CanvasLayer
         _asteroidsMaxStartingQuantity = (SpinBox)FindChild("Asteroids Max Starting Quantity");
         _asteroidsMinSpeed = (HSlider)FindChild("Asteroids Min Speed");
         _asteroidsMaxSpeed = (HSlider)FindChild("Asteroids Max Speed");
+        _asteroidsGravityEnabled = (CheckBox)FindChild("Asteroids Gravity Enabled");
+        _asteroidGravitationalConstant = (HSlider)FindChild("Asteroids Gravitational Constant");
 
         _missilesSpeed = (HSlider)FindChild("Missiles Speed");
         _missilesMax = (SpinBox)FindChild("Missiles Maximum");
@@ -138,6 +144,8 @@ public partial class SettingsDialog : CanvasLayer
             AsteroidsMaxStartingQuantity = (int)_asteroidsMaxStartingQuantity.Value,
             AsteroidsMinSpeed = (float)_asteroidsMinSpeed.Value,
             AsteroidsMaxSpeed = (float)_asteroidsMaxSpeed.Value,
+            AsteroidsGravityEnabled = _asteroidsGravityEnabled.ButtonPressed,
+            AsteroidsGravitationalConstant = (float)_asteroidGravitationalConstant.Value,
 
             MissilesMax = (int)_missilesMax.Value,
             MissilesSpeed = (float)_missilesSpeed.Value,
@@ -161,10 +169,11 @@ public partial class SettingsDialog : CanvasLayer
 
         _asteroidsRotationEnabled.ButtonPressed = ActiveSettings.AsteroidsRotationEnabled;
         _asteroidsStartingQuantity.Value = ActiveSettings.AsteroidsStartingQuantity;
-
         _asteroidsMaxStartingQuantity.Value = ActiveSettings.AsteroidsMaxStartingQuantity;
         _asteroidsMinSpeed.Value = ActiveSettings.AsteroidsMinSpeed;
         _asteroidsMaxSpeed.Value = ActiveSettings.AsteroidsMaxSpeed;
+        _asteroidsGravityEnabled.ButtonPressed = ActiveSettings.AsteroidsGravityEnabled;
+        _asteroidGravitationalConstant.Value = ActiveSettings.AsteroidsGravitationalConstant;
 
         _missilesMax.Value = ActiveSettings.MissilesMax;
         _missilesSpeed.Value = ActiveSettings.MissilesSpeed;

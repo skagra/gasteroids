@@ -9,6 +9,9 @@
 script = ExtResource("1_8u110")
 MinSpeed = 75.0
 MaxSpeed = 150.0
+GravitationalMultiplier = 1500.0
+_massMediumAsteroid = 2000.0
+_massSmallAsteroid = 1000.0
 _bangLarge = ExtResource("2_tohdg")
 _bangMedium = ExtResource("3_qllmd")
 _bangSmall = ExtResource("4_bnpmu")

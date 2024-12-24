@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 namespace Asteroids;
@@ -41,6 +42,14 @@ public partial class Player : RigidBody2D
     private bool _isActive = false;
     private bool _isExploding = false;
     private bool _hasCollidedThisFrame = false;
+
+    Func<Vector2, Vector2> _gravitationalPullCallback;
+
+    public Func<Vector2, Vector2> GravitationalPullCallback
+    {
+        set => _gravitationalPullCallback = value;
+        get => _gravitationalPullCallback;
+    }
 
     public override void _Ready()
     {
@@ -121,6 +130,9 @@ public partial class Player : RigidBody2D
     {
         if (_isActive && !_isExploding)
         {
+            var variableGravity = _gravitationalPullCallback?.Invoke(Position) ?? Vector2.Zero;
+            ApplyCentralForce(variableGravity);
+
             if (Input.IsActionPressed(_ACTION_THRUST))
             {
                 ThrustPressed();

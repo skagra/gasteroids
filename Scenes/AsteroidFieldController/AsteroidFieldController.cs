@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Godot;
 
 namespace Asteroids;
@@ -39,6 +40,16 @@ public partial class AsteroidFieldController : Node
     [Export]
     public float RotationMaxRadiansPerSecond { get; set; } = 1.0f;
 
+    [ExportGroup("Gravity")]
+    [Export]
+    public float GravitationalMultiplier { get; set; } = 1000;
+    [Export]
+    private float _massLargeAsteroid = 5000;
+    [Export]
+    private float _massMediumAsteroid = 500;
+    [Export]
+    private float _massSmallAsteroid = 50;
+
     [ExportGroup("Sounds")]
     [Export]
     private AudioStream _bangLarge;
@@ -46,6 +57,7 @@ public partial class AsteroidFieldController : Node
     private AudioStream _bangMedium;
     [Export]
     private AudioStream _bangSmall;
+
 
     [ExportCategory("Testing")]
     [Export]
@@ -95,6 +107,28 @@ public partial class AsteroidFieldController : Node
         {
             CreateField(_testingNumAsteroids, new Rect2(), false);
         }
+    }
+
+    public Vector2 GetGravitationalVector(Vector2 location)
+    {
+        var result = new Vector2();
+
+        foreach (var asteroid in _activeAsteroids)
+        {
+            if (!asteroid.ReadyForCleanUp)
+            {
+                var locus = asteroid.Asteroid.Position - location;
+                var unitForce = locus.Normalized() / locus.LengthSquared();
+                result += unitForce * asteroid.AsteroidSize switch
+                {
+                    AsteroidSize.Large => _massLargeAsteroid,
+                    AsteroidSize.Medium => _massMediumAsteroid,
+                    AsteroidSize.Small => _massSmallAsteroid,
+                    _ => throw new NotImplementedException()
+                };
+            }
+        }
+        return result * GravitationalMultiplier;
     }
 
     public override void _Process(double delta)
