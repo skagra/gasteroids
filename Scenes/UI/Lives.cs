@@ -5,9 +5,19 @@ namespace Asteroids;
 
 public partial class Lives : Node2D
 {
+    [Export]
+    private AudioStream _extraLifeSound;
+
     private PackedScene _lifeScene = GD.Load<PackedScene>("res://Scenes/UI/Life.tscn");
 
+    private readonly AudioStreamPlayer2D _extraLifeSoundPlayer = new();
     private readonly List<Sprite2D> _lives = new();
+
+    public override void _Ready()
+    {
+        _extraLifeSoundPlayer.Stream = _extraLifeSound;
+        AddChild(_extraLifeSoundPlayer);
+    }
 
     public int Value
     {
@@ -30,6 +40,11 @@ public partial class Lives : Node2D
 
     public void AddLife(bool mute = false)
     {
+        if (!mute)
+        {
+            _extraLifeSoundPlayer.Play();
+        }
+
         var newLife = _lifeScene.Instantiate<Sprite2D>();
         var width = newLife.Texture.GetWidth() * newLife.Scale.X;
         newLife.SetPosition(new Vector2(_lives.Count * width, 0));

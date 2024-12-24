@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://nu2biysl40aq"]
+[gd_scene load_steps=7 format=3 uid="uid://nu2biysl40aq"]
 
 [ext_resource type="Script" path="res://Scenes/UI/Score.cs" id="1_fmhiy"]
 [ext_resource type="Theme" uid="uid://g6klnwtqqkv5" path="res://Themes/UI.tres" id="1_hihmr"]
 [ext_resource type="Script" path="res://Scenes/UI/Lives.cs" id="2_t60xm"]
 [ext_resource type="Script" path="res://Scenes/UI/PushStart.cs" id="3_3qr5w"]
 [ext_resource type="FontFile" uid="uid://pfyq1utd07y3" path="res://Fonts/Hyperspace Bold.otf" id="3_pgx7u"]
+[ext_resource type="AudioStream" uid="uid://djk4g0usm5oip" path="res://Audio/extraShip.wav" id="5_0wcbj"]
 
 [node name="UI" type="CanvasLayer"]
 
@@ -49,6 +50,7 @@ vertical_alignment = 1
 position = Vector2(30, 92)
 scale = Vector2(0.5, 0.5)
 script = ExtResource("2_t60xm")
+_extraLifeSound = ExtResource("5_0wcbj")
 
 [node name="Help" type="Label" parent="Panel"]
 layout_mode = 1

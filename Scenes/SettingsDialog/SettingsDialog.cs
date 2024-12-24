@@ -99,9 +99,6 @@ public partial class SettingsDialog : CanvasLayer
         _resetButton.Pressed += OnResetPressed;
         _cancelButton.Pressed += OnCancelButtonPressed;
 
-        // Set initial focus on first control
-        _backgroundEnabled.CallDeferred(CheckBox.MethodName.GrabFocus);
-
         // Start with default settings
         ApplyDefaultSettings();
 
@@ -178,7 +175,7 @@ public partial class SettingsDialog : CanvasLayer
     public new void Show()
     {
         ApplyActiveSettings();
-
+        _backgroundEnabled.CallDeferred(CheckBox.MethodName.GrabFocus);
         base.Show();
     }
 

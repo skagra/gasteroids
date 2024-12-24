@@ -5,6 +5,8 @@ namespace Asteroids;
 
 public partial class Main : Node
 {
+    private const string _SETTINGS_SAVE_PATH = "user://settings.json";
+
     // Inspector configuration values
     [ExportCategory("Scores")]
     [Export]
@@ -95,6 +97,18 @@ public partial class Main : Node
         _exclusionZone.Position = _shipSpawnPosition;
 
         // Apply the default configuration
+        try
+        {
+            var settings = SettingsPersistence.Load(_SETTINGS_SAVE_PATH);
+            if (settings != null)
+            {
+                _settingsDialog.ActiveSettings = settings;
+            }
+        }
+        catch
+        {
+        }
+
         ApplyConfiguration(_settingsDialog.ActiveSettings);
 
         // Very first time create some asteroids just for aesthetic reasons
@@ -305,6 +319,8 @@ public partial class Main : Node
         _oneCoinLabel.Show();
 
         ApplyConfiguration(_settingsDialog.ActiveSettings);
+
+        SettingsPersistence.Save(_settingsDialog.ActiveSettings, _SETTINGS_SAVE_PATH);
 
         _gameState = GameState.WaitingToPlay;
     }

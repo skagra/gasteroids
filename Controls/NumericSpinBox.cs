@@ -20,7 +20,7 @@ public partial class NumericSpinBox : SpinBox
             _audioStreamPlayer.Stream = _errorBeep;
             AddChild(_audioStreamPlayer);
         }
-        UpdateOnTextChanged = true;
+
         Alignment = HorizontalAlignment.Right;
         _lineEdit = GetLineEdit();
         _lineEdit.GuiInput += LineEditGuiInput;

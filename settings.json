@@ -1,0 +1,18 @@
+{
+  "BackgroundEnabled": false,
+  "SoundEnabled": true,
+  "ShipInfiniteLives": false,
+  "ShipStartingCount": 3,
+  "ShipMax": 9,
+  "ShipExtraThreshold": 10000,
+  "ShipAcceleration": 300,
+  "ShipRotationSpeed": 5,
+  "AsteroidsRotationEnabled": true,
+  "AsteroidsStartingQuantity": 4,
+  "AsteroidsMaxStartingQuantity": 20,
+  "AsteroidsMinSpeed": 100,
+  "AsteroidsMaxSpeed": 150,
+  "MissilesMax": 8,
+  "MissilesSpeed": 200,
+  "MissilesLifespan": 1.5
+}
