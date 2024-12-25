@@ -6,34 +6,33 @@ namespace Asteroids;
 public partial class Screen : Node
 {
     public static Screen Instance { get; private set; }
-    public Viewport _viewport;
+
+    private Rect2 _viewportRect;
 
     public override void _Ready()
     {
         Instance = this;
-        _viewport = GetTree().Root.GetViewport();
+        _viewportRect = GetTree().Root.GetViewport().GetVisibleRect();
     }
 
     public Vector2 ClampToViewport(Vector2 position)
     {
-        var viewportRect = _viewport.GetVisibleRect();
-
-        if (position.X > viewportRect.End.X)
+        if (position.X > _viewportRect.End.X)
         {
-            position.X = viewportRect.Position.X;
+            position.X = _viewportRect.Position.X;
         }
-        else if (position.X < viewportRect.Position.X)
+        else if (position.X < _viewportRect.Position.X)
         {
-            position.X = viewportRect.End.X;
+            position.X = _viewportRect.End.X;
         }
 
-        if (position.Y > viewportRect.End.Y)
+        if (position.Y > _viewportRect.End.Y)
         {
-            position.Y = viewportRect.Position.Y;
+            position.Y = _viewportRect.Position.Y;
         }
-        else if (position.Y < viewportRect.Position.Y)
+        else if (position.Y < _viewportRect.Position.Y)
         {
-            position.Y = viewportRect.End.Y;
+            position.Y = _viewportRect.End.Y;
         }
 
         return position;
@@ -41,6 +40,15 @@ public partial class Screen : Node
 
     public Vector2 Centre
     {
-        get => _viewport.GetVisibleRect().Size * 0.5f;
+        get => _viewportRect.Size * 0.5f;
     }
+
+    public float Left { get => _viewportRect.Position.X; }
+
+    public float Right { get => _viewportRect.End.X; }
+
+    public float Top { get => _viewportRect.Position.Y; }
+
+    public float Bottom { get => _viewportRect.End.Y; }
+
 }

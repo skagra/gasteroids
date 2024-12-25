@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=3 uid="uid://detxusf2uxlnq"]
+
+[ext_resource type="Script" path="res://Scenes/LargeSaucer/LargeSaucer.cs" id="1_3ekii"]
+[ext_resource type="Texture2D" uid="uid://bonlrwqihq7e" path="res://Graphics/Asteroids.png" id="1_fkrqp"]
+[ext_resource type="AudioStream" uid="uid://cqrf4or8yw26i" path="res://Audio/saucerBig.wav" id="2_ytwoy"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8dbxh"]
+atlas = ExtResource("1_fkrqp")
+region = Rect2(414, 160, 98, 78)
+
+[node name="LargeSaucer" type="Area2D"]
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("1_3ekii")
+_saucerSound = ExtResource("2_ytwoy")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("AtlasTexture_8dbxh")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-5, -22, 8, -22, 34, 5, 14, 20, -11, 20, -31, 5)

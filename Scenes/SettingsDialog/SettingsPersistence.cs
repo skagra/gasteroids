@@ -18,9 +18,9 @@ public static class SettingsPersistence
             var jsonString = File.ReadAllText(ProjectSettings.GlobalizePath(userPath));
             result = JsonSerializer.Deserialize<GameSettings>(jsonString);
         }
-        catch
+        catch (Exception e)
         {
-            // Ignore and return null
+            Logger.I.Error("Failed to load save file '{0}'", e.ToString());
         }
 
         return result;
@@ -33,9 +33,9 @@ public static class SettingsPersistence
             var json = JsonSerializer.Serialize(settings, _jsonOptions);
             File.WriteAllText(ProjectSettings.GlobalizePath(userPath), json);
         }
-        catch
+        catch (Exception e)
         {
-            // Ignore
+            Logger.I.Error("Failed to load save file '{0}'", e.ToString());
         }
     }
 }

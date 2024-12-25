@@ -21,7 +21,7 @@ public partial class AsteroidFieldController : Node
 
     // Signals
     [Signal]
-    public delegate void CollisionEventHandler(Asteroid asteroid, AsteroidSize size, Node collidedWith);
+    public delegate void CollidedEventHandler(Asteroid asteroid, AsteroidSize size, Node collidedWith);
 
     [Signal]
     public delegate void FieldClearedEventHandler();
@@ -80,7 +80,7 @@ public partial class AsteroidFieldController : Node
                 GD.Load<PackedScene>($"{_ASTEROID_SCENE_BASE}AsteroidType3Small.tscn") };
 
     // Asteroid explosion
-    private readonly PackedScene _asteroidExplosion = GD.Load<PackedScene>($"res://Scenes/AsteroidFieldController/AsteroidExplosion.tscn");
+    private readonly PackedScene _asteroidExplosion = GD.Load<PackedScene>($"res://Scenes/Explosion/Explosion.tscn");
 
     // List of all active asteroids
     private readonly List<AsteroidDetails> _activeAsteroids = new();
@@ -200,7 +200,7 @@ public partial class AsteroidFieldController : Node
         asteroid.LinearVelocity = Vector2.Right.Rotated((float)GD.RandRange(0f, 2f * Math.PI)) * (float)GD.RandRange(MinSpeed, MaxSpeed);
         asteroid.AngularVelocity = IsRotationEnabled ? (float)GD.RandRange(0, RotationMaxRadiansPerSecond * 2.0f) - RotationMaxRadiansPerSecond : 0f;
 
-        asteroid.Collided += OnCollidedWithAsteroid;
+        asteroid.Collided += AsteroidOnCollided;
 
         // Return the created asteroid and associated information
         var asteroidDetails = new AsteroidDetails { Asteroid = asteroid, AsteroidSize = size, ReadyForCleanUp = false };
@@ -259,23 +259,27 @@ public partial class AsteroidFieldController : Node
         }
         else
         {
-            var asteroidExplosion = _asteroidExplosion.Instantiate<AsteroidExplosion>();
+            var asteroidExplosion = _asteroidExplosion.Instantiate<Explosion>();
             asteroidExplosion.Position = asteroid.Asteroid.Position;
             asteroidExplosion.AngularVelocity = asteroid.Asteroid.AngularVelocity;
             asteroidExplosion.LinearVelocity = asteroid.Asteroid.LinearVelocity;
             CallDeferred(MethodName.AddChild, asteroidExplosion);
-            asteroidExplosion.ExplosionCompleted += DestroyExplosion;
+            asteroidExplosion.ExplosionCompleted += ExplosionOnExplosionCompleted;
         }
     }
 
-    private void DestroyExplosion(AsteroidExplosion asteroidExplosion)
+    private void ExplosionOnExplosionCompleted(Explosion asteroidExplosion)
     {
+        Logger.I.SignalReceived(this, asteroidExplosion, Explosion.SignalName.ExplosionCompleted);
+
         RemoveChild(asteroidExplosion);
         asteroidExplosion.QueueFree();
     }
 
-    private void OnCollidedWithAsteroid(Asteroid asteroid, Node2D collidedWith)
+    private void AsteroidOnCollided(Asteroid asteroid, Node2D collidedWith)
     {
+        Logger.I.SignalReceived(this, asteroid, Asteroid.SignalName.Collided, collidedWith);
+
         // This could either be a bullet or an asteroid that's been collided with
         var asteroidDetails = _activeAsteroids.Find(ad => ad.Asteroid == asteroid);
 
@@ -287,7 +291,8 @@ public partial class AsteroidFieldController : Node
                 asteroidDetails.ReadyForCleanUp = true;
 
                 SplitAsteroid(asteroidDetails);
-                EmitSignal(SignalName.Collision, asteroid, (int)asteroidDetails.AsteroidSize, collidedWith);
+                Logger.I.SignalSent(this, SignalName.Collided, asteroidDetails.AsteroidSize, collidedWith);
+                EmitSignal(SignalName.Collided, asteroid, (int)asteroidDetails.AsteroidSize, collidedWith);
             }
         }
         else
@@ -317,6 +322,8 @@ public partial class AsteroidFieldController : Node
         // If all asteroids have been destroyed then raise the associated event
         if (_activeAsteroids.Count <= 0)
         {
+            Logger.I.SignalSent(this, SignalName.FieldCleared);
+
             EmitSignal(SignalName.FieldCleared);
         }
     }

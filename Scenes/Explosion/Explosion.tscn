@@ -1,74 +1,74 @@
 [gd_scene load_steps=21 format=3 uid="uid://vo7q10rrwj5k"]
 
-[ext_resource type="Texture2D" uid="uid://pef3snaxlbvt" path="res://Graphics/Asteroid Explosion.png" id="1_l5420"]
-[ext_resource type="Script" path="res://Scenes/AsteroidFieldController/AsteroidExplosion.cs" id="2_3684s"]
+[ext_resource type="Texture2D" uid="uid://pef3snaxlbvt" path="res://Graphics/Asteroid Explosion.png" id="1_r0qj7"]
+[ext_resource type="Script" path="res://Scenes/Explosion/Explosion.cs" id="2_xxl85"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_aw0ef"]
-atlas = ExtResource("1_l5420")
+atlas = ExtResource("1_r0qj7")
 region = Rect2(0, 0, 150, 150)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rrvw1"]
-atlas = ExtResource("1_l5420")
+atlas = ExtResource("1_r0qj7")
 region = Rect2(150, 0, 150, 150)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_01qb2"]
-atlas = ExtResource("1_l5420")
+atlas = ExtResource("1_r0qj7")
 region = Rect2(300, 0, 150, 150)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_53iu2"]
-atlas = ExtResource("1_l5420")
+atlas = ExtResource("1_r0qj7")
 region = Rect2(450, 0, 150, 150)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_in20r"]
-atlas = ExtResource("1_l5420")
+atlas = ExtResource("1_r0qj7")
 region = Rect2(600, 0, 150, 150)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pf0l6"]
-atlas = ExtResource("1_l5420")
+atlas = ExtResource("1_r0qj7")
 region = Rect2(0, 150, 150, 150)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_r1bjt"]
-atlas = ExtResource("1_l5420")
+atlas = ExtResource("1_r0qj7")
 region = Rect2(150, 150, 150, 150)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mpy3s"]
-atlas = ExtResource("1_l5420")
+atlas = ExtResource("1_r0qj7")
 region = Rect2(300, 150, 150, 150)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_t88y1"]
-atlas = ExtResource("1_l5420")
+atlas = ExtResource("1_r0qj7")
 region = Rect2(450, 150, 150, 150)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_13e6i"]
-atlas = ExtResource("1_l5420")
+atlas = ExtResource("1_r0qj7")
 region = Rect2(600, 150, 150, 150)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wbwvu"]
-atlas = ExtResource("1_l5420")
+atlas = ExtResource("1_r0qj7")
 region = Rect2(0, 300, 150, 150)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_n8d4v"]
-atlas = ExtResource("1_l5420")
+atlas = ExtResource("1_r0qj7")
 region = Rect2(150, 300, 150, 150)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fcuwp"]
-atlas = ExtResource("1_l5420")
+atlas = ExtResource("1_r0qj7")
 region = Rect2(300, 300, 150, 150)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ve6xm"]
-atlas = ExtResource("1_l5420")
+atlas = ExtResource("1_r0qj7")
 region = Rect2(450, 300, 150, 150)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ni1d2"]
-atlas = ExtResource("1_l5420")
+atlas = ExtResource("1_r0qj7")
 region = Rect2(600, 300, 150, 150)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6ovvs"]
-atlas = ExtResource("1_l5420")
+atlas = ExtResource("1_r0qj7")
 region = Rect2(0, 450, 150, 150)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_d56bl"]
-atlas = ExtResource("1_l5420")
+atlas = ExtResource("1_r0qj7")
 region = Rect2(150, 450, 150, 150)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_5j6lg"]
@@ -127,12 +127,12 @@ animations = [{
 }],
 "loop": false,
 "name": &"Explosion ",
-"speed": 20.0
+"speed": 30.0
 }]
 
-[node name="AsteroidExplosion" type="AnimatedSprite2D"]
+[node name="Explosion" type="AnimatedSprite2D"]
 sprite_frames = SubResource("SpriteFrames_5j6lg")
 animation = &"Explosion "
 frame = 16
 frame_progress = 1.0
-script = ExtResource("2_3684s")
+script = ExtResource("2_xxl85")

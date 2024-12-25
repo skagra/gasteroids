@@ -37,6 +37,8 @@ public partial class Asteroid : Area2D
 
     private void Entered(Area2D collidedWith)
     {
+        Logger.I.SignalSent(this, SignalName.Collided, collidedWith);
+
         EmitSignal(SignalName.Collided, this, collidedWith);
     }
 }

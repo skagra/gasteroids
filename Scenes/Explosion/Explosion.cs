@@ -2,10 +2,10 @@ using Godot;
 
 namespace Asteroids;
 
-public partial class AsteroidExplosion : AnimatedSprite2D
+public partial class Explosion : AnimatedSprite2D
 {
     [Signal]
-    public delegate void ExplosionCompletedEventHandler(AsteroidExplosion explosion);
+    public delegate void ExplosionCompletedEventHandler(Explosion explosion);
 
     public Vector2 LinearVelocity { get; set; }
     public float AngularVelocity { get; set; }
@@ -31,6 +31,7 @@ public partial class AsteroidExplosion : AnimatedSprite2D
     // Called back from animation
     private void AnimationCompleted()
     {
+        Logger.I.SignalSent(this, SignalName.ExplosionCompleted);
         EmitSignal(SignalName.ExplosionCompleted, this);
     }
 }

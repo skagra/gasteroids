@@ -72,7 +72,7 @@ public partial class MissileController : Node
         {
             var dormantMissile = _missileScene.Instantiate<Missile>();
             _dormantMissiles.Add(dormantMissile);
-            dormantMissile.Collided += Entered;
+            dormantMissile.Collided += MissileOnCollided;
             AddChild(dormantMissile);
             dormantMissile.Name = $"Missile #{i + 1}";
             DisableMissile(dormantMissile);
@@ -84,8 +84,10 @@ public partial class MissileController : Node
         ClearUpMissiles(delta);
     }
 
-    private void Entered(Missile missile, Node collidedWith)
+    private void MissileOnCollided(Missile missile, Node collidedWith)
     {
+        Logger.I.SignalReceived(this, missile, Missile.SignalName.Collided, collidedWith);
+        Logger.I.SignalSent(this, SignalName.Collided, missile, collidedWith);
         EmitSignal(SignalName.Collided, missile, collidedWith);
     }
 

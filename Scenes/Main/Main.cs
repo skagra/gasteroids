@@ -117,8 +117,6 @@ public partial class Main : Node
 
         // Waiting to start
         WaitingToPlay();
-
-        _player.GravitationalPullCallback = _asteroidFieldController.GetGravitationalVector;
     }
 
     private void SetupSceneReferences()
@@ -143,25 +141,26 @@ public partial class Main : Node
     private void SetupSceneSignals()
     {
         // Missiles
-        _missileController.Collided += OnMissileCollided;
+        _missileController.Collided += MissileControllerOnCollided;
 
         // Player ship
-        _player.Exploding += OnPlayerExploding;
-        _player.Exploded += OnPlayerExploded;
-        _player.Shoot += OnPlayerShoot;
+        _player.Exploding += PlayerOnExploding;
+        _player.Exploded += PlayerOnExploded;
+        _player.Shoot += PlayerOnShoot;
 
         // Asteroids
-        _asteroidFieldController.Collision += OnAsteroidCollided;
-        _asteroidFieldController.FieldCleared += OnFieldCleared;
+        _asteroidFieldController.Collided += AsteroidFieldControllerOnCollided;
+        _asteroidFieldController.FieldCleared += AsteroidFieldControllerOnFieldCleared;
 
         // Configuration settings
-        _settingsDialog.OkPressed += OnConfigDialogOkPressed;
-        _settingsDialog.Cancel += OnConfigDialogCancelPressed;
+        _settingsDialog.OkPressed += SettingsDialogOnOkPressed;
+        _settingsDialog.Cancel += SettingsDialogOnCancel;
 
         // Controls
-        _helpDialog.OkPressed += OnHelpDialogOkPressed;
+        _helpDialog.OkPressed += HelpDialogOnOkPressed;
+
         // Window resize
-        GetTree().GetRoot().SizeChanged += OnResized;
+        GetTree().GetRoot().SizeChanged += WindowOnSizeChanged;
     }
 
     public override void _Process(double delta)
@@ -180,7 +179,7 @@ public partial class Main : Node
         }
     }
 
-    private void OnFieldCleared()
+    private void AsteroidFieldControllerOnFieldCleared()
     {
         // Increment number of asteroids to spawn and keep it within permitted range
         _asteroidsCurrentNewGameStart += _asteroidsNewSheetDelta;
@@ -196,7 +195,7 @@ public partial class Main : Node
         _beats.Reset();
     }
 
-    private void OnPlayerExploded()
+    private void PlayerOnExploded()
     {
         if (_gameState == GameState.Playing)
         {
@@ -210,7 +209,7 @@ public partial class Main : Node
         }
     }
 
-    private void OnPlayerExploding()
+    private void PlayerOnExploding()
     {
         // Just a safety check!
         if (_lives.Value > 0)
@@ -237,18 +236,20 @@ public partial class Main : Node
         }
     }
 
-    private void OnPlayerShoot(Vector2 position, Vector2 shipLinearVelocity, float shipRotation)
+    private void PlayerOnShoot(Vector2 position, Vector2 shipLinearVelocity, float shipRotation)
     {
         _missileController.SpawnMissile(position, shipLinearVelocity, shipRotation);
     }
 
-    private void OnMissileCollided(Missile missile, Node collidedWith)
+    private void MissileControllerOnCollided(Missile missile, Node collidedWith)
     {
+        Logger.I.SignalReceived(this, missile, Missile.SignalName.Collided, collidedWith);
         _missileController.KillMissile(missile);
     }
 
-    private void OnAsteroidCollided(Asteroid asteroid, AsteroidSize size, Node collidedWith)
+    private void AsteroidFieldControllerOnCollided(Asteroid asteroid, AsteroidSize size, Node collidedWith)
     {
+        Logger.I.SignalReceived(this, asteroid, AsteroidFieldController.SignalName.Collided, size, collidedWith);
         if (collidedWith is Missile)
         {
             IncreaseScore(_asteroidScores[size]);
@@ -284,6 +285,7 @@ public partial class Main : Node
 
     private void ShowConfigDialog()
     {
+
         _pushStartLabel.Hide();
         _oneCoinLabel.Hide();
 
@@ -318,7 +320,7 @@ public partial class Main : Node
         _missileController.MissileDuration = config.MissilesLifespan;
     }
 
-    private void OnConfigDialogOkPressed()
+    private void SettingsDialogOnOkPressed()
     {
         _pushStartLabel.Show();
         _oneCoinLabel.Show();
@@ -330,7 +332,7 @@ public partial class Main : Node
         _gameState = GameState.WaitingToPlay;
     }
 
-    private void OnConfigDialogCancelPressed()
+    private void SettingsDialogOnCancel()
     {
         _pushStartLabel.Show();
         _oneCoinLabel.Show();
@@ -339,7 +341,6 @@ public partial class Main : Node
 
     private void WaitingToPlay()
     {
-        // _asteroidFieldController.CreateField(_asteroidsNewGameStart, new Rect2(), false);
         _pushStartLabel.Show();
         _oneCoinLabel.Show();
 
@@ -379,7 +380,7 @@ public partial class Main : Node
         _gameState = GameState.ShowingHelpDialog;
     }
 
-    private void OnHelpDialogOkPressed()
+    private void HelpDialogOnOkPressed()
     {
         _oneCoinLabel.Show();
         _pushStartLabel.Show();
@@ -429,7 +430,7 @@ public partial class Main : Node
         WaitingToPlay();
     }
 
-    private void OnResized()
+    private void WindowOnSizeChanged()
     {
         _shipSpawnPosition = Screen.Instance.Centre;
         _exclusionZone.Position = _shipSpawnPosition;
