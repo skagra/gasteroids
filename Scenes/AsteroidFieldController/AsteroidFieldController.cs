@@ -260,6 +260,7 @@ public partial class AsteroidFieldController : Node
         else
         {
             var asteroidExplosion = _asteroidExplosion.Instantiate<Explosion>();
+            asteroidExplosion.Name = "Asteroid Explosion";
             asteroidExplosion.Position = asteroid.Asteroid.Position;
             asteroidExplosion.AngularVelocity = asteroid.Asteroid.AngularVelocity;
             asteroidExplosion.LinearVelocity = asteroid.Asteroid.LinearVelocity;

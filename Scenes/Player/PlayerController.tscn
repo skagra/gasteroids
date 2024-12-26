@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://ccd52kbej7r3l"]
+
+[ext_resource type="Script" path="res://Scenes/Player/PlayerController.cs" id="1_pyfmb"]
+
+[node name="PlayerController" type="Node"]
+script = ExtResource("1_pyfmb")

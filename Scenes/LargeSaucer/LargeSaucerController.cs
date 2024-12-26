@@ -29,6 +29,7 @@ public partial class LargeSaucerController : Node
     {
         Logger.I.SignalReceived(this, largeSaucer, LargeSaucer.SignalName.Collided, collidedWith);
 
+        _largeSaucer.Deactivate();
         CreateExplosion();
     }
 
@@ -42,6 +43,7 @@ public partial class LargeSaucerController : Node
     private void CreateExplosion()
     {
         var explosion = _explosion.Instantiate<Explosion>();
+        explosion.Name = "Large Saucer Explosion";
         explosion.Position = _largeSaucer.Position;
         explosion.AngularVelocity = 0f;
         explosion.LinearVelocity = _largeSaucer.Velocity;
