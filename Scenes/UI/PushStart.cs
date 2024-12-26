@@ -20,13 +20,13 @@ public partial class PushStart : Label
         _flashTimer = 0;
         _visible = true;
         base.Show();
-        SetProcess(true);
+        this.Enable(true);
     }
 
     public new void Hide()
     {
         base.Hide();
-        SetProcess(false);
+        this.Enable(false);
     }
 
     public override void _Process(double delta)

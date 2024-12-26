@@ -1,10 +1,9 @@
-[gd_scene load_steps=13 format=3 uid="uid://b6s1c2c0v0c81"]
+[gd_scene load_steps=12 format=3 uid="uid://b6s1c2c0v0c81"]
 
 [ext_resource type="Script" path="res://Scenes/Main/Main.cs" id="1_4mmwa"]
-[ext_resource type="PackedScene" uid="uid://df2pgmqfvt5ul" path="res://Scenes/Player/Player.tscn" id="2_fuwta"]
 [ext_resource type="PackedScene" uid="uid://nu2biysl40aq" path="res://Scenes/UI/UI.tscn" id="2_m8vvq"]
 [ext_resource type="PackedScene" uid="uid://bx0l2shyhmj8q" path="res://Scenes/AsteroidFieldController/AsteroidFieldController.tscn" id="3_37sgv"]
-[ext_resource type="PackedScene" uid="uid://d0lj1vtc141qv" path="res://Scenes/MissileController/MissileController.tscn" id="4_abpdt"]
+[ext_resource type="PackedScene" uid="uid://ccd52kbej7r3l" path="res://Scenes/Player/PlayerController.tscn" id="3_c81ab"]
 [ext_resource type="PackedScene" uid="uid://cx6qi3tglyw31" path="res://Scenes/ExclusionZone/ExclusionZone.tscn" id="6_wewr6"]
 [ext_resource type="PackedScene" uid="uid://bvjd2yxqild8r" path="res://Scenes/LargeSaucer/LargeSaucerController.tscn" id="7_bcee1"]
 [ext_resource type="PackedScene" uid="uid://c55fufwvjpgs4" path="res://Scenes/Beats/Beats.tscn" id="7_kqb4t"]
@@ -26,13 +25,9 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_b8eb2")
 
-[node name="Player" parent="." instance=ExtResource("2_fuwta")]
-position = Vector2(6, 28)
-collision_mask = 1
+[node name="PlayerController" parent="." instance=ExtResource("3_c81ab")]
 
 [node name="AsteroidFieldController" parent="." instance=ExtResource("3_37sgv")]
-
-[node name="MissileController" parent="." instance=ExtResource("4_abpdt")]
 
 [node name="ExclusionZone" parent="." instance=ExtResource("6_wewr6")]
 

@@ -9,18 +9,10 @@ public partial class Player : RigidBody2D
     private const string _ACTION_ROTATE_CW = "Rotate CW";
     private const string _ACTION_ROTATE_ACW = "Rotate ACW";
     private const string _ACTION_FIRE = "Fire";
-
     private const string _ANIMATION_THRUST = "Thrust";
-    private const string _ANIMATION_EXPLOSION = "Explosion";
 
     [Signal]
     public delegate void ShootEventHandler(Vector2 shipPosition, Vector2 shipLinearVelocity, float shipRotation);
-
-    [Signal]
-    public delegate void ExplodingEventHandler();
-
-    [Signal]
-    public delegate void ExplodedEventHandler();
 
     [Signal]
     public delegate void CollidedEventHandler(Player player, Node collidedWith);
@@ -38,17 +30,12 @@ public partial class Player : RigidBody2D
     private AudioStreamPlayer2D _thrustAudioStream;
 
     private float _savedLinearDamp;
-
     private bool _isActive = false;
-    private bool _isExploding = false;
     private bool _hasCollidedThisFrame = false;
-
-    Func<Vector2, Vector2> _gravitationalPullCallback = null;
 
     public Func<Vector2, Vector2> GravitationalPullCallback
     {
-        set => _gravitationalPullCallback = value;
-        get => _gravitationalPullCallback;
+        get; set;
     }
 
     public override void _Ready()
@@ -59,7 +46,6 @@ public partial class Player : RigidBody2D
         _thrustAudioStream = _area2D.GetNode<AudioStreamPlayer2D>("ThrustAudioPlayer");
 
         _area2D.AreaEntered += Area2DAreaEntered;
-        _sprite.AnimationFinished += SpriteOnAnimationFinished;
 
         // TODO Scaling
         _spriteSize = _sprite.SpriteFrames.GetFrameTexture(_sprite.Animation, _sprite.Frame).GetSize();
@@ -93,12 +79,9 @@ public partial class Player : RigidBody2D
 
         _sprite.SetAnimation(_ANIMATION_THRUST);
 
-        _isExploding = false;
         _hasCollidedThisFrame = false;
 
-        SetProcess(true);
-        SetPhysicsProcess(true);
-        SetProcessInput(true);
+        this.Enable(true);
 
         Show();
 
@@ -108,16 +91,16 @@ public partial class Player : RigidBody2D
     public void Deactivate()
     {
         Hide();
-        _collisionPolygon.Disabled = true;
-        SetProcess(false);
-        SetPhysicsProcess(false);
-        SetProcessInput(false);
+        _collisionPolygon.SetDeferred(CollisionPolygon2D.PropertyName.Disabled, true);
+
+        this.Enable(false);
+
         _isActive = false;
     }
 
     public override void _Input(InputEvent inputEvent)
     {
-        if (_isActive && !_isExploding)
+        if (_isActive)
         {
             if (inputEvent.IsActionPressed(_ACTION_FIRE))
             {
@@ -128,9 +111,9 @@ public partial class Player : RigidBody2D
 
     public override void _PhysicsProcess(double delta)
     {
-        if (_isActive && !_isExploding)
+        if (_isActive) //  && !_isExploding)
         {
-            var variableGravity = _gravitationalPullCallback?.Invoke(Position) ?? Vector2.Zero;
+            var variableGravity = GravitationalPullCallback?.Invoke(Position) ?? Vector2.Zero;
             ApplyCentralForce(variableGravity);
 
             if (Input.IsActionPressed(_ACTION_THRUST))
@@ -157,11 +140,14 @@ public partial class Player : RigidBody2D
 
     private void FirePressed()
     {
-        Logger.I.SignalSent(this, SignalName.Shoot);
+        // Current position + long dimension of spite in the direction of its rotation
+        var position = Position + ((_spriteSize.X / 2.0f) * Vector2.Right.Rotated(_area2D.Rotation));
+
+        Logger.I.SignalSent(this, SignalName.Shoot, position, LinearVelocity, _area2D.Rotation);
 
         EmitSignal(SignalName.Shoot,
-            // Current position + long dimension of spite in the direction of its rotation
-            Position + ((_spriteSize.X / 2.0f) * Vector2.Right.Rotated(_area2D.Rotation)),
+
+            position,
             LinearVelocity,
             _area2D.Rotation);
     }
@@ -177,15 +163,6 @@ public partial class Player : RigidBody2D
         if (!_sprite.IsPlaying())
         {
             _sprite.Play(_ANIMATION_THRUST);
-        }
-    }
-
-    private void SpriteOnAnimationFinished()
-    {
-        if (_sprite.Animation == _ANIMATION_EXPLOSION)
-        {
-            Logger.I.SignalSent(this, SignalName.Exploded);
-            EmitSignal(SignalName.Exploded);
         }
     }
 
@@ -211,26 +188,13 @@ public partial class Player : RigidBody2D
     private void Area2DAreaEntered(Area2D collidedWith)
     {
         Logger.I.SignalReceived(this, collidedWith, Area2D.SignalName.AreaEntered);
-        if (_isActive)
+
+        if (_isActive && !_hasCollidedThisFrame)
         {
+            _hasCollidedThisFrame = true;
+
             Logger.I.SignalSent(this, SignalName.Collided, collidedWith);
             EmitSignal(SignalName.Collided, this, collidedWith);
-
-            if (!_hasCollidedThisFrame && !_isExploding)
-            {
-                _hasCollidedThisFrame = true;
-                _isExploding = true;
-
-                Logger.I.Debug("Disabling player collision polygon");
-                _collisionPolygon.SetDeferred(CollisionPolygon2D.PropertyName.Disabled, true);
-
-                LinearDamp = _savedLinearDamp;
-                _sprite.Play(_ANIMATION_EXPLOSION);
-
-                Logger.I.SignalSent(this, SignalName.Exploding);
-
-                EmitSignal(SignalName.Exploding);
-            }
         }
     }
 }

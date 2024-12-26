@@ -1,0 +1,142 @@
+[gd_scene load_steps=22 format=3 uid="uid://dd3t4irdeyo48"]
+
+[ext_resource type="PackedScene" uid="uid://vo7q10rrwj5k" path="res://Scenes/Explosion/Explosion.tscn" id="1_s8m3h"]
+[ext_resource type="Texture2D" uid="uid://pef3snaxlbvt" path="res://Graphics/Asteroid Explosion.png" id="2_8n31t"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bf6l8"]
+atlas = ExtResource("2_8n31t")
+region = Rect2(0, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rooy2"]
+atlas = ExtResource("2_8n31t")
+region = Rect2(150, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_16tc6"]
+atlas = ExtResource("2_8n31t")
+region = Rect2(300, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dgi5t"]
+atlas = ExtResource("2_8n31t")
+region = Rect2(450, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dlblp"]
+atlas = ExtResource("2_8n31t")
+region = Rect2(600, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lw3ps"]
+atlas = ExtResource("2_8n31t")
+region = Rect2(0, 150, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0k37c"]
+atlas = ExtResource("2_8n31t")
+region = Rect2(150, 150, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q1heo"]
+atlas = ExtResource("2_8n31t")
+region = Rect2(300, 150, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jlerg"]
+atlas = ExtResource("2_8n31t")
+region = Rect2(450, 150, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_44535"]
+atlas = ExtResource("2_8n31t")
+region = Rect2(600, 150, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s6tgg"]
+atlas = ExtResource("2_8n31t")
+region = Rect2(0, 300, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_teg5e"]
+atlas = ExtResource("2_8n31t")
+region = Rect2(150, 300, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6brnq"]
+atlas = ExtResource("2_8n31t")
+region = Rect2(300, 300, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vkotn"]
+atlas = ExtResource("2_8n31t")
+region = Rect2(450, 300, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g4m81"]
+atlas = ExtResource("2_8n31t")
+region = Rect2(600, 300, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l0tcf"]
+atlas = ExtResource("2_8n31t")
+region = Rect2(0, 450, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s66ir"]
+atlas = ExtResource("2_8n31t")
+region = Rect2(150, 450, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hexpk"]
+atlas = ExtResource("2_8n31t")
+region = Rect2(300, 450, 150, 150)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_cawye"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bf6l8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rooy2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_16tc6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dgi5t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dlblp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lw3ps")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0k37c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q1heo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jlerg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_44535")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s6tgg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_teg5e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6brnq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vkotn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g4m81")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l0tcf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s66ir")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hexpk")
+}],
+"loop": false,
+"name": &"Explosion",
+"speed": 30.0
+}]
+
+[node name="LargeSaucerExplosion" instance=ExtResource("1_s8m3h")]
+sprite_frames = SubResource("SpriteFrames_cawye")
+animation = &"Explosion"

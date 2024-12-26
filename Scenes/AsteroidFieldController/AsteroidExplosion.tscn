@@ -1,0 +1,144 @@
+[gd_scene load_steps=22 format=3 uid="uid://vdpw8oj24ytp"]
+
+[ext_resource type="PackedScene" uid="uid://vo7q10rrwj5k" path="res://Scenes/Explosion/Explosion.tscn" id="1_hekni"]
+[ext_resource type="Texture2D" uid="uid://pef3snaxlbvt" path="res://Graphics/Asteroid Explosion.png" id="2_hb10j"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cokfn"]
+atlas = ExtResource("2_hb10j")
+region = Rect2(0, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_adppi"]
+atlas = ExtResource("2_hb10j")
+region = Rect2(150, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nqpup"]
+atlas = ExtResource("2_hb10j")
+region = Rect2(300, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n1npv"]
+atlas = ExtResource("2_hb10j")
+region = Rect2(450, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wu7y4"]
+atlas = ExtResource("2_hb10j")
+region = Rect2(600, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oo3v4"]
+atlas = ExtResource("2_hb10j")
+region = Rect2(0, 150, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u6qtf"]
+atlas = ExtResource("2_hb10j")
+region = Rect2(150, 150, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w832w"]
+atlas = ExtResource("2_hb10j")
+region = Rect2(300, 150, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p5ldi"]
+atlas = ExtResource("2_hb10j")
+region = Rect2(450, 150, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ldlt2"]
+atlas = ExtResource("2_hb10j")
+region = Rect2(600, 150, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ak1dl"]
+atlas = ExtResource("2_hb10j")
+region = Rect2(0, 300, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tc57q"]
+atlas = ExtResource("2_hb10j")
+region = Rect2(150, 300, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7cchm"]
+atlas = ExtResource("2_hb10j")
+region = Rect2(300, 300, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tstj8"]
+atlas = ExtResource("2_hb10j")
+region = Rect2(450, 300, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5wdfi"]
+atlas = ExtResource("2_hb10j")
+region = Rect2(600, 300, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5eurf"]
+atlas = ExtResource("2_hb10j")
+region = Rect2(0, 450, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_skmxl"]
+atlas = ExtResource("2_hb10j")
+region = Rect2(150, 450, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0fbso"]
+atlas = ExtResource("2_hb10j")
+region = Rect2(300, 450, 150, 150)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_lia2v"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cokfn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_adppi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nqpup")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n1npv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wu7y4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oo3v4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u6qtf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w832w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p5ldi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ldlt2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ak1dl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tc57q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7cchm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tstj8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5wdfi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5eurf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_skmxl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0fbso")
+}],
+"loop": false,
+"name": &"Explosion",
+"speed": 30.0
+}]
+
+[node name="AsteroidExplosion" instance=ExtResource("1_hekni")]
+sprite_frames = SubResource("SpriteFrames_lia2v")
+animation = &"Explosion"
+frame = 17
+frame_progress = 1.0

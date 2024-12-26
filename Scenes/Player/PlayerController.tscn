@@ -1,6 +1,16 @@
-[gd_scene load_steps=2 format=3 uid="uid://ccd52kbej7r3l"]
+[gd_scene load_steps=6 format=3 uid="uid://ccd52kbej7r3l"]
 
 [ext_resource type="Script" path="res://Scenes/Player/PlayerController.cs" id="1_pyfmb"]
+[ext_resource type="PackedScene" uid="uid://pnyomyqsqfui" path="res://Scenes/Player/PlayerExplosion.tscn" id="2_wb5yd"]
+[ext_resource type="PackedScene" uid="uid://d0lj1vtc141qv" path="res://Scenes/MissileController/MissileController.tscn" id="3_nfv5s"]
+[ext_resource type="PackedScene" uid="uid://df2pgmqfvt5ul" path="res://Scenes/Player/Player.tscn" id="4_8ftv4"]
+[ext_resource type="PackedScene" uid="uid://blmfdrw5ovx81" path="res://Scenes/Player/PlayerMissile.tscn" id="4_pmy1a"]
 
 [node name="PlayerController" type="Node"]
 script = ExtResource("1_pyfmb")
+_explosion = ExtResource("2_wb5yd")
+
+[node name="MissileController" parent="." instance=ExtResource("3_nfv5s")]
+_missileScene = ExtResource("4_pmy1a")
+
+[node name="Player" parent="." instance=ExtResource("4_8ftv4")]

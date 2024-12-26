@@ -1,9 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://bvjd2yxqild8r"]
+[gd_scene load_steps=4 format=3 uid="uid://bvjd2yxqild8r"]
 
 [ext_resource type="Script" path="res://Scenes/LargeSaucer/LargeSaucerController.cs" id="1_c14qx"]
+[ext_resource type="PackedScene" uid="uid://dd3t4irdeyo48" path="res://Scenes/LargeSaucer/LargeSaucerExplosion.tscn" id="2_30dcx"]
 [ext_resource type="PackedScene" uid="uid://detxusf2uxlnq" path="res://Scenes/LargeSaucer/LargeSaucer.tscn" id="2_iyk1e"]
 
 [node name="LargeSaucerController" type="Node"]
 script = ExtResource("1_c14qx")
+_explosion = ExtResource("2_30dcx")
 
 [node name="LargeSaucer" parent="." instance=ExtResource("2_iyk1e")]

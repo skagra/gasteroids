@@ -5,7 +5,8 @@ namespace Asteroids;
 
 public partial class LargeSaucerController : Node
 {
-    private readonly PackedScene _explosion = GD.Load<PackedScene>("res://Scenes/Explosion/Explosion.tscn");
+    [Export]
+    private PackedScene _explosion;
 
     private LargeSaucer _largeSaucer;
 
@@ -48,6 +49,7 @@ public partial class LargeSaucerController : Node
         explosion.AngularVelocity = 0f;
         explosion.LinearVelocity = _largeSaucer.Velocity;
         explosion.ExplosionCompleted += ExplosionOnCompleted;
+        explosion.Animation = "Explosion";
 
         CallDeferred(MethodName.AddChild, explosion);
     }

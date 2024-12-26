@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace Asteroids;
 
@@ -29,7 +30,9 @@ public partial class MissileController : Node
 
     private int _missileCount = 5;
 
-    private readonly PackedScene _missileScene = GD.Load<PackedScene>("res://Scenes/Missile/Missile.tscn");
+    // [Export] .. TODO and need a player missile inherited scene and need to expose various player and missile controller properties in player controller
+    [Export]
+    private PackedScene _missileScene;
 
     private sealed class ActiveMissile
     {
@@ -50,6 +53,8 @@ public partial class MissileController : Node
         // Audio
         _shootAudioStream.Stream = _missileExplosionSound;
         AddChild(_shootAudioStream);
+
+        SetUpMissiles();
     }
 
     private void SetUpMissiles()
@@ -112,22 +117,16 @@ public partial class MissileController : Node
     private static void DisableMissile(Missile missile)
     {
         missile.Hide();
-        missile.SetProcess(false);
-        missile.SetPhysicsProcess(false);
-        missile.SetDeferred(Area2D.PropertyName.Monitorable, false);
-        missile.SetDeferred(Area2D.PropertyName.Monitoring, false);
+        missile.EnableDeferred(false);
     }
 
     private static void EnableMissile(Missile missile)
     {
         missile.Show();
-        missile.SetProcess(true);
-        missile.SetPhysicsProcess(true);
-        missile.SetDeferred(Area2D.PropertyName.Monitorable, true);
-        missile.SetDeferred(Area2D.PropertyName.Monitoring, true);
+        missile.EnableDeferred(true);
     }
 
-    public void KillMissile(Missile missile)
+    public void DeSpawnMissile(Missile missile)
     {
         var missileDetails = _activeMissiles.Find(missileDetails => missileDetails.Missile == missile);
 

@@ -50,8 +50,8 @@ public partial class Main : Node
 
     // Scene references
     private AsteroidFieldController _asteroidFieldController;
-    private MissileController _missileController;
-    private Player _player;
+    // private MissileController _missileController;
+    private PlayerController _playerController;
     private Score _score;
     private Lives _lives;
     private Label _gameOverLabel;
@@ -113,7 +113,7 @@ public partial class Main : Node
         ApplyConfiguration(_settingsDialog.ActiveSettings);
 
         // Very first time create some asteroids just for aesthetic reasons
-        _asteroidFieldController.CreateField(15, new Rect2(), false); // TODO Hard coded number of asteroids
+        _asteroidFieldController.SpawnField(15, new Rect2(), false); // TODO Hard coded number of asteroids
 
         // Waiting to start
         WaitingToPlay();
@@ -122,8 +122,8 @@ public partial class Main : Node
     private void SetupSceneReferences()
     {
         // Get references too all required scenes
-        _player = GetNode<Player>("Player");
-        _missileController = GetNode<MissileController>("MissileController");
+        _playerController = GetNode<PlayerController>("PlayerController");
+        // _missileController = GetNode<MissileController>("MissileController");
         _asteroidFieldController = GetNode<AsteroidFieldController>("AsteroidFieldController");
         _score = (Score)FindChild("Score");
         _lives = (Lives)FindChild("Lives");
@@ -141,12 +141,12 @@ public partial class Main : Node
     private void SetupSceneSignals()
     {
         // Missiles
-        _missileController.Collided += MissileControllerOnCollided;
+        //_missileController.Collided += MissileControllerOnCollided;
 
         // Player ship
-        _player.Exploding += PlayerOnExploding;
-        _player.Exploded += PlayerOnExploded;
-        _player.Shoot += PlayerOnShoot;
+        _playerController.Exploding += PlayerOnExploding;
+        _playerController.Exploded += PlayerOnExploded;
+        //_playerController.Shoot += PlayerOnShoot;
 
         // Asteroids
         _asteroidFieldController.Collided += AsteroidFieldControllerOnCollided;
@@ -174,7 +174,7 @@ public partial class Main : Node
             {
                 _gameState = GameState.Playing;
                 _exclusionZoneCollisionShape.Disabled = true;
-                _player.Activate(_shipSpawnPosition);
+                _playerController.Activate(_shipSpawnPosition);
             }
         }
     }
@@ -186,8 +186,8 @@ public partial class Main : Node
         _asteroidsCurrentNewGameStart = Mathf.Clamp(_asteroidsCurrentNewGameStart, 0, _asteroidsNewGameMax);
 
         // Spawn the new field of asteroids
-        _asteroidFieldController.CreateField(_asteroidsCurrentNewGameStart,
-            new Rect2(_player.Position.X - _safeZoneRadius, _player.Position.Y - _safeZoneRadius,
+        _asteroidFieldController.SpawnField(_asteroidsCurrentNewGameStart,
+            new Rect2(_playerController.PlayerPosition.X - _safeZoneRadius, _playerController.PlayerPosition.Y - _safeZoneRadius,
                       _safeZoneRadius * 2, _safeZoneRadius * 2),
                       true);
 
@@ -200,7 +200,7 @@ public partial class Main : Node
         if (_gameState == GameState.Playing)
         {
             // Hide the player/stop processing
-            _player.Deactivate();
+            _playerController.Deactivate();
 
             // This is safe wrt signal delivery order
             // as there is a gap between "Exploding" and "Exploded"
@@ -236,16 +236,16 @@ public partial class Main : Node
         }
     }
 
-    private void PlayerOnShoot(Vector2 position, Vector2 shipLinearVelocity, float shipRotation)
-    {
-        _missileController.SpawnMissile(position, shipLinearVelocity, shipRotation);
-    }
+    // private void PlayerOnShoot(Vector2 position, Vector2 shipLinearVelocity, float shipRotation)
+    // {
+    //     _missileController.SpawnMissile(position, shipLinearVelocity, shipRotation);
+    // }
 
-    private void MissileControllerOnCollided(Missile missile, Node collidedWith)
-    {
-        Logger.I.SignalReceived(this, missile, Missile.SignalName.Collided, collidedWith);
-        _missileController.KillMissile(missile);
-    }
+    // private void MissileControllerOnCollided(Missile missile, Node collidedWith)
+    // {
+    //     Logger.I.SignalReceived(this, missile, Missile.SignalName.Collided, collidedWith);
+    //     _missileController.KillMissile(missile);
+    // }
 
     private void AsteroidFieldControllerOnCollided(Asteroid asteroid, AsteroidSize size, Node collidedWith)
     {
@@ -267,19 +267,19 @@ public partial class Main : Node
             ShipStartingCount = _livesNewGame,
             ShipMax = _livesMax,
             ShipExtraThreshold = _lifeExtraThreshold,
-            ShipAcceleration = _player.ThrustForce,
-            ShipRotationSpeed = _player.RotationSpeed,
+            ShipAcceleration = _playerController.PlayerThrustForce,
+            ShipRotationSpeed = _playerController.PlayerRotationSpeed,
 
             AsteroidsRotationEnabled = _asteroidFieldController.IsRotationEnabled,
             AsteroidsStartingQuantity = _asteroidsNewGameStart,
             AsteroidsMaxStartingQuantity = _asteroidsNewGameMax,
             AsteroidsMinSpeed = _asteroidFieldController.MinSpeed,
             AsteroidsMaxSpeed = _asteroidFieldController.MaxSpeed,
-            AsteroidsGravityEnabled = _player.GravitationalPullCallback != null,
+            AsteroidsGravityEnabled = _playerController.PlayerGravitationalPullCallback != null,
             AsteroidsGravitationalConstant = _asteroidFieldController.GravitationalMultiplier,
-            MissilesMax = _missileController.MissileCount,
-            MissilesSpeed = _missileController.MissileSpeed,
-            MissilesLifespan = _missileController.MissileDuration
+            MissilesMax = _playerController.MissileCount,
+            MissilesSpeed = _playerController.MissileSpeed,
+            MissilesLifespan = _playerController.MissileDuration
         };
     }
 
@@ -305,19 +305,19 @@ public partial class Main : Node
         _livesNewGame = config.ShipStartingCount;
         _livesMax = config.ShipMax;
         _lifeExtraThreshold = config.ShipExtraThreshold;
-        _player.ThrustForce = config.ShipAcceleration;
-        _player.RotationSpeed = config.ShipRotationSpeed;
+        _playerController.PlayerThrustForce = config.ShipAcceleration;
+        _playerController.PlayerRotationSpeed = config.ShipRotationSpeed;
 
         _asteroidFieldController.IsRotationEnabled = config.AsteroidsRotationEnabled;
         _asteroidsNewGameStart = config.AsteroidsStartingQuantity;
         _asteroidsNewGameMax = config.AsteroidsMaxStartingQuantity;
         _asteroidFieldController.MinSpeed = config.AsteroidsMinSpeed;
         _asteroidFieldController.MaxSpeed = config.AsteroidsMaxSpeed;
-        _player.GravitationalPullCallback = config.AsteroidsGravityEnabled ? _asteroidFieldController.GetGravitationalVector : null;
+        _playerController.PlayerGravitationalPullCallback = config.AsteroidsGravityEnabled ? _asteroidFieldController.GetGravitationalVector : null;
         _asteroidFieldController.GravitationalMultiplier = config.AsteroidsGravitationalConstant;
-        _missileController.MissileCount = config.MissilesMax;
-        _missileController.MissileSpeed = config.MissilesSpeed;
-        _missileController.MissileDuration = config.MissilesLifespan;
+        _playerController.MissileCount = config.MissilesMax;
+        _playerController.MissileSpeed = config.MissilesSpeed;
+        _playerController.MissileDuration = config.MissilesLifespan;
     }
 
     private void SettingsDialogOnOkPressed()
@@ -409,7 +409,7 @@ public partial class Main : Node
         _oneCoinLabel.Hide();
 
         // Create the new asteroid fields
-        _asteroidFieldController.CreateField(_asteroidsCurrentNewGameStart,
+        _asteroidFieldController.SpawnField(_asteroidsCurrentNewGameStart,
            new Rect2(_shipSpawnPosition.X - _safeZoneRadius, _shipSpawnPosition.Y - _safeZoneRadius,
                      _safeZoneRadius * 2, _safeZoneRadius * 2),
            true);

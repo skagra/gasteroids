@@ -89,10 +89,7 @@ public partial class LargeSaucer : Area2D
                                (float)GD.RandRange(Screen.Instance.Top, Screen.Instance.Bottom));
 
         NewPath();
-        SetProcess(true);
-        SetPhysicsProcess(true);
-        Monitorable = true;
-        Monitoring = true;
+        this.Enable(true);
         _collisionPolygon.Disabled = false;
 
         _isActive = true;
@@ -104,10 +101,7 @@ public partial class LargeSaucer : Area2D
         Hide();
         _isActive = false;
 
-        SetProcess(false);
-        SetPhysicsProcess(false);
-        SetDeferred(PropertyName.Monitorable, false);
-        SetDeferred(PropertyName.Monitoring, false);
+        this.EnableDeferred(false);
         SetDeferred(CollisionPolygon2D.PropertyName.Disabled, true);
 
         _saucerSoundPlayer.Stop();

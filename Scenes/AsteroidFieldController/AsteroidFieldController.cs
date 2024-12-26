@@ -27,6 +27,10 @@ public partial class AsteroidFieldController : Node
     public delegate void FieldClearedEventHandler();
 
     // Values configurable via the inspector
+    [Export]
+    [ExportCategory("References")]
+    private PackedScene _asteroidExplosion;
+
     [ExportCategory("Main")]
     [ExportGroup("Speed")]
     [Export]
@@ -79,9 +83,6 @@ public partial class AsteroidFieldController : Node
                 GD.Load<PackedScene>($"{_ASTEROID_SCENE_BASE}AsteroidType2Small.tscn"),
                 GD.Load<PackedScene>($"{_ASTEROID_SCENE_BASE}AsteroidType3Small.tscn") };
 
-    // Asteroid explosion
-    private readonly PackedScene _asteroidExplosion = GD.Load<PackedScene>($"res://Scenes/Explosion/Explosion.tscn");
-
     // List of all active asteroids
     private readonly List<AsteroidDetails> _activeAsteroids = new();
 
@@ -105,7 +106,7 @@ public partial class AsteroidFieldController : Node
         // Test mode
         if (GetParent() is Window)
         {
-            CreateField(_testingNumAsteroids, new Rect2(), false);
+            SpawnField(_testingNumAsteroids, new Rect2(), false);
         }
     }
 
@@ -137,7 +138,7 @@ public partial class AsteroidFieldController : Node
     }
 
     // Clear active asteroid list and destroy all associated GameObjects
-    public void DestroyField()
+    public void DeSpawnField()
     {
         foreach (var asteroid in _activeAsteroids)
         {
@@ -147,28 +148,28 @@ public partial class AsteroidFieldController : Node
 
     // Create a sheet of large asteroids with random position, velocity and angular velocity,
     // while avoiding the exclusionZone Rect
-    public void CreateField(int numAsteroids, Rect2 exclusionZone, bool onlyLarge = true)
+    public void SpawnField(int numAsteroids, Rect2 exclusionZone, bool onlyLarge = true)
     {
         _asteroidId = 1;
-        DestroyField();
+        DeSpawnField();
 
         for (var i = 0; i < numAsteroids; i++)
         {
             if (onlyLarge)
             {
-                CreateRandomAsteroid(AsteroidSize.Large, exclusionZone);
+                SpawnRandomAsteroid(AsteroidSize.Large, exclusionZone);
             }
             else
             {
                 var values = Enum.GetValues(typeof(AsteroidSize));
-                CreateRandomAsteroid((AsteroidSize)values.GetValue(GD.RandRange(0, values.Length - 1)), exclusionZone);
+                SpawnRandomAsteroid((AsteroidSize)values.GetValue(GD.RandRange(0, values.Length - 1)), exclusionZone);
             }
         }
     }
 
     // Create an asteroid of the given size, with random position, velocity and angular velocity,
     // while avoiding the exclusionZone Rect.   
-    private AsteroidDetails CreateRandomAsteroid(AsteroidSize size, Rect2 exclusionZone)
+    private AsteroidDetails SpawnRandomAsteroid(AsteroidSize size, Rect2 exclusionZone)
     {
         var vp = GetViewport().GetVisibleRect();
 
@@ -220,7 +221,7 @@ public partial class AsteroidFieldController : Node
 
     // Create a random asteroid at the position of the given asteroid
     // at one size smaller than the given asteroid
-    private AsteroidDetails CreateSplitAsteroid(AsteroidDetails existingAsteroid)
+    private AsteroidDetails SpawnSplitAsteroid(AsteroidDetails existingAsteroid)
     {
         var newAsteroidSize = existingAsteroid.AsteroidSize switch
         {
@@ -229,7 +230,7 @@ public partial class AsteroidFieldController : Node
             _ => throw new NotImplementedException()
         };
 
-        var asteroidDetails = CreateRandomAsteroid(newAsteroidSize, new Rect2(0, 0, 0, 0));
+        var asteroidDetails = SpawnRandomAsteroid(newAsteroidSize, new Rect2(0, 0, 0, 0));
         asteroidDetails.Asteroid.Position = existingAsteroid.Asteroid.Position;
 
         return asteroidDetails;
@@ -254,8 +255,8 @@ public partial class AsteroidFieldController : Node
 
         if (asteroid.AsteroidSize != AsteroidSize.Small)
         {
-            CreateSplitAsteroid(asteroid);
-            CreateSplitAsteroid(asteroid);
+            SpawnSplitAsteroid(asteroid);
+            SpawnSplitAsteroid(asteroid);
         }
         else
         {

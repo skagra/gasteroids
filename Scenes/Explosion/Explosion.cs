@@ -28,7 +28,6 @@ public partial class Explosion : AnimatedSprite2D
         Rotation += AngularVelocity * (float)delta;
     }
 
-    // Called back from animation
     private void AnimationCompleted()
     {
         Logger.I.SignalSent(this, SignalName.ExplosionCompleted);
