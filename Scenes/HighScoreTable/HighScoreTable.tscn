@@ -1,0 +1,33 @@
+[gd_scene load_steps=3 format=3 uid="uid://bb8s26xmfrcas"]
+
+[ext_resource type="Script" path="res://Scenes/HighScoreTable/HighScoreTable.cs" id="1_x13oe"]
+[ext_resource type="Theme" uid="uid://bgfii5oeawryi" path="res://Themes/Dialog.tres" id="2_0s2nh"]
+
+[node name="HighScoreTable" type="CanvasLayer"]
+script = ExtResource("1_x13oe")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -98.5
+offset_top = -29.5
+offset_right = 98.5
+offset_bottom = 29.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_0s2nh")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"DialogHeading"
+text = "High Scores"
+
+[node name="GridContainer" type="GridContainer" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+columns = 3

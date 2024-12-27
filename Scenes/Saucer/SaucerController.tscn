@@ -1,0 +1,17 @@
+[gd_scene load_steps=6 format=3 uid="uid://bvjd2yxqild8r"]
+
+[ext_resource type="Script" path="res://Scenes/Saucer/SaucerController.cs" id="1_c14qx"]
+[ext_resource type="PackedScene" uid="uid://dd3t4irdeyo48" path="res://Scenes/Saucer/SaucerExplosion.tscn" id="2_30dcx"]
+[ext_resource type="AudioStream" uid="uid://b873xi6y1o0di" path="res://Audio/bangSmall.wav" id="3_jyhkt"]
+[ext_resource type="PackedScene" uid="uid://d0lj1vtc141qv" path="res://Scenes/MissileController/MissileController.tscn" id="4_gtcb1"]
+[ext_resource type="PackedScene" uid="uid://bp58suxfa4eqc" path="res://Scenes/Saucer/SaucerMissile.tscn" id="5_pwfu2"]
+
+[node name="SaucerController" type="Node"]
+script = ExtResource("1_c14qx")
+_explosion = ExtResource("2_30dcx")
+_explosionSound = ExtResource("3_jyhkt")
+
+[node name="MissileController" parent="." instance=ExtResource("4_gtcb1")]
+MissileDuration = 2.0
+MissileSpeed = 400.0
+_missileScene = ExtResource("5_pwfu2")

@@ -92,6 +92,9 @@ Help={
 
 2d_physics/layer_1="Asteroids"
 2d_physics/layer_2="Player"
+2d_physics/layer_3="Exclusion Zone"
+2d_physics/layer_4="Large Saucer"
+2d_physics/layer_5="Small Saucer"
 
 [rendering]
 

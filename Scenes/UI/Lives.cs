@@ -15,6 +15,7 @@ public partial class Lives : Node2D
 
     public override void _Ready()
     {
+        _extraLifeSoundPlayer.Bus = Constants.AUDIO_BUS_NAME_FX;
         _extraLifeSoundPlayer.Stream = _extraLifeSound;
         AddChild(_extraLifeSoundPlayer);
     }

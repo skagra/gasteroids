@@ -3,22 +3,22 @@ using Godot;
 
 namespace Asteroids;
 
-public partial class LargeSaucer : Area2D
+public partial class Saucer : Area2D
 {
     [Signal]
-    public delegate void CollidedEventHandler(LargeSaucer largeSaucer, Node collidedWith);
+    public delegate void CollidedEventHandler(Saucer saucer, Node collidedWith);
 
     [Signal]
-    public delegate void OffScreenEventHandler(LargeSaucer largeSaucer);
+    public delegate void OffScreenEventHandler(Saucer saucer);
 
     [Export]
-    private float Speed { get; set; } = 250f;
+    public float Speed { get; set; } = 250f;
 
     [Export]
-    private float MinPathDuration { get; set; } = 0.25f;
+    public float MinPathDuration { get; set; } = 0.25f;
 
     [Export]
-    private float MaxPathDuration { get; set; } = 0.5f;
+    public float MaxPathDuration { get; set; } = 0.5f;
 
     [Export]
     private AudioStream _saucerSound;
@@ -42,18 +42,26 @@ public partial class LargeSaucer : Area2D
 
     private bool _isActive = false;
 
+    private float _spawnTimer;
+
     public override void _Ready()
     {
         _collisionPolygon = GetNode<CollisionPolygon2D>("CollisionPolygon2D");
 
+        _saucerSoundPlayer.Bus = Constants.AUDIO_BUS_NAME_FX;
         _saucerSoundPlayer.Stream = _saucerSound;
         AddChild(_saucerSoundPlayer);
 
         AreaEntered += Entered;
 
-        _isActive = false;
-
         Deactivate();
+    }
+
+    private bool _fxEnabled = true;
+
+    public void EnableFx(bool enable)
+    {
+        _fxEnabled = enable;
     }
 
     private bool _collisionFlaggedThisFrame = false;
@@ -76,7 +84,10 @@ public partial class LargeSaucer : Area2D
 
     public void Activate()
     {
-        _saucerSoundPlayer.Play();
+        if (_fxEnabled)
+        {
+            _saucerSoundPlayer.Play();
+        }
 
         _direction = (GD.Randi() % 2) switch
         {
@@ -134,7 +145,7 @@ public partial class LargeSaucer : Area2D
             SwitchDirectionIfNeeded();
             Position += _velocity * (float)delta;
 
-            if (!_saucerSoundPlayer.IsPlaying())
+            if (_fxEnabled && !_saucerSoundPlayer.IsPlaying())
             {
                 _saucerSoundPlayer.Play();
             };

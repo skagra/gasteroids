@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://bp58suxfa4eqc"]
+
+[ext_resource type="PackedScene" uid="uid://djcm0jgmhfoqw" path="res://Scenes/Missile/Missile.tscn" id="1_fsj0c"]
+
+[node name="SaucerMissile" instance=ExtResource("1_fsj0c")]
+collision_layer = 24
+collision_mask = 3

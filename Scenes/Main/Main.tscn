@@ -1,15 +1,18 @@
-[gd_scene load_steps=12 format=3 uid="uid://b6s1c2c0v0c81"]
+[gd_scene load_steps=15 format=3 uid="uid://b6s1c2c0v0c81"]
 
 [ext_resource type="Script" path="res://Scenes/Main/Main.cs" id="1_4mmwa"]
 [ext_resource type="PackedScene" uid="uid://nu2biysl40aq" path="res://Scenes/UI/UI.tscn" id="2_m8vvq"]
 [ext_resource type="PackedScene" uid="uid://bx0l2shyhmj8q" path="res://Scenes/AsteroidFieldController/AsteroidFieldController.tscn" id="3_37sgv"]
 [ext_resource type="PackedScene" uid="uid://ccd52kbej7r3l" path="res://Scenes/Player/PlayerController.tscn" id="3_c81ab"]
 [ext_resource type="PackedScene" uid="uid://cx6qi3tglyw31" path="res://Scenes/ExclusionZone/ExclusionZone.tscn" id="6_wewr6"]
-[ext_resource type="PackedScene" uid="uid://bvjd2yxqild8r" path="res://Scenes/LargeSaucer/LargeSaucerController.tscn" id="7_bcee1"]
+[ext_resource type="PackedScene" uid="uid://bvjd2yxqild8r" path="res://Scenes/Saucer/SaucerController.tscn" id="7_bcee1"]
 [ext_resource type="PackedScene" uid="uid://c55fufwvjpgs4" path="res://Scenes/Beats/Beats.tscn" id="7_kqb4t"]
+[ext_resource type="PackedScene" uid="uid://bs2jf8dh304n2" path="res://Scenes/Saucer/SmallSaucer.tscn" id="7_lqlai"]
+[ext_resource type="PackedScene" uid="uid://ced2kqn8jadtp" path="res://Scenes/Saucer/LargeSaucer.tscn" id="7_yvgho"]
 [ext_resource type="PackedScene" uid="uid://cu3bhbnbhqh8y" path="res://Scenes/HelpDialog/HelpDialog.tscn" id="9_4054w"]
 [ext_resource type="Texture2D" uid="uid://dorw1dk8egeyd" path="res://Graphics/Background.jpg" id="10_5m703"]
 [ext_resource type="PackedScene" uid="uid://b6kmyi73lblks" path="res://Scenes/SettingsDialog/SettingsDialog.tscn" id="10_kidqi"]
+[ext_resource type="PackedScene" uid="uid://bb8s26xmfrcas" path="res://Scenes/HighScoreTable/HighScoreTable.tscn" id="13_6i0d3"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_b8eb2"]
 texture = ExtResource("10_5m703")
@@ -32,6 +35,10 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_b8eb2")
 [node name="ExclusionZone" parent="." instance=ExtResource("6_wewr6")]
 
 [node name="LargeSaucerController" parent="." instance=ExtResource("7_bcee1")]
+_saucerScene = ExtResource("7_yvgho")
+
+[node name="SmallSaucerController" parent="." instance=ExtResource("7_bcee1")]
+_saucerScene = ExtResource("7_lqlai")
 
 [node name="Beats" parent="." instance=ExtResource("7_kqb4t")]
 
@@ -42,3 +49,7 @@ visible = false
 
 [node name="Settings Dialog" parent="." instance=ExtResource("10_kidqi")]
 visible = false
+
+[node name="HighScoreTable" parent="." instance=ExtResource("13_6i0d3")]
+offset = Vector2(0, -200)
+transform = Transform2D(1, 0, 0, 1, 0, -200)

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq.Expressions;
 using Godot;
 
 namespace Asteroids;
@@ -67,6 +68,8 @@ public partial class AsteroidFieldController : Node
     [Export]
     private int _testingNumAsteroids = 10;
 
+    public int AsteroidCount { get => _activeAsteroids.Count; }
+
     private const string _ASTEROID_SCENE_BASE = "res://Scenes/Asteroid/";
 
     // Asteroid scenes
@@ -93,13 +96,18 @@ public partial class AsteroidFieldController : Node
     // Asteroid id used to give spawned asteroids friendly names
     private int _asteroidId = 1;
 
+    private bool _fxEnabled = true;
+
     public override void _Ready()
     {
         // Set up audio streams
+        _audioStreamPlayerBangLarge.Bus = Constants.AUDIO_BUS_NAME_FX;
         _audioStreamPlayerBangLarge.Stream = _bangLarge;
         AddChild(_audioStreamPlayerBangLarge);
+        _audioStreamPlayerBangMedium.Bus = Constants.AUDIO_BUS_NAME_FX;
         _audioStreamPlayerBangMedium.Stream = _bangMedium;
         AddChild(_audioStreamPlayerBangMedium);
+        _audioStreamPlayerBangSmall.Bus = Constants.AUDIO_BUS_NAME_FX;
         _audioStreamPlayerBangSmall.Stream = _bangSmall;
         AddChild(_audioStreamPlayerBangSmall);
 
@@ -130,6 +138,12 @@ public partial class AsteroidFieldController : Node
             }
         }
         return result * GravitationalMultiplier;
+    }
+
+
+    public void EnableFx(bool enable)
+    {
+        _fxEnabled = enable;
     }
 
     public override void _Process(double delta)
@@ -240,17 +254,20 @@ public partial class AsteroidFieldController : Node
     // and play the associated explosion audio
     private void SplitAsteroid(AsteroidDetails asteroid)
     {
-        switch (asteroid.AsteroidSize)
+        if (_fxEnabled)
         {
-            case AsteroidSize.Large:
-                _audioStreamPlayerBangLarge.Play();
-                break;
-            case AsteroidSize.Medium:
-                _audioStreamPlayerBangMedium.Play();
-                break;
-            case AsteroidSize.Small:
-                _audioStreamPlayerBangSmall.Play();
-                break;
+            switch (asteroid.AsteroidSize)
+            {
+                case AsteroidSize.Large:
+                    _audioStreamPlayerBangLarge.Play();
+                    break;
+                case AsteroidSize.Medium:
+                    _audioStreamPlayerBangMedium.Play();
+                    break;
+                case AsteroidSize.Small:
+                    _audioStreamPlayerBangSmall.Play();
+                    break;
+            }
         }
 
         if (asteroid.AsteroidSize != AsteroidSize.Small)

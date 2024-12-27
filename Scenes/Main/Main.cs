@@ -1,6 +1,6 @@
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using Godot;
-
 
 namespace Asteroids;
 
@@ -37,9 +37,31 @@ public partial class Main : Node
     [Export]
     private int _asteroidsNewSheetDelta = 1;
 
+    [ExportCategory("Saucers")]
+    [Export]
+    private float _largeSaucerStartMinSpawnTimer = 10;
+    [Export]
+    private float _largeSaucerStartMaxSpawnTimer = 20;
+    [Export]
+    private float _largeSaucerSpawnTimerFloor = 5;
+    [Export]
+    private float _largeSaucerSpawnTimerDeltaProportion = 0.5f;
+    [Export]
+    private float _smallSaucerStartMinSpawnTimer = 60;
+    [Export]
+    private float _smallSaucerStartMaxSpawnTimer = 120;
+    [Export]
+    private float _smallSaucerSpawnTimerFloor = 5;
+    [Export]
+    private float _smallSaucerSpawnTimerDeltaProportion = 0.5f;
+
     [ExportCategory("Misc")]
     [Export]
     private int _safeZoneRadius = 200;
+    [Export]
+    private int _startAsteroidsOnDemoScreen = 15;
+    [Export]
+    private int _minAsteroidsOnDemoScreen = 10;
 
     [ExportCategory("Testing")]
     [Export]
@@ -50,7 +72,6 @@ public partial class Main : Node
 
     // Scene references
     private AsteroidFieldController _asteroidFieldController;
-    // private MissileController _missileController;
     private PlayerController _playerController;
     private Score _score;
     private Lives _lives;
@@ -63,6 +84,9 @@ public partial class Main : Node
     private SettingsDialog _settingsDialog;
     private HelpDialog _helpDialog;
     private Panel _background;
+    private SaucerController _largeSaucerController;
+    private SaucerController _smallSaucerController;
+    private HighScoreTable _highScoreTable;
 
     // State
     private int _asteroidsCurrentNewGameStart;
@@ -112,18 +136,45 @@ public partial class Main : Node
 
         ApplyConfiguration(_settingsDialog.ActiveSettings);
 
-        // Very first time create some asteroids just for aesthetic reasons
-        _asteroidFieldController.SpawnField(15, new Rect2(), false); // TODO Hard coded number of asteroids
+        CreateDemoScreen();
+
+        _smallSaucerController.TargetCallback = () => _playerController.PlayerPosition;
 
         // Waiting to start
         WaitingToPlay();
+
+        _highScoreTable.AddScore("Bob", 22000);
+        _highScoreTable.AddScore("Bill", 19);
+        _highScoreTable.AddScore("Zaphod", 6600);
+
+    }
+
+    private void EnableFx(bool enable)
+    {
+        _asteroidFieldController.EnableFx(enable);
+        _playerController.EnableFx(enable);
+        _smallSaucerController.EnableFx(enable);
+        _largeSaucerController.EnableFx(enable);
+    }
+
+    private void CreateDemoScreen()
+    {
+        EnableFx(false);
+
+        _smallSaucerController.SpawnTimerMax = _smallSaucerStartMinSpawnTimer;
+        _smallSaucerController.SpawnTimerMin = _smallSaucerStartMaxSpawnTimer;
+        _largeSaucerController.SpawnTimerMax = _largeSaucerStartMinSpawnTimer;
+        _largeSaucerController.SpawnTimerMin = _largeSaucerStartMaxSpawnTimer;
+
+        _largeSaucerController.Activate();
+
+        _asteroidFieldController.SpawnField(_startAsteroidsOnDemoScreen, new Rect2(), false);
     }
 
     private void SetupSceneReferences()
     {
         // Get references too all required scenes
         _playerController = GetNode<PlayerController>("PlayerController");
-        // _missileController = GetNode<MissileController>("MissileController");
         _asteroidFieldController = GetNode<AsteroidFieldController>("AsteroidFieldController");
         _score = (Score)FindChild("Score");
         _lives = (Lives)FindChild("Lives");
@@ -136,21 +187,24 @@ public partial class Main : Node
         _settingsDialog = GetNode<SettingsDialog>("Settings Dialog");
         _helpDialog = GetNode<HelpDialog>("Help Dialog");
         _background = GetNode<Panel>("Background");
+        _largeSaucerController = GetNode<SaucerController>("LargeSaucerController");
+        _smallSaucerController = GetNode<SaucerController>("SmallSaucerController");
+        _highScoreTable = GetNode<HighScoreTable>("HighScoreTable");
     }
 
     private void SetupSceneSignals()
     {
-        // Missiles
-        //_missileController.Collided += MissileControllerOnCollided;
-
         // Player ship
         _playerController.Exploding += PlayerOnExploding;
         _playerController.Exploded += PlayerOnExploded;
-        //_playerController.Shoot += PlayerOnShoot;
 
         // Asteroids
         _asteroidFieldController.Collided += AsteroidFieldControllerOnCollided;
         _asteroidFieldController.FieldCleared += AsteroidFieldControllerOnFieldCleared;
+
+        // Saucers
+        _smallSaucerController.Collided += SmallSaucerOnCollided;
+        _largeSaucerController.Collided += LargeSaucerOnCollided;
 
         // Configuration settings
         _settingsDialog.OkPressed += SettingsDialogOnOkPressed;
@@ -177,6 +231,51 @@ public partial class Main : Node
                 _playerController.Activate(_shipSpawnPosition);
             }
         }
+        else if (_gameState == GameState.WaitingToPlay)
+        {
+            if (_smallSaucerController.IsActive && !_smallSaucerController.IsSaucerActive &&
+                !_largeSaucerController.IsActive)
+            {
+                _largeSaucerController.Activate();
+                _smallSaucerController.Deactivate();
+            }
+
+            if (_asteroidFieldController.AsteroidCount < _minAsteroidsOnDemoScreen)
+            {
+                CreateDemoScreen();
+            }
+
+        }
+    }
+
+    private void SmallSaucerOnCollided(Saucer saucer, Node collidedWith)
+    {
+        Logger.I.SignalReceived(this, saucer, Saucer.SignalName.Collided, collidedWith, "SMALL");
+        if (collidedWith is Missile)
+        {
+            IncreaseScore(_scoreSaucerSmall);
+        }
+    }
+
+    private void LargeSaucerOnCollided(Saucer saucer, Node collidedWith)
+    {
+        Logger.I.SignalReceived(this, saucer, Saucer.SignalName.Collided, collidedWith, "LARGE");
+        if (collidedWith is Missile)
+        {
+            IncreaseScore(_scoreSaucerLarge);
+        }
+    }
+
+    private void AsteroidFieldControllerOnCollided(Asteroid asteroid, AsteroidSize size, Node collidedWith)
+    {
+        Logger.I.SignalReceived(this, asteroid, AsteroidFieldController.SignalName.Collided, size, collidedWith);
+        if (collidedWith is Missile missile)
+        {
+            if (missile.GetParent()?.GetParent() is PlayerController)
+            {
+                IncreaseScore(_asteroidScores[size]);
+            }
+        }
     }
 
     private void AsteroidFieldControllerOnFieldCleared()
@@ -190,6 +289,12 @@ public partial class Main : Node
             new Rect2(_playerController.PlayerPosition.X - _safeZoneRadius, _playerController.PlayerPosition.Y - _safeZoneRadius,
                       _safeZoneRadius * 2, _safeZoneRadius * 2),
                       true);
+
+        _largeSaucerController.SpawnTimerMax = Mathf.Max(_largeSaucerController.SpawnTimerMax * _largeSaucerSpawnTimerDeltaProportion, _largeSaucerSpawnTimerFloor);
+        _largeSaucerController.SpawnTimerMin = Mathf.Max(_largeSaucerController.SpawnTimerMin * _largeSaucerSpawnTimerDeltaProportion, _largeSaucerSpawnTimerFloor); ;
+
+        _smallSaucerController.SpawnTimerMax = Mathf.Max(_smallSaucerController.SpawnTimerMax * _smallSaucerSpawnTimerDeltaProportion, _smallSaucerSpawnTimerFloor);
+        _smallSaucerController.SpawnTimerMin = Mathf.Max(_smallSaucerController.SpawnTimerMin * _smallSaucerSpawnTimerDeltaProportion, _smallSaucerSpawnTimerFloor);
 
         // Reset beats sounds to slowest pace
         _beats.Reset();
@@ -236,26 +341,6 @@ public partial class Main : Node
         }
     }
 
-    // private void PlayerOnShoot(Vector2 position, Vector2 shipLinearVelocity, float shipRotation)
-    // {
-    //     _missileController.SpawnMissile(position, shipLinearVelocity, shipRotation);
-    // }
-
-    // private void MissileControllerOnCollided(Missile missile, Node collidedWith)
-    // {
-    //     Logger.I.SignalReceived(this, missile, Missile.SignalName.Collided, collidedWith);
-    //     _missileController.KillMissile(missile);
-    // }
-
-    private void AsteroidFieldControllerOnCollided(Asteroid asteroid, AsteroidSize size, Node collidedWith)
-    {
-        Logger.I.SignalReceived(this, asteroid, AsteroidFieldController.SignalName.Collided, size, collidedWith);
-        if (collidedWith is Missile)
-        {
-            IncreaseScore(_asteroidScores[size]);
-        }
-    }
-
     private GameSettings CollectConfiguration()
     {
         return new GameSettings
@@ -285,7 +370,6 @@ public partial class Main : Node
 
     private void ShowConfigDialog()
     {
-
         _pushStartLabel.Hide();
         _oneCoinLabel.Hide();
 
@@ -414,6 +498,20 @@ public partial class Main : Node
                      _safeZoneRadius * 2, _safeZoneRadius * 2),
            true);
 
+        // Set up saucers
+        _smallSaucerController.SpawnTimerMax = _smallSaucerStartMinSpawnTimer;
+        _smallSaucerController.SpawnTimerMin = _smallSaucerStartMaxSpawnTimer;
+        _smallSaucerController.Deactivate(true);
+        _smallSaucerController.Activate();
+        _largeSaucerController.SpawnTimerMax = _largeSaucerStartMinSpawnTimer;
+        _largeSaucerController.SpawnTimerMin = _largeSaucerStartMaxSpawnTimer;
+        _largeSaucerController.Deactivate(true);
+        _largeSaucerController.Activate();
+
+        // Enable FX audio
+        //SetFxAudioEnabled(true);
+        EnableFx(true);
+
         // Start playing the beats sounds
         _beats.Reset();
         _beats.Start();
@@ -427,6 +525,8 @@ public partial class Main : Node
         _beats.Stop();
         _gameOverLabel.Show();
 
+        _highScoreTable.Show(); // TODO XXX
+
         WaitingToPlay();
     }
 
@@ -438,12 +538,17 @@ public partial class Main : Node
 
     private static void SetSoundEnabled(bool enabled)
     {
-        AudioServer.SetBusMute(AudioServer.GetBusIndex("Master"), !enabled);
+        AudioServer.SetBusMute(AudioServer.GetBusIndex(Constants.AUDIO_BUS_NAME_MASTER), !enabled);
     }
 
     private static bool GetSoundEnabled()
     {
-        return !AudioServer.IsBusMute(AudioServer.GetBusIndex("Master"));
+        return !AudioServer.IsBusMute(AudioServer.GetBusIndex(Constants.AUDIO_BUS_NAME_MASTER));
+    }
+
+    private static void SetFxAudioEnabled(bool enabled)
+    {
+        AudioServer.SetBusMute(AudioServer.GetBusIndex(Constants.AUDIO_BUS_NAME_FX), !enabled);
     }
 
     private void IncreaseScore(int increase)

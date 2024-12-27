@@ -22,12 +22,12 @@ public partial class Beats : Node
     private bool _playing = false;
     private float _gapTimer;
     private float _increaseSpeedTimer;
-    private AudioStreamPlayer2D _beatsAudioStream;
+    private AudioStreamPlayer2D _beatsAudioStream = new();
     private int _currentSample = 1;
 
     public override void _Ready()
     {
-        _beatsAudioStream = new AudioStreamPlayer2D();
+        _beatsAudioStream.Bus = Constants.AUDIO_BUS_NAME_FX;
         AddChild(_beatsAudioStream);
     }
 

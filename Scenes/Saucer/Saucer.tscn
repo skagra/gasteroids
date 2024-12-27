@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://detxusf2uxlnq"]
+
+[ext_resource type="Script" path="res://Scenes/Saucer/Saucer.cs" id="1_u0ys5"]
+
+[node name="Saucer" type="Area2D"]
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("1_u0ys5")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]

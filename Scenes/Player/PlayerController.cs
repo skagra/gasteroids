@@ -15,6 +15,9 @@ public partial class PlayerController : Node
     private PackedScene _explosion;
 
     [Export]
+    private AudioStream _explosionSound;
+
+    [Export]
     public float PlayerThrustForce
     {
         get => _player.ThrustForce;
@@ -62,9 +65,15 @@ public partial class PlayerController : Node
 
     private Player _player;
     private MissileController _missileController;
+    private AudioStreamPlayer2D _explosionPlayer = new();
+    private bool _fxEnabled = true;
 
     public override void _Ready()
     {
+        _explosionPlayer.Bus = Constants.AUDIO_BUS_NAME_FX;
+        _explosionPlayer.Stream = _explosionSound;
+        AddChild(_explosionPlayer);
+
         _player = GetNode<Player>("Player");
         _missileController = GetNode<MissileController>("MissileController");
 
@@ -74,6 +83,12 @@ public partial class PlayerController : Node
         _missileController.Collided += MissileControllerOnCollided;
 
         _player.Deactivate();
+    }
+
+    public void EnableFx(bool enable)
+    {
+        _fxEnabled = enable;
+        _missileController.EnableFx(enable);
     }
 
     public void Activate()
@@ -113,6 +128,11 @@ public partial class PlayerController : Node
 
     private void SpawnExplosion()
     {
+        if (_fxEnabled)
+        {
+            _explosionPlayer.Play();
+        }
+
         var playerExplosion = _explosion.Instantiate<Explosion>();
         playerExplosion.Name = "Player Explosion";
         playerExplosion.Position = _player.Position;

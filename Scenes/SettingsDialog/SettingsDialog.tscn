@@ -184,6 +184,21 @@ max_value = 10.0
 step = 0.0
 value = 5.0
 
+[node name="Linear Dampening Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Ship Category Container"]
+layout_mode = 2
+size_flags_horizontal = 2
+mouse_filter = 0
+text = "Linear Dampening"
+
+[node name="Linear Dampening" type="HSlider" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Ship Category Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 1.0
+max_value = 10.0
+step = 0.0
+value = 5.0
+
 [node name="Player Missiles Category Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_type_variation = &"DialogCategory"
@@ -339,6 +354,51 @@ mouse_filter = 0
 text = "Gravitational Constant"
 
 [node name="Asteroids Gravitational Constant" type="HSlider" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Asteroids Category Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+min_value = 1000.0
+max_value = 2000.0
+value = 1500.0
+
+[node name="Large Saucer Category Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"DialogCategory"
+text = "Saucers"
+
+[node name="Large Saucer Category Container" type="GridContainer" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="Large Saucer Enabled Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Large Saucer Category Container"]
+layout_mode = 2
+mouse_filter = 0
+text = "Enabled"
+
+[node name="Large Saucer Enabled" type="CheckBox" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Large Saucer Category Container"]
+layout_mode = 2
+size_flags_horizontal = 10
+button_pressed = true
+
+[node name="Large Saucer Frequency Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Large Saucer Category Container"]
+layout_mode = 2
+mouse_filter = 0
+text = "Frequency"
+
+[node name="Large Saucer Frequency" type="HSlider" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Large Saucer Category Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+min_value = 1000.0
+max_value = 2000.0
+value = 1500.0
+
+[node name="Large Saucer Missile Lifespan Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Large Saucer Category Container"]
+layout_mode = 2
+mouse_filter = 0
+text = "Missile Lifespan"
+
+[node name="Large Saucer Missile Lifespan" type="HSlider" parent="PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Large Saucer Category Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6

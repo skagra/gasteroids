@@ -1,7 +1,6 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 namespace Asteroids;
 
@@ -30,7 +29,6 @@ public partial class MissileController : Node
 
     private int _missileCount = 5;
 
-    // [Export] .. TODO and need a player missile inherited scene and need to expose various player and missile controller properties in player controller
     [Export]
     private PackedScene _missileScene;
 
@@ -48,18 +46,34 @@ public partial class MissileController : Node
 
     private AudioStreamPlayer2D _shootAudioStream = new();
 
+    private bool _fxEnabled = true;
+
+    public void EnableFx(bool enable)
+    {
+        _fxEnabled = enable;
+    }
+
     public override void _Ready()
     {
-        // Audio
+        _shootAudioStream.Bus = Constants.AUDIO_BUS_NAME_FX;
         _shootAudioStream.Stream = _missileExplosionSound;
         AddChild(_shootAudioStream);
 
         SetUpMissiles();
     }
 
+    public void DeSpawnAllMissiles()
+    {
+        foreach (var missileDetails in _activeMissiles)
+        {
+            DisableMissile(missileDetails.Missile);
+            _dormantMissiles.Add(missileDetails.Missile);
+        }
+        _activeMissiles.Clear();
+    }
+
     private void SetUpMissiles()
     {
-        // Destroy any old missiles
         foreach (var missile in _activeMissiles)
         {
             missile.Missile.QueueFree();
@@ -78,9 +92,9 @@ public partial class MissileController : Node
             var dormantMissile = _missileScene.Instantiate<Missile>();
             _dormantMissiles.Add(dormantMissile);
             dormantMissile.Collided += MissileOnCollided;
+            DisableMissile(dormantMissile);
             AddChild(dormantMissile);
             dormantMissile.Name = $"Missile #{i + 1}";
-            DisableMissile(dormantMissile);
         }
     }
 
@@ -101,7 +115,10 @@ public partial class MissileController : Node
         // Remove missile from the dormant list and add to the active list
         if (_dormantMissiles.Count > 0)
         {
-            _shootAudioStream.Play();
+            if (_fxEnabled)
+            {
+                _shootAudioStream.Play();
+            }
 
             var newMissile = _dormantMissiles[0];
             _dormantMissiles.RemoveAt(0);
@@ -138,6 +155,8 @@ public partial class MissileController : Node
             _dormantMissiles.Add(missile);
         }
     }
+
+
 
     private void ClearUpMissiles(double delta)
     {

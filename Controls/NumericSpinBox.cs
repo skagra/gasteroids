@@ -8,18 +8,15 @@ public partial class NumericSpinBox : SpinBox
     [Export]
     private AudioStream _errorBeep;
 
-    private AudioStreamPlayer2D _audioStreamPlayer;
+    private AudioStreamPlayer2D _audioStreamPlayer = new();
 
     private LineEdit _lineEdit;
 
     public override void _Ready()
     {
-        if (_errorBeep != null)
-        {
-            _audioStreamPlayer = new();
-            _audioStreamPlayer.Stream = _errorBeep;
-            AddChild(_audioStreamPlayer);
-        }
+        _audioStreamPlayer.Bus = Constants.AUDIO_BUS_NAME_UI;
+        _audioStreamPlayer.Stream = _errorBeep;
+        AddChild(_audioStreamPlayer);
 
         Alignment = HorizontalAlignment.Right;
         _lineEdit = GetLineEdit();
