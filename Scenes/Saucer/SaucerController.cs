@@ -96,7 +96,6 @@ public partial class SaucerController : Node
     private void ResetTimer()
     {
         _spawnTimer = (float)GD.RandRange(SpawnTimerMax, SpawnTimerMin);
-        GD.Print(_spawnTimer);
     }
 
     public void Activate()

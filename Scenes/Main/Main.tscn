@@ -51,5 +51,5 @@ visible = false
 visible = false
 
 [node name="HighScoreTable" parent="." instance=ExtResource("13_6i0d3")]
-offset = Vector2(0, -200)
-transform = Transform2D(1, 0, 0, 1, 0, -200)
+offset = Vector2(0, -80)
+transform = Transform2D(1, 0, 0, 1, 0, -80)

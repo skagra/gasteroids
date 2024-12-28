@@ -4,10 +4,12 @@
         "deadzone",
         "Gadot",
         "gasteroids",
+        "highscores",
         "Mathf",
         "Monitorable",
         "tscn",
-        "vsync"
+        "vsync",
+        "Zaphod"
     ],
     "cSpell.ignorePaths": [
         "**/*.tscn",

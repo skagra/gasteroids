@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using Godot;
 
 namespace Asteroids;
@@ -7,6 +6,10 @@ namespace Asteroids;
 public partial class Main : Node
 {
     private const string _SETTINGS_SAVE_PATH = "user://settings.json";
+    private const string _HIGH_SCORE_SAVE_PATH = "user://highscores.json";
+
+    private const float _GAME_OVER_SHOW_TIME = 5;
+    private const float _HIGH_SCORE_SHOW_TIME = 10;
 
     // Inspector configuration values
     [ExportCategory("Scores")]
@@ -76,7 +79,7 @@ public partial class Main : Node
     private Score _score;
     private Lives _lives;
     private Label _gameOverLabel;
-    private Label _oneCoinLabel;
+    private Label _helpLabel;
     private PushStart _pushStartLabel;
     private Area2D _exclusionZone;
     private Beats _beats;
@@ -87,6 +90,7 @@ public partial class Main : Node
     private SaucerController _largeSaucerController;
     private SaucerController _smallSaucerController;
     private HighScoreTable _highScoreTable;
+    private Label _highScoreLabel;
 
     // State
     private int _asteroidsCurrentNewGameStart;
@@ -96,6 +100,10 @@ public partial class Main : Node
     // Game state machine
     private enum GameState { WaitingToPlay, AwaitingNewShip, Playing, ShowingConfigDialog, ShowingHelpDialog };
     private GameState _gameState;
+
+    // Timers
+    private Timer _showingGameOver = new();
+    private Timer _showingHighScores = new();
 
     public override void _EnterTree()
     {
@@ -136,6 +144,13 @@ public partial class Main : Node
 
         ApplyConfiguration(_settingsDialog.ActiveSettings);
 
+        var highScores = HighScorePersistence.Load(_HIGH_SCORE_SAVE_PATH);
+        if (highScores != null)
+        {
+            _highScoreTable.SetHighScores(highScores);
+        }
+        _highScoreLabel.Text = _highScoreTable.HighScore.ToString();
+
         CreateDemoScreen();
 
         _smallSaucerController.TargetCallback = () => _playerController.PlayerPosition;
@@ -143,10 +158,29 @@ public partial class Main : Node
         // Waiting to start
         WaitingToPlay();
 
-        _highScoreTable.AddScore("Bob", 22000);
-        _highScoreTable.AddScore("Bill", 19);
-        _highScoreTable.AddScore("Zaphod", 6600);
+        _showingGameOver.OneShot = true;
+        _showingGameOver.Autostart = false;
+        _showingGameOver.Timeout += ShowingGameOverOnTimeout;
+        AddChild(_showingGameOver);
 
+        _showingHighScores.OneShot = true;
+        _showingHighScores.Autostart = false;
+        _showingHighScores.Timeout += ShowingHighScoresTimeout;
+        AddChild(_showingHighScores);
+    }
+
+    private void ShowingGameOverOnTimeout()
+    {
+        _gameOverLabel.Hide();
+        _helpLabel.Hide();
+        _highScoreTable.Show();
+        _showingHighScores.Start(_HIGH_SCORE_SHOW_TIME);
+    }
+
+    private void ShowingHighScoresTimeout()
+    {
+        _highScoreTable.Hide();
+        _helpLabel.Show();
     }
 
     private void EnableFx(bool enable)
@@ -180,7 +214,7 @@ public partial class Main : Node
         _lives = (Lives)FindChild("Lives");
         _gameOverLabel = (Label)FindChild("Game Over");
         _pushStartLabel = (PushStart)FindChild("Push Start");
-        _oneCoinLabel = (Label)FindChild("Help");
+        _helpLabel = (Label)FindChild("Help");
         _exclusionZone = GetNode<Area2D>("ExclusionZone");
         _exclusionZoneCollisionShape = _exclusionZone.GetNode<CollisionShape2D>("CollisionShape2D");
         _beats = GetNode<Beats>("Beats");
@@ -190,6 +224,7 @@ public partial class Main : Node
         _largeSaucerController = GetNode<SaucerController>("LargeSaucerController");
         _smallSaucerController = GetNode<SaucerController>("SmallSaucerController");
         _highScoreTable = GetNode<HighScoreTable>("HighScoreTable");
+        _highScoreLabel = (Label)FindChild("High Score");
     }
 
     private void SetupSceneSignals()
@@ -371,7 +406,11 @@ public partial class Main : Node
     private void ShowConfigDialog()
     {
         _pushStartLabel.Hide();
-        _oneCoinLabel.Hide();
+        _helpLabel.Hide();
+        _showingGameOver.Stop();
+        _showingHighScores.Stop();
+        _highScoreTable.Hide();
+        _gameOverLabel.Hide();
 
         _settingsDialog.ActiveSettings = CollectConfiguration();
         _settingsDialog.Show();
@@ -407,7 +446,7 @@ public partial class Main : Node
     private void SettingsDialogOnOkPressed()
     {
         _pushStartLabel.Show();
-        _oneCoinLabel.Show();
+        _helpLabel.Show();
 
         ApplyConfiguration(_settingsDialog.ActiveSettings);
 
@@ -419,14 +458,14 @@ public partial class Main : Node
     private void SettingsDialogOnCancel()
     {
         _pushStartLabel.Show();
-        _oneCoinLabel.Show();
+        _helpLabel.Show();
         _gameState = GameState.WaitingToPlay;
     }
 
     private void WaitingToPlay()
     {
         _pushStartLabel.Show();
-        _oneCoinLabel.Show();
+        _helpLabel.Show();
 
         _gameState = GameState.WaitingToPlay;
     }
@@ -457,8 +496,13 @@ public partial class Main : Node
 
     private void ShowHelpDialog()
     {
-        _oneCoinLabel.Hide();
+        _helpLabel.Hide();
         _pushStartLabel.Hide();
+        _gameOverLabel.Hide();
+
+        _showingGameOver.Stop();
+        _showingHighScores.Stop();
+        _highScoreTable.Hide();
 
         _helpDialog.Show();
         _gameState = GameState.ShowingHelpDialog;
@@ -466,7 +510,7 @@ public partial class Main : Node
 
     private void HelpDialogOnOkPressed()
     {
-        _oneCoinLabel.Show();
+        _helpLabel.Show();
         _pushStartLabel.Show();
 
         _gameState = GameState.WaitingToPlay;
@@ -487,10 +531,17 @@ public partial class Main : Node
         // Don't need the exclusion zone as we are creating new asteroids
         _exclusionZoneCollisionShape.Disabled = true;
 
+        // Stop timers
+        _showingGameOver.Stop();
+        _showingHighScores.Stop();
+
         // Hide UI labels
         _pushStartLabel.Hide();
         _gameOverLabel.Hide();
-        _oneCoinLabel.Hide();
+        _helpLabel.Hide();
+
+        // Hide high score tables
+        _highScoreTable.Hide();
 
         // Create the new asteroid fields
         _asteroidFieldController.SpawnField(_asteroidsCurrentNewGameStart,
@@ -520,12 +571,13 @@ public partial class Main : Node
         _gameState = GameState.AwaitingNewShip;
     }
 
+
     private void GameOver()
     {
         _beats.Stop();
         _gameOverLabel.Show();
 
-        _highScoreTable.Show(); // TODO XXX
+        _showingGameOver.Start(_GAME_OVER_SHOW_TIME);
 
         WaitingToPlay();
     }

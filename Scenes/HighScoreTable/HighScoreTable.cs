@@ -1,29 +1,80 @@
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
+
+namespace Asteroids;
 
 public partial class HighScoreTable : CanvasLayer
 {
     private const int _MAX_SCORES = 10;
+    private const string _DEFAULT_NAME = "---";
 
-    private class ScoreDetails
-    {
-        public string name;
-        public int score;
-    }
-
-    private List<ScoreDetails> _scoreDetails = new();
+    private readonly List<ScoreDetails> _scoreDetails = new();
 
     private GridContainer _scoresContainer;
 
     private bool _changedSinceLastShow = false;
 
-    public int HighScore { get => _scoreDetails.Count > 0 ? _scoreDetails[0].score : 0; }
+    public int HighScore { get => _scoreDetails.Count > 0 ? _scoreDetails[0].Score : 0; }
+
+    public class ScoreControl
+    {
+        public Label name;
+        public Label score;
+    }
+    private readonly List<ScoreControl> _scoreControls = new();
+
+    public List<ScoreDetails> GetScores()
+    {
+        var result = new List<ScoreDetails>();
+        result.AddRange(_scoreDetails.Select(sd => new ScoreDetails { Name = sd.Name, Score = sd.Score }));
+        return result;
+    }
 
     public override void _Ready()
     {
+        Hide();
+
         _scoresContainer = (GridContainer)FindChild("GridContainer");
 
-        Hide();
+        for (var i = 0; i < _MAX_SCORES; i++)
+        {
+            var scoreControl = new ScoreControl();
+            var scoreDetails = new ScoreDetails();
+
+            var rank = new Label
+            {
+                Text = $"{i + 1}.",
+                SizeFlagsHorizontal = Control.SizeFlags.ShrinkBegin,
+                HorizontalAlignment = HorizontalAlignment.Left
+
+            };
+            _scoresContainer.AddChild(rank);
+
+            var score = new Label
+            {
+                SizeFlagsHorizontal = Control.SizeFlags.ShrinkEnd | Control.SizeFlags.Expand,
+                HorizontalAlignment = HorizontalAlignment.Right
+            };
+            scoreControl.score = score;
+            _scoresContainer.AddChild(score);
+
+            var name = new Label()
+            {
+                SizeFlagsHorizontal = Control.SizeFlags.ShrinkEnd | Control.SizeFlags.Expand,
+                HorizontalAlignment = HorizontalAlignment.Right
+            };
+            scoreControl.name = name;
+            _scoresContainer.AddChild(name);
+
+            scoreDetails.Name = _DEFAULT_NAME;
+            scoreDetails.Score = 0;
+
+            _scoreControls.Add(scoreControl);
+            _scoreDetails.Add(scoreDetails);
+        }
+
+        ApplyScoresToControls();
 
         if (GetParent() is Window)
         {
@@ -35,57 +86,36 @@ public partial class HighScoreTable : CanvasLayer
         }
     }
 
-    public bool IsEligibleForInclusion(int score)
+    public void SetHighScores(List<ScoreDetails> scores)
     {
-        return score > (_scoreDetails.Count > 0 ? _scoreDetails[^1].score : 0);
+        _scoreDetails.Clear();
+        _scoreDetails.AddRange(scores.Select(sd => new ScoreDetails { Name = sd.Name, Score = sd.Score }));
+        _scoreDetails.Sort((a, b) => b.Score.CompareTo(a.Score));
+        ApplyScoresToControls();
     }
 
-    public void ClearScores()
+    private void ApplyScoresToControls()
     {
-        foreach (var control in _scoresContainer.GetChildren())
+        for (var i = 0; i < _scoreControls.Count; i++)
         {
-            control.QueueFree();
+            _scoreControls[i].name.Text = _scoreDetails[i].Name;
+            _scoreControls[i].score.Text = _scoreDetails[i].Score.ToString();
         }
-        _scoreDetails.Clear();
+    }
 
-        _changedSinceLastShow = true;
+
+    public bool IsEligibleForInclusion(int score)
+    {
+        return score > (_scoreDetails.Count > 0 ? _scoreDetails[^1].Score : 0);
     }
 
     public new void Show()
     {
         if (_changedSinceLastShow)
         {
-            for (int i = 0; i < _scoreDetails.Count; i++)
-            {
-                var rank = new Label
-                {
-                    Text = $"{i + 1}.",
-                    SizeFlagsHorizontal = Control.SizeFlags.ShrinkBegin,
-                    HorizontalAlignment = HorizontalAlignment.Left
-
-                };
-                _scoresContainer.AddChild(rank);
-
-                var score = new Label
-                {
-                    Text = _scoreDetails[i].score.ToString(),
-                    SizeFlagsHorizontal = Control.SizeFlags.ShrinkEnd | Control.SizeFlags.Expand,
-                    HorizontalAlignment = HorizontalAlignment.Right
-                };
-                _scoresContainer.AddChild(score);
-
-                var name = new Label()
-                {
-                    Text = _scoreDetails[i].name,
-                    SizeFlagsHorizontal = Control.SizeFlags.ShrinkEnd | Control.SizeFlags.Expand,
-                    HorizontalAlignment = HorizontalAlignment.Right
-                };
-
-                _scoresContainer.AddChild(name);
-            }
+            ApplyScoresToControls();
+            _changedSinceLastShow = false;
         }
-
-        _changedSinceLastShow = false;
 
         base.Show();
     }
@@ -94,8 +124,8 @@ public partial class HighScoreTable : CanvasLayer
     {
         _changedSinceLastShow = true;
 
-        _scoreDetails.Add(new ScoreDetails { name = name, score = score });
-        _scoreDetails.Sort((a, b) => b.score.CompareTo(a.score));
+        _scoreDetails.Add(new ScoreDetails { Name = name, Score = score });
+        _scoreDetails.Sort((a, b) => b.Score.CompareTo(a.Score));
         if (_scoreDetails.Count > _MAX_SCORES)
         {
             _scoreDetails.RemoveAt(_scoreDetails.Count - 1);

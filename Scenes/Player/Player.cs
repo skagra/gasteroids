@@ -9,6 +9,8 @@ public partial class Player : RigidBody2D
     private const string _ACTION_ROTATE_CW = "Rotate CW";
     private const string _ACTION_ROTATE_ACW = "Rotate ACW";
     private const string _ACTION_FIRE = "Fire";
+    private const string _ACTION_HYPERSPACE = "Hyperspace";
+
     private const string _ANIMATION_THRUST = "Thrust";
 
     [Signal]
@@ -107,12 +109,13 @@ public partial class Player : RigidBody2D
             {
                 FirePressed();
             }
+
         }
     }
 
     public override void _PhysicsProcess(double delta)
     {
-        if (_isActive) //  && !_isExploding)
+        if (_isActive)
         {
             var variableGravity = GravitationalPullCallback?.Invoke(Position) ?? Vector2.Zero;
             ApplyCentralForce(variableGravity);
@@ -135,22 +138,36 @@ public partial class Player : RigidBody2D
             {
                 RotateACWPressed(delta);
             }
+
+            if (Input.IsActionJustPressed(_ACTION_HYPERSPACE))
+            {
+                HyperspacePressed();
+            }
+
         }
         Position = Screen.Instance.ClampToViewport(Position);
+    }
+
+    private void HyperspacePressed()
+    {
+        // TODO Chance to explode!
+        Position = new Vector2((float)GD.RandRange(Screen.Instance.Left, Screen.Instance.Right),
+                               (float)GD.RandRange(Screen.Instance.Top, Screen.Instance.Bottom));
     }
 
     private void FirePressed()
     {
         // Current position + long dimension of spite in the direction of its rotation
+        // https://steamcommunity.com/app/400020/discussions/0/3855581634402220944/
+        //  It looks like the exact odds are: choose a random even number from 0-62, explode if 
+        // random_number >= number_of_asteroids + 44. 
+        // So, looks like hyperspace should never randomly explode if there are at least 19 asteroids on the screen. 
+        // Anything less, and there's a chance. But that's just eyeballing the code.
         var position = Position + ((_spriteSize.X / 2.0f) * Vector2.Right.Rotated(_area2D.Rotation));
 
         Logger.I.SignalSent(this, SignalName.Shoot, position, LinearVelocity, _area2D.Rotation);
 
-        EmitSignal(SignalName.Shoot,
-
-            position,
-            LinearVelocity,
-            _area2D.Rotation);
+        EmitSignal(SignalName.Shoot, position, LinearVelocity, _area2D.Rotation);
     }
 
     private void ThrustPressed()
