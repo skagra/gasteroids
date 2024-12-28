@@ -9,6 +9,8 @@ public partial class HelpDialog : CanvasLayer
 
     private Button _okButton;
 
+    private AnimationPlayer _animationPlayer;
+
     public override void _Ready()
     {
         _okButton = (Button)FindChild("OK Button");
@@ -23,11 +25,12 @@ public partial class HelpDialog : CanvasLayer
     public new void Show()
     {
         base.Show();
+        ((FadingPanelContainer)FindChild("FadingPanelContainer")).Show();
     }
 
     private void OkButtonPressed()
     {
-        Hide();
+        // _animationPlayer.Play("FadeOut");
         EmitSignal(SignalName.OkPressed);
     }
 }

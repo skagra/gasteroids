@@ -46,15 +46,16 @@ public partial class HighScoreTable : CanvasLayer
             {
                 Text = $"{i + 1}.",
                 SizeFlagsHorizontal = Control.SizeFlags.ShrinkBegin,
-                HorizontalAlignment = HorizontalAlignment.Left
-
+                HorizontalAlignment = HorizontalAlignment.Left,
+                ThemeTypeVariation = "HighScoreLabel"
             };
             _scoresContainer.AddChild(rank);
 
             var score = new Label
             {
                 SizeFlagsHorizontal = Control.SizeFlags.ShrinkEnd | Control.SizeFlags.Expand,
-                HorizontalAlignment = HorizontalAlignment.Right
+                HorizontalAlignment = HorizontalAlignment.Right,
+                ThemeTypeVariation = "HighScoreLabel"
             };
             scoreControl.score = score;
             _scoresContainer.AddChild(score);
@@ -62,7 +63,9 @@ public partial class HighScoreTable : CanvasLayer
             var name = new Label()
             {
                 SizeFlagsHorizontal = Control.SizeFlags.ShrinkEnd | Control.SizeFlags.Expand,
-                HorizontalAlignment = HorizontalAlignment.Right
+                HorizontalAlignment = HorizontalAlignment.Right,
+                ThemeTypeVariation = "HighScoreLabel"
+
             };
             scoreControl.name = name;
             _scoresContainer.AddChild(name);

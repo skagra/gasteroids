@@ -11,12 +11,17 @@ config_version=5
 [application]
 
 config/name="Asteroids"
+config/description="Asteroids - By Paul Harvey
+https://github.com/skagra/gasteroids
+
+A clone of the orginal Atari arcade game with some moder twists.
+"
+config/version="0.1"
 run/main_scene="res://Scenes/Main/Main.tscn"
 config/features=PackedStringArray("4.3", "C#", "Forward Plus")
 boot_splash/bg_color=Color(0, 0, 0, 1)
-boot_splash/show_image=false
-boot_splash/use_filter=false
-config/icon="res://Graphics/Icon.svg"
+boot_splash/image="res://Graphics/Splash.png"
+config/icon="res://Graphics/Icon.png"
 
 [audio]
 

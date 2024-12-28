@@ -18,7 +18,7 @@ public partial class Asteroid : Area2D
 
     public override void _Ready()
     {
-        AreaEntered += Entered;
+        AreaEntered += Area2DEntered;
 
         if (GetParent() is Window)
         {
@@ -35,7 +35,7 @@ public partial class Asteroid : Area2D
         Rotation += AngularVelocity * (float)delta;
     }
 
-    private void Entered(Area2D collidedWith)
+    private void Area2DEntered(Area2D collidedWith)
     {
         Logger.I.SignalSent(this, SignalName.Collided, collidedWith);
 
