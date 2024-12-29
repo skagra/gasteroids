@@ -13,3 +13,7 @@ Unity as a platform so I set about this project to create a version of Asteroids
 * [Experiences with Godot](docs/gadot.md) vs Unity 
 * [Credits](docs/credits.md)
 * [References](docs/references.md)
+
+# License
+
+This game is open source and licensed under [GPLv3](LICENSE).  Source code is available on [GitHub](https://github.com/skagra/gasteroids).

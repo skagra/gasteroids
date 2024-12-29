@@ -541,7 +541,7 @@ public partial class Main : Node
         _helpLabel.Hide();
 
         // Hide high score tables
-        _highScoreTable.Hide();
+        _highScoreTable.Hide(true);
 
         // Create the new asteroid fields
         _asteroidFieldController.SpawnField(_asteroidsCurrentNewGameStart,

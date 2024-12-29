@@ -11,6 +11,8 @@ public partial class SettingsDialog : CanvasLayer
     [Signal]
     public delegate void CancelEventHandler();
 
+    private FadingPanelContainer _fadingPanelContainer;
+
     // Graphics
     private CheckBox _backgroundEnabled;
 
@@ -72,6 +74,8 @@ public partial class SettingsDialog : CanvasLayer
 
     public override void _Ready()
     {
+        _fadingPanelContainer = (FadingPanelContainer)FindChild("FadingPanelContainer");
+
         // Get references to controls
         _backgroundEnabled = (CheckBox)FindChild("Background Enabled");
 
@@ -181,11 +185,12 @@ public partial class SettingsDialog : CanvasLayer
     }
 
     // Show the settings dialog with currently active settings
-    public new void Show()
+    public void Show(bool immediate = false)
     {
         ApplyActiveSettings();
         _backgroundEnabled.CallDeferred(CheckBox.MethodName.GrabFocus);
         base.Show();
+        _fadingPanelContainer.Show();
     }
 
     // Signal handling
@@ -207,5 +212,10 @@ public partial class SettingsDialog : CanvasLayer
         Hide();
 
         EmitSignal(SignalName.OkPressed);
+    }
+
+    public void Hide(bool immediate = false)
+    {
+        _fadingPanelContainer.Hide(immediate);
     }
 }

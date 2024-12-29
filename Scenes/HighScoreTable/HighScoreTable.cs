@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Godot;
 
 namespace Asteroids;
@@ -14,6 +15,8 @@ public partial class HighScoreTable : CanvasLayer
     private GridContainer _scoresContainer;
 
     private bool _changedSinceLastShow = false;
+
+    private FadingPanelContainer _fadingPanelContainer;
 
     public int HighScore { get => _scoreDetails.Count > 0 ? _scoreDetails[0].Score : 0; }
 
@@ -33,8 +36,7 @@ public partial class HighScoreTable : CanvasLayer
 
     public override void _Ready()
     {
-        Hide();
-
+        _fadingPanelContainer = (FadingPanelContainer)FindChild("FadingPanelContainer");
         _scoresContainer = (GridContainer)FindChild("GridContainer");
 
         for (var i = 0; i < _MAX_SCORES; i++)
@@ -77,6 +79,8 @@ public partial class HighScoreTable : CanvasLayer
             _scoreDetails.Add(scoreDetails);
         }
 
+        Hide(true);
+
         ApplyScoresToControls();
 
         if (GetParent() is Window)
@@ -87,6 +91,11 @@ public partial class HighScoreTable : CanvasLayer
 
             Show();
         }
+    }
+
+    public void Hide(bool immediate = false)
+    {
+        _fadingPanelContainer.Hide(immediate);
     }
 
     public void SetHighScores(List<ScoreDetails> scores)
@@ -106,7 +115,6 @@ public partial class HighScoreTable : CanvasLayer
         }
     }
 
-
     public bool IsEligibleForInclusion(int score)
     {
         return score > (_scoreDetails.Count > 0 ? _scoreDetails[^1].Score : 0);
@@ -121,6 +129,7 @@ public partial class HighScoreTable : CanvasLayer
         }
 
         base.Show();
+        _fadingPanelContainer.Show();
     }
 
     public void AddScore(string name, int score)

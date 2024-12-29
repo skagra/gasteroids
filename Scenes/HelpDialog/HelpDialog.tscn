@@ -1,44 +1,23 @@
 [gd_scene load_steps=4 format=3 uid="uid://cu3bhbnbhqh8y"]
 
-[ext_resource type="Theme" uid="uid://bgfii5oeawryi" path="res://Themes/Dialog.tres" id="1_mi7ym"]
 [ext_resource type="Script" path="res://Scenes/HelpDialog/HelpDialog.cs" id="2_bmfss"]
-[ext_resource type="PackedScene" uid="uid://67by6r3h3g0e" path="res://Scenes/FadingPanelContainer/FadingPanelContainer.tscn" id="3_2sskt"]
+[ext_resource type="PackedScene" uid="uid://67by6r3h3g0e" path="res://Controls/FadingPanelContainer/FadingPanelContainer.tscn" id="3_2sskt"]
+[ext_resource type="Theme" uid="uid://cphlitqn3odss" path="res://Themes/ModernDialog.tres" id="3_y814q"]
 
 [node name="Help Dialog" type="CanvasLayer"]
 script = ExtResource("2_bmfss")
 
-[node name="Help Dialog Panel" type="PanelContainer" parent="."]
-visible = false
-modulate = Color(1, 1, 1, 0)
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -74.5
-offset_top = -97.5
-offset_right = 74.5
-offset_bottom = 97.5
-grow_horizontal = 2
-grow_vertical = 2
-theme = ExtResource("1_mi7ym")
-
 [node name="FadingPanelContainer" parent="." instance=ExtResource("3_2sskt")]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -150.0
+offset_left = -196.0
 offset_top = -227.0
-offset_right = 150.0
-offset_bottom = 227.0
-grow_horizontal = 2
-grow_vertical = 2
-theme = ExtResource("1_mi7ym")
+offset_right = 197.0
+offset_bottom = 152.0
+size_flags_vertical = 0
+theme = ExtResource("3_y814q")
 
 [node name="Help VBox" type="VBoxContainer" parent="FadingPanelContainer"]
 layout_mode = 2
+size_flags_vertical = 0
 
 [node name="Help Dialog Heading" type="Label" parent="FadingPanelContainer/Help VBox"]
 layout_mode = 2
@@ -100,77 +79,79 @@ theme_type_variation = &"DialogCategory"
 text = "Game Play"
 horizontal_alignment = 1
 
-[node name="Gane Play Container" type="GridContainer" parent="FadingPanelContainer/Help VBox"]
+[node name="Game Play Container" type="GridContainer" parent="FadingPanelContainer/Help VBox"]
 layout_mode = 2
-size_flags_vertical = 3
 columns = 2
 
-[node name="Fire Label" type="Label" parent="FadingPanelContainer/Help VBox/Gane Play Container"]
+[node name="Fire Label" type="Label" parent="FadingPanelContainer/Help VBox/Game Play Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
 text = "Fire
 "
 
-[node name="Fire Control" type="Label" parent="FadingPanelContainer/Help VBox/Gane Play Container"]
+[node name="Fire Control" type="Label" parent="FadingPanelContainer/Help VBox/Game Play Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
 text = "Left Mouse button"
 horizontal_alignment = 2
 
-[node name="Thrust Label" type="Label" parent="FadingPanelContainer/Help VBox/Gane Play Container"]
+[node name="Thrust Label" type="Label" parent="FadingPanelContainer/Help VBox/Game Play Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
 text = "Thrust"
 
-[node name="Thrust Control" type="Label" parent="FadingPanelContainer/Help VBox/Gane Play Container"]
+[node name="Thrust Control" type="Label" parent="FadingPanelContainer/Help VBox/Game Play Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
 text = "Right Mouse Button"
 horizontal_alignment = 2
 
-[node name="Rotate CW Label" type="Label" parent="FadingPanelContainer/Help VBox/Gane Play Container"]
+[node name="Rotate CW Label" type="Label" parent="FadingPanelContainer/Help VBox/Game Play Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
 text = "Rotate CW"
 
-[node name="Rotate CW Control" type="Label" parent="FadingPanelContainer/Help VBox/Gane Play Container"]
+[node name="Rotate CW Control" type="Label" parent="FadingPanelContainer/Help VBox/Game Play Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
 text = "S"
 horizontal_alignment = 2
 
-[node name="Rotate ACW Label" type="Label" parent="FadingPanelContainer/Help VBox/Gane Play Container"]
+[node name="Rotate ACW Label" type="Label" parent="FadingPanelContainer/Help VBox/Game Play Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
 text = "Rotate ACW"
 
-[node name="Rotate ACW Control" type="Label" parent="FadingPanelContainer/Help VBox/Gane Play Container"]
+[node name="Rotate ACW Control" type="Label" parent="FadingPanelContainer/Help VBox/Game Play Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
 text = "A"
 horizontal_alignment = 2
 
-[node name="Hyperspace Label" type="Label" parent="FadingPanelContainer/Help VBox/Gane Play Container"]
+[node name="Hyperspace Label" type="Label" parent="FadingPanelContainer/Help VBox/Game Play Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
 text = "Hyperspace"
 
-[node name="Hyperspace Control" type="Label" parent="FadingPanelContainer/Help VBox/Gane Play Container"]
+[node name="Hyperspace Control" type="Label" parent="FadingPanelContainer/Help VBox/Game Play Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
 text = "Space"
 horizontal_alignment = 2
 
-[node name="OK Button" type="Button" parent="FadingPanelContainer/Help VBox"]
+[node name="MarginContainer" type="MarginContainer" parent="FadingPanelContainer/Help VBox"]
+layout_mode = 2
+
+[node name="OK Button" type="Button" parent="FadingPanelContainer/Help VBox/MarginContainer"]
 layout_mode = 2
 text = "OK"

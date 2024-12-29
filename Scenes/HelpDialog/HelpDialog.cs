@@ -9,12 +9,16 @@ public partial class HelpDialog : CanvasLayer
 
     private Button _okButton;
 
-    private AnimationPlayer _animationPlayer;
+    private FadingPanelContainer _fadingPanelContainer;
 
     public override void _Ready()
     {
+        _fadingPanelContainer = (FadingPanelContainer)FindChild("FadingPanelContainer");
+
         _okButton = (Button)FindChild("OK Button");
         _okButton.Pressed += OkButtonPressed;
+
+        Hide(true);
 
         if (GetParent() is Window)
         {
@@ -22,15 +26,20 @@ public partial class HelpDialog : CanvasLayer
         }
     }
 
-    public new void Show()
+    private void Hide(bool immediate = false)
+    {
+        _fadingPanelContainer.Hide(immediate);
+    }
+
+    public void Show(bool immediate = false)
     {
         base.Show();
-        ((FadingPanelContainer)FindChild("FadingPanelContainer")).Show();
+        _fadingPanelContainer.Show(immediate);
     }
 
     private void OkButtonPressed()
     {
-        // _animationPlayer.Play("FadeOut");
+        _fadingPanelContainer.Hide();
         EmitSignal(SignalName.OkPressed);
     }
 }
