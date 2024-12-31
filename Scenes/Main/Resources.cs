@@ -42,7 +42,7 @@ public partial class Resources : Node
 
     public override void _Ready()
     {
-        _background = (Panel)GetNode("/root/Main/Background"); // TODO
+        _background = (Panel)GetNode("/root/Main/Background"); // TODO this is not great and generates error on first load
     }
 
     public static void SwitchTheme(Themes theme)

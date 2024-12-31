@@ -1,8 +1,25 @@
-[gd_scene load_steps=4 format=3 uid="uid://cu3bhbnbhqh8y"]
+[gd_scene load_steps=9 format=3 uid="uid://cu3bhbnbhqh8y"]
 
 [ext_resource type="Script" path="res://Scenes/HelpDialog/HelpDialog.cs" id="2_bmfss"]
 [ext_resource type="PackedScene" uid="uid://67by6r3h3g0e" path="res://Controls/FadingPanelContainer/FadingPanelContainer.tscn" id="3_2sskt"]
 [ext_resource type="Theme" uid="uid://cphlitqn3odss" path="res://Themes/Modern.tres" id="3_y814q"]
+[ext_resource type="Texture2D" uid="uid://bonlrwqihq7e" path="res://Graphics/Asteroids.png" id="4_jhlrl"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_unlix"]
+atlas = ExtResource("4_jhlrl")
+region = Rect2(327, 3, 155, 154)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_skwht"]
+atlas = ExtResource("4_jhlrl")
+region = Rect2(92, 157, 89, 91)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_und0x"]
+atlas = ExtResource("4_jhlrl")
+region = Rect2(-1, 254, 65, 66)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hg3wk"]
+atlas = ExtResource("4_jhlrl")
+region = Rect2(414, 162, 100, 81)
 
 [node name="Help Dialog" type="CanvasLayer"]
 script = ExtResource("2_bmfss")
@@ -25,128 +42,205 @@ theme_type_variation = &"DialogHeading"
 text = "Help"
 horizontal_alignment = 1
 
-[node name="UI Controls Container" type="GridContainer" parent="FadingPanelContainer/Help VBox"]
+[node name="TabContainer" type="TabContainer" parent="FadingPanelContainer/Help VBox"]
 layout_mode = 2
+size_flags_vertical = 3
+current_tab = 0
+
+[node name="Controls" type="VBoxContainer" parent="FadingPanelContainer/Help VBox/TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="Controls" type="GridContainer" parent="FadingPanelContainer/Help VBox/TabContainer/Controls"]
+layout_mode = 2
+size_flags_vertical = 3
 columns = 2
 
-[node name="Configuration Label" type="Label" parent="FadingPanelContainer/Help VBox/UI Controls Container"]
+[node name="Configuration Label" type="Label" parent="FadingPanelContainer/Help VBox/TabContainer/Controls/Controls"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Configuration"
 
-[node name="Configuration Key" type="Label" parent="FadingPanelContainer/Help VBox/UI Controls Container"]
+[node name="Configuration Key" type="Label" parent="FadingPanelContainer/Help VBox/TabContainer/Controls/Controls"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "C"
 horizontal_alignment = 2
 
-[node name="Start Label" type="Label" parent="FadingPanelContainer/Help VBox/UI Controls Container"]
+[node name="Start Label" type="Label" parent="FadingPanelContainer/Help VBox/TabContainer/Controls/Controls"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Start"
 
-[node name="Start Key" type="Label" parent="FadingPanelContainer/Help VBox/UI Controls Container"]
+[node name="Start Key" type="Label" parent="FadingPanelContainer/Help VBox/TabContainer/Controls/Controls"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "1"
 horizontal_alignment = 2
 
-[node name="Quit Label" type="Label" parent="FadingPanelContainer/Help VBox/UI Controls Container"]
+[node name="Quit Label" type="Label" parent="FadingPanelContainer/Help VBox/TabContainer/Controls/Controls"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Quit"
 
-[node name="Quit Key" type="Label" parent="FadingPanelContainer/Help VBox/UI Controls Container"]
+[node name="Quit Key" type="Label" parent="FadingPanelContainer/Help VBox/TabContainer/Controls/Controls"]
 layout_mode = 2
 text = "ESCAPE"
 horizontal_alignment = 2
 
-[node name="Help Label" type="Label" parent="FadingPanelContainer/Help VBox/UI Controls Container"]
+[node name="Help Label" type="Label" parent="FadingPanelContainer/Help VBox/TabContainer/Controls/Controls"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Help"
 
-[node name="Help Key" type="Label" parent="FadingPanelContainer/Help VBox/UI Controls Container"]
+[node name="Help Key" type="Label" parent="FadingPanelContainer/Help VBox/TabContainer/Controls/Controls"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "H"
 horizontal_alignment = 2
 
-[node name="Game Play Category Heading" type="Label" parent="FadingPanelContainer/Help VBox"]
+[node name="Game Play Category Heading" type="Label" parent="FadingPanelContainer/Help VBox/TabContainer/Controls"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"DialogCategory"
 text = "Game Play"
 horizontal_alignment = 1
 
-[node name="Game Play Container" type="GridContainer" parent="FadingPanelContainer/Help VBox"]
+[node name="Game Play Container" type="GridContainer" parent="FadingPanelContainer/Help VBox/TabContainer/Controls"]
 layout_mode = 2
+size_flags_vertical = 3
 columns = 2
 
-[node name="Fire Label" type="Label" parent="FadingPanelContainer/Help VBox/Game Play Container"]
+[node name="Fire Label" type="Label" parent="FadingPanelContainer/Help VBox/TabContainer/Controls/Game Play Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
 text = "Fire
 "
 
-[node name="Fire Control" type="Label" parent="FadingPanelContainer/Help VBox/Game Play Container"]
+[node name="Fire Control" type="Label" parent="FadingPanelContainer/Help VBox/TabContainer/Controls/Game Play Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
 text = "Left Mouse button"
 horizontal_alignment = 2
 
-[node name="Thrust Label" type="Label" parent="FadingPanelContainer/Help VBox/Game Play Container"]
+[node name="Thrust Label" type="Label" parent="FadingPanelContainer/Help VBox/TabContainer/Controls/Game Play Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
 text = "Thrust"
 
-[node name="Thrust Control" type="Label" parent="FadingPanelContainer/Help VBox/Game Play Container"]
+[node name="Thrust Control" type="Label" parent="FadingPanelContainer/Help VBox/TabContainer/Controls/Game Play Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
 text = "Right Mouse Button"
 horizontal_alignment = 2
 
-[node name="Rotate CW Label" type="Label" parent="FadingPanelContainer/Help VBox/Game Play Container"]
+[node name="Rotate CW Label" type="Label" parent="FadingPanelContainer/Help VBox/TabContainer/Controls/Game Play Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
 text = "Rotate CW"
 
-[node name="Rotate CW Control" type="Label" parent="FadingPanelContainer/Help VBox/Game Play Container"]
+[node name="Rotate CW Control" type="Label" parent="FadingPanelContainer/Help VBox/TabContainer/Controls/Game Play Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
 text = "S"
 horizontal_alignment = 2
 
-[node name="Rotate ACW Label" type="Label" parent="FadingPanelContainer/Help VBox/Game Play Container"]
+[node name="Rotate ACW Label" type="Label" parent="FadingPanelContainer/Help VBox/TabContainer/Controls/Game Play Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
 text = "Rotate ACW"
 
-[node name="Rotate ACW Control" type="Label" parent="FadingPanelContainer/Help VBox/Game Play Container"]
+[node name="Rotate ACW Control" type="Label" parent="FadingPanelContainer/Help VBox/TabContainer/Controls/Game Play Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
 text = "A"
 horizontal_alignment = 2
 
-[node name="Hyperspace Label" type="Label" parent="FadingPanelContainer/Help VBox/Game Play Container"]
+[node name="Hyperspace Label" type="Label" parent="FadingPanelContainer/Help VBox/TabContainer/Controls/Game Play Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
 text = "Hyperspace"
 
-[node name="Hyperspace Control" type="Label" parent="FadingPanelContainer/Help VBox/Game Play Container"]
+[node name="Hyperspace Control" type="Label" parent="FadingPanelContainer/Help VBox/TabContainer/Controls/Game Play Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
 text = "Space"
+horizontal_alignment = 2
+
+[node name="Scoring" type="GridContainer" parent="FadingPanelContainer/Help VBox/TabContainer"]
+visible = false
+layout_mode = 2
+columns = 2
+metadata/_tab_index = 1
+
+[node name="Large Asteroid Image" type="TextureRect" parent="FadingPanelContainer/Help VBox/TabContainer/Scoring"]
+layout_mode = 2
+size_flags_horizontal = 0
+texture = SubResource("AtlasTexture_unlix")
+flip_v = true
+
+[node name="Large Asteroid Score" type="Label" parent="FadingPanelContainer/Help VBox/TabContainer/Scoring"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "20 Points"
+horizontal_alignment = 2
+
+[node name="Medium Asteroid Image" type="TextureRect" parent="FadingPanelContainer/Help VBox/TabContainer/Scoring"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = SubResource("AtlasTexture_skwht")
+
+[node name="Medium Asteroid Score" type="Label" parent="FadingPanelContainer/Help VBox/TabContainer/Scoring"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "20 Points"
+horizontal_alignment = 2
+
+[node name="Small Asteroid Image" type="TextureRect" parent="FadingPanelContainer/Help VBox/TabContainer/Scoring"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = SubResource("AtlasTexture_und0x")
+
+[node name="Small Asteroid Score" type="Label" parent="FadingPanelContainer/Help VBox/TabContainer/Scoring"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "100 Points"
+horizontal_alignment = 2
+
+[node name="Large Saucer Image" type="TextureRect" parent="FadingPanelContainer/Help VBox/TabContainer/Scoring"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = SubResource("AtlasTexture_hg3wk")
+
+[node name="Large Saucer Score" type="Label" parent="FadingPanelContainer/Help VBox/TabContainer/Scoring"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "200 Points"
+horizontal_alignment = 2
+
+[node name="Small Saucer Image" type="TextureRect" parent="FadingPanelContainer/Help VBox/TabContainer/Scoring"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = SubResource("AtlasTexture_hg3wk")
+
+[node name="Small Saucer Score" type="Label" parent="FadingPanelContainer/Help VBox/TabContainer/Scoring"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "1000 Points"
 horizontal_alignment = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="FadingPanelContainer/Help VBox"]
