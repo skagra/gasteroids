@@ -48,7 +48,7 @@ public partial class Saucer : Area2D
     {
         _collisionPolygon = GetNode<CollisionPolygon2D>("CollisionPolygon2D");
 
-        _saucerSoundPlayer.Bus = Constants.AUDIO_BUS_NAME_FX;
+        _saucerSoundPlayer.Bus = Resources.AUDIO_BUS_NAME_FX;
         _saucerSoundPlayer.Stream = _saucerSound;
         AddChild(_saucerSoundPlayer);
 
@@ -96,8 +96,8 @@ public partial class Saucer : Area2D
             _ => throw new NotImplementedException()
         };
 
-        Position = new Vector2(_direction == Direction.LeftToRight ? Screen.Instance.Left : Screen.Instance.Right,
-                               (float)GD.RandRange(Screen.Instance.Top, Screen.Instance.Bottom));
+        Position = new Vector2(_direction == Direction.LeftToRight ? Screen.Left : Screen.Right,
+                               (float)GD.RandRange(Screen.Top, Screen.Bottom));
 
         NewPath();
         this.Enable(true);
@@ -149,8 +149,8 @@ public partial class Saucer : Area2D
             {
                 _saucerSoundPlayer.Play();
             };
-            if ((_direction == Direction.LeftToRight && Position.X >= Screen.Instance.Right) ||
-                (_direction == Direction.RightToLeft && Position.X <= Screen.Instance.Left))
+            if ((_direction == Direction.LeftToRight && Position.X >= Screen.Right) ||
+                (_direction == Direction.RightToLeft && Position.X <= Screen.Left))
             {
                 Deactivate();
 
@@ -158,7 +158,7 @@ public partial class Saucer : Area2D
                 EmitSignal(SignalName.OffScreen, this);
             }
 
-            Position = Screen.Instance.ClampToViewport(Position);
+            Position = Screen.ClampToViewport(Position);
         }
     }
 }

@@ -1,0 +1,601 @@
+[gd_scene load_steps=5 format=3 uid="uid://b6kmyi73lblks"]
+
+[ext_resource type="Script" path="res://Scenes/Settings/GameSettingsDialog.cs" id="1_m01os"]
+[ext_resource type="PackedScene" uid="uid://67by6r3h3g0e" path="res://Controls/FadingPanelContainer/FadingPanelContainer.tscn" id="2_o0daa"]
+[ext_resource type="Theme" uid="uid://cphlitqn3odss" path="res://Themes/Modern.tres" id="3_5hvvd"]
+[ext_resource type="PackedScene" uid="uid://dj746n7clp03t" path="res://Controls/NumericSpinBox/NumericSpinBox.tscn" id="3_k6nax"]
+
+[node name="Game Settings Dialog" type="CanvasLayer"]
+script = ExtResource("1_m01os")
+
+[node name="FadingPanelContainer" parent="." groups=["Themeable"] instance=ExtResource("2_o0daa")]
+theme = ExtResource("3_5hvvd")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="FadingPanelContainer" groups=["Themeable"]]
+layout_mode = 2
+
+[node name="Dialog Heading" type="Label" parent="FadingPanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"DialogHeading"
+text = "Settings
+"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="FadingPanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 500)
+layout_mode = 2
+size_flags_vertical = 3
+follow_focus = true
+horizontal_scroll_mode = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="FadingPanelContainer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_right = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Precanned Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"DialogCategory"
+text = "Pre-Canned Configurations"
+
+[node name="Precanned Container" type="GridContainer" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="Configuration Set Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Precanned Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Enable or disable background image"
+mouse_filter = 0
+text = "Configuration Set
+"
+
+[node name="Configuration Set" type="OptionButton" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Precanned Container"]
+layout_mode = 2
+size_flags_horizontal = 8
+selected = 2
+item_count = 5
+popup/item_0/text = "Classic"
+popup/item_1/text = "Easy"
+popup/item_1/id = 1
+popup/item_2/text = "Normal"
+popup/item_2/id = 2
+popup/item_3/text = "Hard"
+popup/item_3/id = 3
+popup/item_4/text = "Crazy Hard!"
+popup/item_4/id = 4
+
+[node name="Theme Category Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"DialogCategory"
+text = "Themes"
+
+[node name="Theme Container" type="GridContainer" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="Theme Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Theme Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Enable or disable background image"
+mouse_filter = 0
+text = "Theme
+"
+
+[node name="Theme" type="OptionButton" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Theme Container"]
+layout_mode = 2
+size_flags_horizontal = 8
+selected = 0
+item_count = 2
+popup/item_0/text = "Modern"
+popup/item_1/text = "Classic"
+popup/item_1/id = 1
+
+[node name="Sound Category Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_type_variation = &"DialogCategory"
+text = "Sound"
+
+[node name="Sound Enabled Container" type="GridContainer" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="Sound Enabled Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Sound Enabled Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tooltip_text = "Enable or disable sound effects"
+mouse_filter = 0
+text = "Sound Enabled"
+
+[node name="Sound Enabled" type="CheckBox" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Sound Enabled Container"]
+layout_mode = 2
+button_pressed = true
+
+[node name="Player Ship Category Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"DialogCategory"
+text = "Player Ships"
+
+[node name="Ship Category Container" type="GridContainer" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="Player Infinite Lives Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Ship Category Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tooltip_text = "Enable or disable sound effects"
+mouse_filter = 0
+text = "Infinite Ships"
+
+[node name="Player Infinite Lives" type="CheckBox" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Ship Category Container"]
+layout_mode = 2
+size_flags_horizontal = 8
+button_pressed = true
+
+[node name="Player Starting Lives Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Ship Category Container"]
+layout_mode = 2
+size_flags_horizontal = 2
+tooltip_text = "The number of ships at the
+beginning of a new game"
+mouse_filter = 0
+text = "Starting Ships"
+
+[node name="Player Starting Lives" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Ship Category Container" instance=ExtResource("3_k6nax")]
+layout_mode = 2
+size_flags_horizontal = 10
+min_value = 1.0
+max_value = 6.0
+value = 3.0
+
+[node name="Player Max Lives Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Ship Category Container"]
+layout_mode = 2
+size_flags_horizontal = 2
+tooltip_text = "The maximum number of ships that
+may be earned"
+mouse_filter = 0
+text = "Maximum Ships"
+
+[node name="Player Max Lives" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Ship Category Container" instance=ExtResource("3_k6nax")]
+layout_mode = 2
+size_flags_horizontal = 10
+min_value = 3.0
+max_value = 9.0
+value = 3.0
+
+[node name="Player Extra Life Score Threshold Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Ship Category Container"]
+layout_mode = 2
+size_flags_horizontal = 2
+tooltip_text = "An extra ship is earned every time
+this threshold is passed"
+mouse_filter = 0
+text = "Extra Ship Score Threshold"
+
+[node name="Player Extra Life Score Threshold" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Ship Category Container" instance=ExtResource("3_k6nax")]
+custom_minimum_size = Vector2(75, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+min_value = 1000.0
+value = 10000.0
+
+[node name="Ship Acceleration Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Ship Category Container"]
+layout_mode = 2
+size_flags_horizontal = 2
+tooltip_text = "How quickly your ship accelerates"
+mouse_filter = 0
+text = "Acceleration"
+
+[node name="Ship Acceleration" type="HSlider" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Ship Category Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 100.0
+max_value = 1000.0
+value = 300.0
+
+[node name="Ship Turn Speed Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Ship Category Container"]
+layout_mode = 2
+size_flags_horizontal = 2
+tooltip_text = "How quickly your ship turns"
+mouse_filter = 0
+text = "Turn Speed"
+
+[node name="Ship Turn Speed" type="HSlider" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Ship Category Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 1.0
+max_value = 10.0
+step = 0.0
+value = 5.0
+
+[node name="Ship Linear Dampening Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Ship Category Container"]
+layout_mode = 2
+size_flags_horizontal = 2
+mouse_filter = 0
+text = "Linear Dampening"
+
+[node name="Ship Linear Dampening" type="HSlider" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Ship Category Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 2.0
+step = 0.0
+value = 2.0
+
+[node name="Player Missiles Category Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"DialogCategory"
+text = "Player Missiles"
+
+[node name="Player Missiles Category Container" type="GridContainer" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="Player Max Missiles Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Player Missiles Category Container"]
+layout_mode = 2
+size_flags_horizontal = 2
+tooltip_text = "Maximum number of missiles on 
+the screen at once"
+mouse_filter = 0
+text = "Maximum Quantity"
+
+[node name="Player Max Missiles" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Player Missiles Category Container" instance=ExtResource("3_k6nax")]
+layout_mode = 2
+size_flags_horizontal = 10
+min_value = 5.0
+max_value = 20.0
+value = 8.0
+
+[node name="Player Missiles Speed Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Player Missiles Category Container"]
+layout_mode = 2
+size_flags_horizontal = 2
+tooltip_text = "Missile speed, relative to ship velocity"
+mouse_filter = 0
+text = "Speed"
+
+[node name="Player Missiles Speed" type="HSlider" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Player Missiles Category Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+min_value = 100.0
+max_value = 1000.0
+step = 0.0
+value = 100.0
+
+[node name="Player Missiles Lifespan Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Player Missiles Category Container"]
+layout_mode = 2
+size_flags_horizontal = 2
+tooltip_text = "Lifespan of a missile"
+mouse_filter = 0
+text = "Lifespan"
+
+[node name="Player Missiles Lifespan" type="HSlider" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Player Missiles Category Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+min_value = 0.25
+max_value = 4.0
+step = 0.0
+value = 1.5
+
+[node name="Asteroids Category Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"DialogCategory"
+text = "Asteroids"
+
+[node name="Asteroids Category Container" type="GridContainer" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 2
+
+[node name="Asteroids Rotation Enabled Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Asteroids Category Container"]
+layout_mode = 2
+tooltip_text = "Enable or disable asteroid rotation.  Asteroids 
+did not rotate in the original arcade game."
+mouse_filter = 0
+text = "Rotation Enabled
+"
+
+[node name="Asteroids Rotation Enabled" type="CheckBox" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Asteroids Category Container"]
+layout_mode = 2
+size_flags_horizontal = 10
+button_pressed = true
+
+[node name="Asteroids Initial Quantity Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Asteroids Category Container"]
+layout_mode = 2
+tooltip_text = "The number of asteroids at the 
+beginning of a new game"
+mouse_filter = 0
+text = "Starting Quantity"
+
+[node name="Asteroids Initial Quantity" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Asteroids Category Container" instance=ExtResource("3_k6nax")]
+layout_mode = 2
+size_flags_horizontal = 10
+min_value = 4.0
+max_value = 20.0
+value = 4.0
+
+[node name="Asteroids Max Quantity Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Asteroids Category Container"]
+layout_mode = 2
+tooltip_text = "The number of asteroids at the start of each 
+new sheet increases until this limit is reached."
+mouse_filter = 0
+text = "Maximum Starting Quantity"
+
+[node name="Asteroids Max Quantity" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Asteroids Category Container" instance=ExtResource("3_k6nax")]
+layout_mode = 2
+size_flags_horizontal = 10
+min_value = 4.0
+max_value = 20.0
+value = 4.0
+
+[node name="Asteroids Min Speed Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Asteroids Category Container"]
+layout_mode = 2
+tooltip_text = "The minimum speed at which asteroids may travel"
+mouse_filter = 0
+text = "Minimum Speed"
+
+[node name="Asteroids Min Speed" type="HSlider" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Asteroids Category Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+min_value = 75.0
+max_value = 500.0
+step = 0.0
+value = 100.0
+
+[node name="Asteroids Max Speed Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Asteroids Category Container"]
+layout_mode = 2
+tooltip_text = "The maximum speed at which asteroids may travel"
+mouse_filter = 0
+text = "Maximum Speed"
+
+[node name="Asteroids Max Speed" type="HSlider" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Asteroids Category Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+min_value = 75.0
+max_value = 500.0
+value = 150.0
+
+[node name="Asteroids Gravity Enabled Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Asteroids Category Container"]
+layout_mode = 2
+tooltip_text = "Enable or disable gravitational pull of asteroids"
+mouse_filter = 0
+text = "Gravity Enabled
+"
+
+[node name="Asteroids Gravity Enabled" type="CheckBox" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Asteroids Category Container"]
+layout_mode = 2
+size_flags_horizontal = 10
+button_pressed = true
+
+[node name="Asteroids Gravitational Constant Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Asteroids Category Container"]
+layout_mode = 2
+tooltip_text = "How hard gravity sucks!"
+mouse_filter = 0
+text = "Gravitational Constant"
+
+[node name="Asteroids Gravitational Constant" type="HSlider" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Asteroids Category Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+min_value = 1000.0
+max_value = 2000.0
+value = 1500.0
+
+[node name="Large Saucer Category Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"DialogCategory"
+text = "Large Saucer"
+
+[node name="Large Saucer Category Container" type="GridContainer" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="Large Saucer Enabled Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Large Saucer Category Container"]
+layout_mode = 2
+mouse_filter = 0
+text = "Enabled"
+
+[node name="Large Saucer Enabled" type="CheckBox" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Large Saucer Category Container"]
+layout_mode = 2
+size_flags_horizontal = 10
+button_pressed = true
+
+[node name="Large Saucer Speed Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Large Saucer Category Container"]
+layout_mode = 2
+size_flags_horizontal = 2
+tooltip_text = "Missile speed, relative to ship velocity"
+mouse_filter = 0
+text = "Speed"
+
+[node name="Large Saucer Speed" type="HSlider" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Large Saucer Category Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+min_value = 100.0
+max_value = 1000.0
+step = 0.0
+value = 100.0
+
+[node name="Large Saucer Spawn Frequency Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Large Saucer Category Container"]
+layout_mode = 2
+mouse_filter = 0
+text = "Frequency"
+
+[node name="Large Saucer Spawn Frequency" type="HSlider" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Large Saucer Category Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+min_value = 1000.0
+max_value = 2000.0
+value = 1500.0
+
+[node name="Large Saucer Max Missiles Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Large Saucer Category Container"]
+layout_mode = 2
+size_flags_horizontal = 2
+tooltip_text = "Maximum number of missiles on 
+the screen at once"
+mouse_filter = 0
+text = "Maximum Quantity"
+
+[node name="Large Saucer Max Missiles" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Large Saucer Category Container" instance=ExtResource("3_k6nax")]
+layout_mode = 2
+size_flags_horizontal = 10
+min_value = 5.0
+max_value = 20.0
+value = 8.0
+
+[node name="Large Saucer Missiles Speed Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Large Saucer Category Container"]
+layout_mode = 2
+size_flags_horizontal = 2
+tooltip_text = "Missile speed, relative to ship velocity"
+mouse_filter = 0
+text = "Speed"
+
+[node name="Large Saucer Missiles Speed" type="HSlider" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Large Saucer Category Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+min_value = 100.0
+max_value = 1000.0
+step = 0.0
+value = 100.0
+
+[node name="Large Saucer Missiles Lifespan Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Large Saucer Category Container"]
+layout_mode = 2
+size_flags_horizontal = 2
+tooltip_text = "Lifespan of a missile"
+mouse_filter = 0
+text = "Lifespan"
+
+[node name="Large Saucer Missiles Lifespan" type="HSlider" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Large Saucer Category Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+min_value = 0.25
+max_value = 4.0
+step = 0.0
+value = 1.5
+
+[node name="Small Saucer Category Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"DialogCategory"
+text = "Small Saucer"
+
+[node name="Small Saucer Category Container" type="GridContainer" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="Small Saucer Enabled Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Small Saucer Category Container"]
+layout_mode = 2
+mouse_filter = 0
+text = "Enabled"
+
+[node name="Small Saucer Enabled" type="CheckBox" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Small Saucer Category Container"]
+layout_mode = 2
+size_flags_horizontal = 10
+button_pressed = true
+
+[node name="Small Saucer Speed Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Small Saucer Category Container"]
+layout_mode = 2
+size_flags_horizontal = 2
+tooltip_text = "Missile speed, relative to ship velocity"
+mouse_filter = 0
+text = "Speed"
+
+[node name="Small Saucer Speed" type="HSlider" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Small Saucer Category Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+min_value = 100.0
+max_value = 1000.0
+step = 0.0
+value = 100.0
+
+[node name="Small Saucer Spawn Frequency Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Small Saucer Category Container"]
+layout_mode = 2
+mouse_filter = 0
+text = "Frequency"
+
+[node name="Small Saucer Spawn Frequency" type="HSlider" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Small Saucer Category Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+min_value = 1000.0
+max_value = 2000.0
+value = 1500.0
+
+[node name="Small Saucer Max Missiles Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Small Saucer Category Container"]
+layout_mode = 2
+size_flags_horizontal = 2
+tooltip_text = "Maximum number of missiles on 
+the screen at once"
+mouse_filter = 0
+text = "Maximum Quantity"
+
+[node name="Small Saucer Max Missiles" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Small Saucer Category Container" instance=ExtResource("3_k6nax")]
+layout_mode = 2
+size_flags_horizontal = 10
+min_value = 5.0
+max_value = 20.0
+value = 8.0
+
+[node name="Small Saucer Missiles Speed Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Small Saucer Category Container"]
+layout_mode = 2
+size_flags_horizontal = 2
+tooltip_text = "Missile speed, relative to ship velocity"
+mouse_filter = 0
+text = "Speed"
+
+[node name="Small Saucer Missiles Speed" type="HSlider" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Small Saucer Category Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+min_value = 100.0
+max_value = 1000.0
+step = 0.0
+value = 100.0
+
+[node name="Small Saucer Missiles Lifespan Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Small Saucer Category Container"]
+layout_mode = 2
+size_flags_horizontal = 2
+tooltip_text = "Lifespan of a missile"
+mouse_filter = 0
+text = "Lifespan"
+
+[node name="Small Saucer Missiles Lifespan" type="HSlider" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Small Saucer Category Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+min_value = 0.25
+max_value = 4.0
+step = 0.0
+value = 1.5
+
+[node name="MarginContainer" type="MarginContainer" parent="FadingPanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Buttons Container" type="HBoxContainer" parent="FadingPanelContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 1
+
+[node name="OK Button" type="Button" parent="FadingPanelContainer/VBoxContainer/MarginContainer/Buttons Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "OK"
+
+[node name="Cancel Button" type="Button" parent="FadingPanelContainer/VBoxContainer/MarginContainer/Buttons Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Cancel"

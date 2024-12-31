@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://bbl6psak4tgdr"]
+
+[ext_resource type="Script" path="res://Controls/ShakingCamera/ShakingCamera.cs" id="1_0ojwk"]
+
+[node name="ShakingCamera" type="Camera2D"]
+anchor_mode = 0
+script = ExtResource("1_0ojwk")

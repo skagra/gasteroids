@@ -8,21 +8,22 @@ public partial class Lives : Node2D
     [Export]
     private AudioStream _extraLifeSound;
 
-    private PackedScene _lifeScene = GD.Load<PackedScene>("res://Scenes/UI/Life.tscn");
+    private PackedScene _lifeScene = Resources.LifeScene;
 
     private readonly AudioStreamPlayer2D _extraLifeSoundPlayer = new();
     private readonly List<Sprite2D> _lives = new();
 
     public override void _Ready()
     {
-        _extraLifeSoundPlayer.Bus = Constants.AUDIO_BUS_NAME_FX;
+        _extraLifeSoundPlayer.Bus = Resources.AUDIO_BUS_NAME_FX;
         _extraLifeSoundPlayer.Stream = _extraLifeSound;
         AddChild(_extraLifeSoundPlayer);
     }
 
     public int Value
     {
-        get { return _lives.Count; }
+        get => _lives.Count;
+        set => SetLives(value);
     }
 
     public void SetLives(int lives)

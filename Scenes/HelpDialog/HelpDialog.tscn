@@ -2,12 +2,12 @@
 
 [ext_resource type="Script" path="res://Scenes/HelpDialog/HelpDialog.cs" id="2_bmfss"]
 [ext_resource type="PackedScene" uid="uid://67by6r3h3g0e" path="res://Controls/FadingPanelContainer/FadingPanelContainer.tscn" id="3_2sskt"]
-[ext_resource type="Theme" uid="uid://cphlitqn3odss" path="res://Themes/ModernDialog.tres" id="3_y814q"]
+[ext_resource type="Theme" uid="uid://cphlitqn3odss" path="res://Themes/Modern.tres" id="3_y814q"]
 
 [node name="Help Dialog" type="CanvasLayer"]
 script = ExtResource("2_bmfss")
 
-[node name="FadingPanelContainer" parent="." instance=ExtResource("3_2sskt")]
+[node name="FadingPanelContainer" parent="." groups=["Themeable"] instance=ExtResource("3_2sskt")]
 offset_left = -196.0
 offset_top = -227.0
 offset_right = 197.0

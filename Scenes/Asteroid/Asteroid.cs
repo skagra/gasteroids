@@ -22,7 +22,7 @@ public partial class Asteroid : Area2D
 
         if (GetParent() is Window)
         {
-            Position = Screen.Instance.Centre;
+            Position = Screen.Centre;
             LinearVelocity = _testingLinearVelocity;
             AngularVelocity = _testingAngularVelocity;
         }
@@ -31,7 +31,7 @@ public partial class Asteroid : Area2D
     public override void _Process(double delta)
     {
         Position += LinearVelocity * (float)delta;
-        Position = Screen.Instance.ClampToViewport(Position);
+        Position = Screen.ClampToViewport(Position);
         Rotation += AngularVelocity * (float)delta;
     }
 

@@ -27,7 +27,7 @@ public partial class Beats : Node
 
     public override void _Ready()
     {
-        _beatsAudioStream.Bus = Constants.AUDIO_BUS_NAME_FX;
+        _beatsAudioStream.Bus = Resources.AUDIO_BUS_NAME_FX;
         AddChild(_beatsAudioStream);
     }
 
@@ -87,5 +87,4 @@ public partial class Beats : Node
             }
         }
     }
-
 }

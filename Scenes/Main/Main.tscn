@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://b6s1c2c0v0c81"]
+[gd_scene load_steps=20 format=3 uid="uid://b6s1c2c0v0c81"]
 
 [ext_resource type="Script" path="res://Scenes/Main/Main.cs" id="1_4mmwa"]
 [ext_resource type="PackedScene" uid="uid://nu2biysl40aq" path="res://Scenes/UI/UI.tscn" id="2_m8vvq"]
@@ -11,11 +11,85 @@
 [ext_resource type="PackedScene" uid="uid://ced2kqn8jadtp" path="res://Scenes/Saucer/LargeSaucer.tscn" id="7_yvgho"]
 [ext_resource type="PackedScene" uid="uid://cu3bhbnbhqh8y" path="res://Scenes/HelpDialog/HelpDialog.tscn" id="9_4054w"]
 [ext_resource type="Texture2D" uid="uid://dorw1dk8egeyd" path="res://Graphics/Background.jpg" id="10_5m703"]
-[ext_resource type="PackedScene" uid="uid://b6kmyi73lblks" path="res://Scenes/SettingsDialog/SettingsDialog.tscn" id="10_kidqi"]
+[ext_resource type="PackedScene" uid="uid://b6kmyi73lblks" path="res://Scenes/Settings/GameSettingsDialog.tscn" id="10_kidqi"]
+[ext_resource type="PackedScene" uid="uid://67by6r3h3g0e" path="res://Controls/FadingPanelContainer/FadingPanelContainer.tscn" id="10_raqju"]
 [ext_resource type="PackedScene" uid="uid://bb8s26xmfrcas" path="res://Scenes/HighScoreTable/HighScoreTable.tscn" id="13_6i0d3"]
+[ext_resource type="PackedScene" uid="uid://bbl6psak4tgdr" path="res://Controls/ShakingCamera/ShakingCamera.tscn" id="15_pa42n"]
+[ext_resource type="PackedScene" uid="uid://gkqgdo51ear1" path="res://Scenes/Splash/Splash.tscn" id="15_ymclg"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_b8eb2"]
 texture = ExtResource("10_5m703")
+
+[sub_resource type="Animation" id="Animation_rlbl8"]
+resource_name = "GameOver"
+length = 18.0
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("HighScoreTable")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(5, 15),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [false],
+"method": &"Show"
+}, {
+"args": [false],
+"method": &"Hide"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("UI")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 5),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"ShowGameOverLabel"
+}, {
+"args": [],
+"method": &"HideGameOverLabel"
+}]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("UI")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(18),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"ShowHelpLabel"
+}]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("UI")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(18),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"ShowStartLabel"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_dba5c"]
+_data = {
+"GameOver": SubResource("Animation_rlbl8")
+}
 
 [node name="Main" type="Node" groups=["Player"]]
 script = ExtResource("1_4mmwa")
@@ -24,11 +98,16 @@ script = ExtResource("1_4mmwa")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -50.0
+offset_top = -30.0
+offset_right = 50.0
+offset_bottom = 26.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_b8eb2")
 
 [node name="PlayerController" parent="." instance=ExtResource("3_c81ab")]
+ShakeTime = 0.5
 
 [node name="AsteroidFieldController" parent="." instance=ExtResource("3_37sgv")]
 
@@ -42,14 +121,43 @@ _saucerScene = ExtResource("7_lqlai")
 
 [node name="Beats" parent="." instance=ExtResource("7_kqb4t")]
 
+[node name="FadingOverlay" parent="." instance=ExtResource("10_raqju")]
+visible = false
+anchors_preset = 15
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 30.0
+offset_bottom = 20.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
 [node name="UI" parent="." instance=ExtResource("2_m8vvq")]
 
 [node name="Help Dialog" parent="." instance=ExtResource("9_4054w")]
 visible = false
 
-[node name="Settings Dialog" parent="." instance=ExtResource("10_kidqi")]
+[node name="Game Settings Dialog" parent="." instance=ExtResource("10_kidqi")]
 visible = false
 
 [node name="HighScoreTable" parent="." instance=ExtResource("13_6i0d3")]
 offset = Vector2(0, 20)
 transform = Transform2D(1, 0, 0, 1, 0, 20)
+
+[node name="Splash" parent="." instance=ExtResource("15_ymclg")]
+
+[node name="ShakingCamera" parent="." instance=ExtResource("15_pa42n")]
+position = Vector2(960, 540)
+anchor_mode = 1
+position_smoothing_enabled = true
+MaxOffsetX = 10.0
+MaxOffsetY = 10.0
+MaxRotation = 0.01
+
+[node name="GameOverAnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_dba5c")
+}

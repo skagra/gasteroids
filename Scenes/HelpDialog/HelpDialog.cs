@@ -26,15 +26,15 @@ public partial class HelpDialog : CanvasLayer
         }
     }
 
-    private void Hide(bool immediate = false)
+    public void Hide(bool immediate = false)
     {
         _fadingPanelContainer.Hide(immediate);
     }
 
     public void Show(bool immediate = false)
     {
-        base.Show();
         _fadingPanelContainer.Show(immediate);
+        base.Show();
     }
 
     private void OkButtonPressed()

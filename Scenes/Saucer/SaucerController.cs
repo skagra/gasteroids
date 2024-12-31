@@ -26,6 +26,12 @@ public partial class SaucerController : Node
     [Export]
     private AudioStream _explosionSound;
 
+    public float Speed
+    {
+        get => _saucer.Speed;
+        set => _saucer.Speed = value;
+    }
+
     private Saucer _saucer;
 
     private MissileController _missileController;
@@ -47,7 +53,7 @@ public partial class SaucerController : Node
 
     public override void _Ready()
     {
-        _explosionPlayer.Bus = Constants.AUDIO_BUS_NAME_FX;
+        _explosionPlayer.Bus = Resources.AUDIO_BUS_NAME_FX;
         _explosionPlayer.Stream = _explosionSound;
         AddChild(_explosionPlayer);
 
@@ -175,8 +181,8 @@ public partial class SaucerController : Node
         explosion.LinearVelocity = _saucer.Velocity;
         explosion.ExplosionCompleted += ExplosionOnCompleted;
         explosion.Animation = "Explosion";
+        AddChild(explosion);
     }
-
 
     private void ExplosionOnCompleted(Explosion asteroidExplosion)
     {

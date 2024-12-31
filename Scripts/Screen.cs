@@ -1,21 +1,20 @@
-using System.Reflection.Metadata.Ecma335;
 using Godot;
 
 namespace Asteroids;
 
 public partial class Screen : Node
 {
-    public static Screen Instance { get; private set; }
+    private static Screen _I;
 
-    private Rect2 _viewportRect;
+    private static Rect2 _viewportRect;
 
     public override void _Ready()
     {
-        Instance = this;
+        _I = this;
         _viewportRect = GetTree().Root.GetViewport().GetVisibleRect();
     }
 
-    public Vector2 ClampToViewport(Vector2 position)
+    public static Vector2 ClampToViewport(Vector2 position)
     {
         if (position.X > _viewportRect.End.X)
         {
@@ -38,17 +37,17 @@ public partial class Screen : Node
         return position;
     }
 
-    public Vector2 Centre
+    public static Vector2 Centre
     {
         get => _viewportRect.Size * 0.5f;
     }
 
-    public float Left { get => _viewportRect.Position.X; }
+    public static float Left { get => _viewportRect.Position.X; }
 
-    public float Right { get => _viewportRect.End.X; }
+    public static float Right { get => _viewportRect.End.X; }
 
-    public float Top { get => _viewportRect.Position.Y; }
+    public static float Top { get => _viewportRect.Position.Y; }
 
-    public float Bottom { get => _viewportRect.End.Y; }
+    public static float Bottom { get => _viewportRect.End.Y; }
 
 }

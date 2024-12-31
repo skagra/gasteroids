@@ -9,9 +9,4 @@ public partial class Score : Label
         get { return int.Parse(Text); }
         set { Text = $"{value:D5}"; }
     }
-
-    public void Increase(int delta)
-    {
-        Value += delta;
-    }
 }

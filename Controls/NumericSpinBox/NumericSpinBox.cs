@@ -14,7 +14,7 @@ public partial class NumericSpinBox : SpinBox
 
     public override void _Ready()
     {
-        _audioStreamPlayer.Bus = Constants.AUDIO_BUS_NAME_UI;
+        _audioStreamPlayer.Bus = Resources.AUDIO_BUS_NAME_UI;
         _audioStreamPlayer.Stream = _errorBeep;
         AddChild(_audioStreamPlayer);
 

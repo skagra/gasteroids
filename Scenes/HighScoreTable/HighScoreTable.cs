@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Godot;
 
 namespace Asteroids;
@@ -16,7 +15,7 @@ public partial class HighScoreTable : CanvasLayer
 
     private bool _changedSinceLastShow = false;
 
-    private FadingPanelContainer _fadingPanelContainer;
+    private FadingPanelContainer _panelContainer;
 
     public int HighScore { get => _scoreDetails.Count > 0 ? _scoreDetails[0].Score : 0; }
 
@@ -36,7 +35,7 @@ public partial class HighScoreTable : CanvasLayer
 
     public override void _Ready()
     {
-        _fadingPanelContainer = (FadingPanelContainer)FindChild("FadingPanelContainer");
+        _panelContainer = (FadingPanelContainer)FindChild("FadingPanelContainer");
         _scoresContainer = (GridContainer)FindChild("GridContainer");
 
         for (var i = 0; i < _MAX_SCORES; i++)
@@ -67,7 +66,6 @@ public partial class HighScoreTable : CanvasLayer
                 SizeFlagsHorizontal = Control.SizeFlags.ShrinkEnd | Control.SizeFlags.Expand,
                 HorizontalAlignment = HorizontalAlignment.Right,
                 ThemeTypeVariation = "HighScoreLabel"
-
             };
             scoreControl.name = name;
             _scoresContainer.AddChild(name);
@@ -93,9 +91,9 @@ public partial class HighScoreTable : CanvasLayer
         }
     }
 
-    public void Hide(bool immediate = false)
+    public void Hide(bool immediate)
     {
-        _fadingPanelContainer.Hide(immediate);
+        _panelContainer.Hide(immediate);
     }
 
     public void SetHighScores(List<ScoreDetails> scores)
@@ -120,7 +118,7 @@ public partial class HighScoreTable : CanvasLayer
         return score > (_scoreDetails.Count > 0 ? _scoreDetails[^1].Score : 0);
     }
 
-    public new void Show()
+    public void Show(bool immediate)
     {
         if (_changedSinceLastShow)
         {
@@ -128,8 +126,8 @@ public partial class HighScoreTable : CanvasLayer
             _changedSinceLastShow = false;
         }
 
+        _panelContainer.Show(immediate);
         base.Show();
-        _fadingPanelContainer.Show();
     }
 
     public void AddScore(string name, int score)

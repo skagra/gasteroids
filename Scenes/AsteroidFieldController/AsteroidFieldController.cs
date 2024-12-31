@@ -70,21 +70,24 @@ public partial class AsteroidFieldController : Node
 
     public int AsteroidCount { get => _activeAsteroids.Count; }
 
-    private const string _ASTEROID_SCENE_BASE = "res://Scenes/Asteroid/";
-
     // Asteroid scenes
-    private readonly List<PackedScene> _largeAsteroidPrefabs =
-        new() { GD.Load<PackedScene>($"{_ASTEROID_SCENE_BASE}AsteroidType1Large.tscn"),
-                GD.Load<PackedScene>($"{_ASTEROID_SCENE_BASE}AsteroidType2Large.tscn"),
-                GD.Load<PackedScene>($"{_ASTEROID_SCENE_BASE}AsteroidType3Large.tscn") };
-    private readonly List<PackedScene> _mediumAsteroidPrefabs =
-        new() { GD.Load<PackedScene>($"{_ASTEROID_SCENE_BASE}AsteroidType1Medium.tscn"),
-                GD.Load<PackedScene>($"{_ASTEROID_SCENE_BASE}AsteroidType2Medium.tscn"),
-                GD.Load<PackedScene>($"{_ASTEROID_SCENE_BASE}AsteroidType3Medium.tscn") };
-    private readonly List<PackedScene> _smallAsteroidPrefabs =
-        new() { GD.Load<PackedScene>($"{_ASTEROID_SCENE_BASE}AsteroidType1Small.tscn"),
-                GD.Load<PackedScene>($"{_ASTEROID_SCENE_BASE}AsteroidType2Small.tscn"),
-                GD.Load<PackedScene>($"{_ASTEROID_SCENE_BASE}AsteroidType3Small.tscn") };
+    private readonly List<PackedScene> _largeAsteroidPrefabs = new() {
+        Resources.AsteroidType1Large,
+        Resources.AsteroidType1Large,
+        Resources.AsteroidType1Large
+    };
+
+    private readonly List<PackedScene> _mediumAsteroidPrefabs = new() {
+        Resources.AsteroidType1Medium,
+        Resources.AsteroidType1Medium,
+        Resources.AsteroidType1Medium
+    };
+
+    private readonly List<PackedScene> _smallAsteroidPrefabs = new() {
+        Resources.AsteroidType1Small,
+        Resources.AsteroidType1Small,
+        Resources.AsteroidType1Small
+    };
 
     // List of all active asteroids
     private readonly List<AsteroidDetails> _activeAsteroids = new();
@@ -101,13 +104,13 @@ public partial class AsteroidFieldController : Node
     public override void _Ready()
     {
         // Set up audio streams
-        _audioStreamPlayerBangLarge.Bus = Constants.AUDIO_BUS_NAME_FX;
+        _audioStreamPlayerBangLarge.Bus = Resources.AUDIO_BUS_NAME_FX;
         _audioStreamPlayerBangLarge.Stream = _bangLarge;
         AddChild(_audioStreamPlayerBangLarge);
-        _audioStreamPlayerBangMedium.Bus = Constants.AUDIO_BUS_NAME_FX;
+        _audioStreamPlayerBangMedium.Bus = Resources.AUDIO_BUS_NAME_FX;
         _audioStreamPlayerBangMedium.Stream = _bangMedium;
         AddChild(_audioStreamPlayerBangMedium);
-        _audioStreamPlayerBangSmall.Bus = Constants.AUDIO_BUS_NAME_FX;
+        _audioStreamPlayerBangSmall.Bus = Resources.AUDIO_BUS_NAME_FX;
         _audioStreamPlayerBangSmall.Stream = _bangSmall;
         AddChild(_audioStreamPlayerBangSmall);
 

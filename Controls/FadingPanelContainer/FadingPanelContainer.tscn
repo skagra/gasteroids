@@ -4,6 +4,7 @@
 
 [sub_resource type="Animation" id="Animation_4m5ax"]
 resource_name = "FadeIn"
+length = 0.3
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -19,6 +20,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_6sjjh"]
 resource_name = "FadeOut"
+length = 0.3
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true

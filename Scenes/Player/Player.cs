@@ -31,7 +31,7 @@ public partial class Player : RigidBody2D
     private Vector2 _spriteSize;
     private AudioStreamPlayer2D _thrustAudioStream;
 
-    private float _savedLinearDamp;
+    //private float _savedLinearDamp;
     private bool _isActive = false;
     private bool _hasCollidedThisFrame = false;
 
@@ -46,14 +46,14 @@ public partial class Player : RigidBody2D
         _collisionPolygon = _area2D.GetNode<CollisionPolygon2D>("CollisionPolygon2D");
         _sprite = _area2D.GetNode<AnimatedSprite2D>("AnimatedSprite2D");
         _thrustAudioStream = _area2D.GetNode<AudioStreamPlayer2D>("ThrustAudioPlayer");
-        _thrustAudioStream.Bus = Constants.AUDIO_BUS_NAME_FX;
+        _thrustAudioStream.Bus = Resources.AUDIO_BUS_NAME_FX;
 
         _area2D.AreaEntered += Area2DAreaEntered;
 
         // TODO Scaling
         _spriteSize = _sprite.SpriteFrames.GetFrameTexture(_sprite.Animation, _sprite.Frame).GetSize();
 
-        _savedLinearDamp = LinearDamp;
+        // _savedLinearDamp = LinearDamp;
 
         if (GetParent() is not Window)
         {
@@ -67,7 +67,12 @@ public partial class Player : RigidBody2D
 
     public void Activate()
     {
-        Activate(Screen.Instance.Centre);
+        Activate(Screen.Centre);
+    }
+
+    public new float LinearDamp
+    {
+        get; set;
     }
 
     public void Activate(Vector2 position)
@@ -75,7 +80,7 @@ public partial class Player : RigidBody2D
         Position = position;
         LinearVelocity = Vector2.Zero;
         AngularVelocity = 0f;
-        LinearDamp = _savedLinearDamp;
+        base.LinearDamp = LinearDamp;
 
         _area2D.Rotation = 0f;
         _collisionPolygon.Disabled = false;
@@ -145,14 +150,14 @@ public partial class Player : RigidBody2D
             }
 
         }
-        Position = Screen.Instance.ClampToViewport(Position);
+        Position = Screen.ClampToViewport(Position);
     }
 
     private void HyperspacePressed()
     {
         // TODO Chance to explode!
-        Position = new Vector2((float)GD.RandRange(Screen.Instance.Left, Screen.Instance.Right),
-                               (float)GD.RandRange(Screen.Instance.Top, Screen.Instance.Bottom));
+        Position = new Vector2((float)GD.RandRange(Screen.Left, Screen.Right),
+                               (float)GD.RandRange(Screen.Top, Screen.Bottom));
     }
 
     private void FirePressed()
@@ -177,7 +182,7 @@ public partial class Player : RigidBody2D
             _thrustAudioStream.Play();
         }
         ApplyCentralForce(_area2D.Transform.X * ThrustForce);
-        LinearDamp = 0f;
+        base.LinearDamp = 0f;
         if (!_sprite.IsPlaying())
         {
             _sprite.Play(_ANIMATION_THRUST);
@@ -186,7 +191,7 @@ public partial class Player : RigidBody2D
 
     private void ThrustNotPressed()
     {
-        LinearDamp = _savedLinearDamp;
+        base.LinearDamp = LinearDamp;
         if (!_sprite.IsPlaying() && _sprite.Animation == _ANIMATION_THRUST)
         {
             _sprite.Stop();

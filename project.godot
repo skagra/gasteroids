@@ -20,6 +20,7 @@ config/version="0.1"
 run/main_scene="res://Scenes/Main/Main.tscn"
 config/features=PackedStringArray("4.3", "C#", "Forward Plus")
 boot_splash/bg_color=Color(0, 0, 0, 1)
+boot_splash/show_image=false
 boot_splash/image="res://Graphics/Splash.png"
 config/icon="res://Graphics/Icon.png"
 
@@ -31,6 +32,7 @@ buses/default_bus_layout="res://Audio/BusLayout.tres"
 
 Screen="*res://Scripts/Screen.cs"
 GodotLogger="*res://Logger/GodotLogger.tscn"
+Resources="*res://Scenes/Main/Resources.cs"
 
 [display]
 
@@ -43,6 +45,10 @@ window/stretch/scale_mode="integer"
 [dotnet]
 
 project/assembly_name="GadotNet"
+
+[global_group]
+
+Themeable=""
 
 [gui]
 

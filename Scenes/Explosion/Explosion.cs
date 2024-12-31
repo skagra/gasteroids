@@ -14,10 +14,10 @@ public partial class Explosion : AnimatedSprite2D
     {
         if (GetParent() is Window)
         {
-            Position = Screen.Instance.Centre;
+            Position = Screen.Centre;
         }
 
-        AnimationFinished += AnimationCompleted;
+        AnimationFinished += AnimatedSprite2DOnAnimationFinished;
 
         Play();
     }
@@ -28,7 +28,7 @@ public partial class Explosion : AnimatedSprite2D
         Rotation += AngularVelocity * (float)delta;
     }
 
-    private void AnimationCompleted()
+    private void AnimatedSprite2DOnAnimationFinished()
     {
         Logger.I.SignalSent(this, SignalName.ExplosionCompleted);
         EmitSignal(SignalName.ExplosionCompleted, this);

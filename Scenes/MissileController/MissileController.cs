@@ -55,7 +55,7 @@ public partial class MissileController : Node
 
     public override void _Ready()
     {
-        _shootAudioStream.Bus = Constants.AUDIO_BUS_NAME_FX;
+        _shootAudioStream.Bus = Resources.AUDIO_BUS_NAME_FX;
         _shootAudioStream.Stream = _missileExplosionSound;
         AddChild(_shootAudioStream);
 
@@ -155,8 +155,6 @@ public partial class MissileController : Node
             _dormantMissiles.Add(missile);
         }
     }
-
-
 
     private void ClearUpMissiles(double delta)
     {

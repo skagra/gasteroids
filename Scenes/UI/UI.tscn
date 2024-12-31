@@ -1,39 +1,34 @@
 [gd_scene load_steps=7 format=3 uid="uid://nu2biysl40aq"]
 
+[ext_resource type="Script" path="res://Scenes/UI/Ui.cs" id="1_e2oad"]
 [ext_resource type="Script" path="res://Scenes/UI/Score.cs" id="1_fmhiy"]
-[ext_resource type="Theme" uid="uid://g6klnwtqqkv5" path="res://Themes/UI.tres" id="1_hihmr"]
+[ext_resource type="Theme" uid="uid://cphlitqn3odss" path="res://Themes/Modern.tres" id="1_mrqha"]
 [ext_resource type="Script" path="res://Scenes/UI/Lives.cs" id="2_t60xm"]
 [ext_resource type="Script" path="res://Scenes/UI/PushStart.cs" id="3_3qr5w"]
-[ext_resource type="FontFile" uid="uid://pfyq1utd07y3" path="res://Fonts/Hyperspace Bold.otf" id="3_pgx7u"]
 [ext_resource type="AudioStream" uid="uid://djk4g0usm5oip" path="res://Audio/extraShip.wav" id="5_0wcbj"]
 
 [node name="UI" type="CanvasLayer"]
+script = ExtResource("1_e2oad")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Control" type="Control" parent="." groups=["Themeable"]]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_hihmr")
+theme = ExtResource("1_mrqha")
 
-[node name="Control" type="Control" parent="Panel"]
+[node name="Score" type="Label" parent="Control"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Score" type="Label" parent="Panel/Control"]
-layout_mode = 1
-offset_right = 150.0
+offset_left = 20.0
+offset_right = 170.0
 offset_bottom = 85.0
+theme_type_variation = &"PlayerScore"
 text = "00000"
-horizontal_alignment = 2
 script = ExtResource("1_fmhiy")
 
-[node name="Game Over" type="Label" parent="Panel/Control"]
+[node name="Game Over" type="Label" parent="Control"]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -48,19 +43,18 @@ offset_bottom = 57.5
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
-theme_override_fonts/font = ExtResource("3_pgx7u")
-theme_override_font_sizes/font_size = 60
+theme_type_variation = &"GameOverLabel"
 text = "GAME OVER"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Lives" type="Node2D" parent="Panel/Control"]
-position = Vector2(30, 92)
-scale = Vector2(0.5, 0.5)
+[node name="Lives" type="Node2D" parent="Control"]
+position = Vector2(40, 66)
+scale = Vector2(0.4, 0.4)
 script = ExtResource("2_t60xm")
 _extraLifeSound = ExtResource("5_0wcbj")
 
-[node name="Help" type="Label" parent="Panel/Control"]
+[node name="Help" type="Label" parent="Control"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -72,12 +66,12 @@ offset_bottom = 305.0
 grow_horizontal = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
-theme_override_font_sizes/font_size = 26
+theme_type_variation = &"HelpLabel"
 text = "Push H For Help"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Push Start" type="Label" parent="Panel/Control"]
+[node name="Push Start" type="Label" parent="Control"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -87,12 +81,12 @@ offset_top = 150.0
 offset_right = 160.5
 offset_bottom = 248.0
 grow_horizontal = 2
-theme_override_fonts/font = ExtResource("3_pgx7u")
-theme_override_font_sizes/font_size = 46
+theme_type_variation = &"StartLabel"
 text = "PUSH START"
+horizontal_alignment = 1
 script = ExtResource("3_3qr5w")
 
-[node name="High Score" type="Label" parent="Panel/Control"]
+[node name="High Score" type="Label" parent="Control"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -101,6 +95,6 @@ offset_left = -86.0
 offset_right = 86.0
 offset_bottom = 85.0
 grow_horizontal = 2
-theme_override_font_sizes/font_size = 26
+theme_type_variation = &"HighScore"
 text = "00000"
 horizontal_alignment = 1

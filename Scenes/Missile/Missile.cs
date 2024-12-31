@@ -18,7 +18,7 @@ public partial class Missile : Area2D
 
     public override void _Process(double delta)
     {
-        Position = Screen.Instance.ClampToViewport(Position);
+        Position = Screen.ClampToViewport(Position);
     }
 
     public override void _Ready()
@@ -27,7 +27,7 @@ public partial class Missile : Area2D
 
         if (GetParent() is Window)
         {
-            Position = Screen.Instance.Centre;
+            Position = Screen.Centre;
             Velocity = _testingLinearVelocity;
         }
     }

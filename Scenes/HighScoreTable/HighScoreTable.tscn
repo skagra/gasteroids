@@ -1,14 +1,22 @@
 [gd_scene load_steps=4 format=3 uid="uid://bb8s26xmfrcas"]
 
 [ext_resource type="Script" path="res://Scenes/HighScoreTable/HighScoreTable.cs" id="1_x13oe"]
-[ext_resource type="PackedScene" uid="uid://67by6r3h3g0e" path="res://Controls/FadingPanelContainer/FadingPanelContainer.tscn" id="2_dwe50"]
-[ext_resource type="Theme" uid="uid://cphlitqn3odss" path="res://Themes/ModernDialog.tres" id="3_028fx"]
+[ext_resource type="PackedScene" uid="uid://67by6r3h3g0e" path="res://Controls/FadingPanelContainer/FadingPanelContainer.tscn" id="2_2ivfu"]
+[ext_resource type="Theme" uid="uid://cphlitqn3odss" path="res://Themes/Modern.tres" id="3_028fx"]
 
 [node name="HighScoreTable" type="CanvasLayer"]
 visible = false
 script = ExtResource("1_x13oe")
 
-[node name="FadingPanelContainer" parent="." instance=ExtResource("2_dwe50")]
+[node name="FadingPanelContainer" parent="." groups=["Themeable"] instance=ExtResource("2_2ivfu")]
+anchors_preset = 5
+anchor_top = 0.0
+anchor_bottom = 0.0
+offset_left = -56.5
+offset_top = 300.0
+offset_right = 56.5
+offset_bottom = 373.0
+grow_vertical = 1
 theme = ExtResource("3_028fx")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="FadingPanelContainer"]

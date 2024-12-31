@@ -1,4 +1,5 @@
 using System;
+using System.Linq.Expressions;
 using Godot;
 
 namespace Asteroids;
@@ -52,6 +53,16 @@ public partial class PlayerController : Node
         set => _missileController.MissileSpeed = value;
     }
 
+    [Export]
+    public float ShakeTime { get; set; }
+
+    [Export]
+    public float LinearDampening
+    {
+        get => _player.LinearDamp;
+        set => _player.LinearDamp = value;
+    }
+
     public Vector2 PlayerPosition
     {
         get => _player.Position;
@@ -66,11 +77,20 @@ public partial class PlayerController : Node
     private Player _player;
     private MissileController _missileController;
     private AudioStreamPlayer2D _explosionPlayer = new();
+    private ShakingCamera _camera;
+    private Timer _shakeTimer = new Timer();
+
     private bool _fxEnabled = true;
 
     public override void _Ready()
     {
-        _explosionPlayer.Bus = Constants.AUDIO_BUS_NAME_FX;
+        _camera = (ShakingCamera)GetViewport().GetCamera2D();
+        _shakeTimer.OneShot = true;
+        _shakeTimer.Timeout += ShakeTimerOnTimeout;
+
+        AddChild(_shakeTimer);
+
+        _explosionPlayer.Bus = Resources.AUDIO_BUS_NAME_FX;
         _explosionPlayer.Stream = _explosionSound;
         AddChild(_explosionPlayer);
 
@@ -126,12 +146,20 @@ public partial class PlayerController : Node
         SpawnExplosion();
     }
 
+    private void ShakeTimerOnTimeout()
+    {
+        _camera.Deactivate();
+    }
+
     private void SpawnExplosion()
     {
         if (_fxEnabled)
         {
             _explosionPlayer.Play();
         }
+
+        _camera.Activate();
+        _shakeTimer.Start(ShakeTime);
 
         var playerExplosion = _explosion.Instantiate<Explosion>();
         playerExplosion.Name = "Player Explosion";
@@ -148,6 +176,8 @@ public partial class PlayerController : Node
     private void ExplosionOnExplosionCompleted(Explosion playerExplosion)
     {
         Logger.I.SignalReceived(this, playerExplosion, Explosion.SignalName.ExplosionCompleted);
+
+
 
         RemoveChild(playerExplosion);
         playerExplosion.QueueFree();
