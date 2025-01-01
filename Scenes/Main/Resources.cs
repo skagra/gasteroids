@@ -32,7 +32,7 @@ public partial class Resources : Node
     public static readonly PackedScene AsteroidType2Small = GD.Load<PackedScene>($"{_ASTEROID_SCENE_BASE}AsteroidType2Small.tscn");
     public static readonly PackedScene AsteroidType3Small = GD.Load<PackedScene>($"{_ASTEROID_SCENE_BASE}AsteroidType3Small.tscn");
 
-    public static readonly PackedScene LifeScene = GD.Load<PackedScene>("res://Scenes/UI/Life.tscn");
+    public static readonly PackedScene LifeScene = GD.Load<PackedScene>("res://Scenes/UI/LifeTextureRect.tscn");
 
     public static Panel _background;
     public override void _EnterTree()
@@ -42,7 +42,7 @@ public partial class Resources : Node
 
     public override void _Ready()
     {
-        _background = (Panel)GetNode("/root/Main/Background"); // TODO this is not great and generates error on first load
+        _background = (Panel)GetNode("/root/Main/Background");
     }
 
     public static void SwitchTheme(Themes theme)

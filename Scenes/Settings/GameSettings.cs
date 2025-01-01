@@ -81,8 +81,8 @@ public class GameSettings
     public float AsteroidsGravitationalConstant { get; set; }
 
     // Saucers
-    private static float SaucerSpawnFrequencyToMinTime(float frequency) => 60f / frequency; // TODO
-    private static float SaucerSpawnFrequencyToMaxTime(float frequency) => 1.5f * 60f / frequency; // TODO
+    private static float SaucerSpawnFrequencyToMinTime(float frequency) => 60f / frequency;
+    private static float SaucerSpawnFrequencyToMaxTime(float frequency) => 1.5f * 60f / frequency;
 
     // Large saucer
     public bool LargeSaucerEnabled { get; set; }

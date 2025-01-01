@@ -1,5 +1,4 @@
 using System;
-using System.Linq.Expressions;
 using Godot;
 
 namespace Asteroids;
@@ -109,6 +108,7 @@ public partial class PlayerController : Node
     {
         _fxEnabled = enable;
         _missileController.EnableFx(enable);
+        _player.EnableFx(enable);
     }
 
     public void Activate()

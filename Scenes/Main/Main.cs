@@ -53,7 +53,7 @@ public partial class Main : Node
     [Export]
     private int _startAsteroidsOnDemoScreen = 15;
     [Export]
-    private int _minAsteroidsOnDemoScreen = 10;
+    private int _minAsteroidsOnDemoScreen = 4;
 
     // Score table
     private readonly Dictionary<AsteroidSize, int> _asteroidScores = new();
@@ -73,10 +73,7 @@ public partial class Main : Node
     private Splash _splashScreen;
     private AnimationPlayer _gameOverAnimationPlayer;
     private Ui _ui;
-
-    // Timers
-    private Timer _endOfGameGracePeriodExpiredTimer;
-    private bool _endOfGameGracePeriodExpired = true;
+    private EnterHighScore _enterHighScore;
 
     // State
     private int _asteroidsCurrentInitialQuantity;
@@ -84,7 +81,7 @@ public partial class Main : Node
     private Vector2 _shipSpawnPosition;
 
     // Game state machine
-    private enum GameState { WaitingToPlay, AwaitingNewShip, Playing, ShowingConfigDialog, ShowingHelpDialog };
+    private enum GameState { WaitingToPlay, AwaitingNewShip, Playing, ShowingConfigDialog, ShowingHelpDialog, EnteringHighScore };
     private GameState _gameState;
 
     // Configurable settings
@@ -107,9 +104,6 @@ public partial class Main : Node
         // Scenes
         SetupSceneSignals();
 
-        // Timers
-        SetupTimers();
-
         // New ship spawn location
         _shipSpawnPosition = Screen.Centre;
 
@@ -120,7 +114,7 @@ public partial class Main : Node
 
         // Load and apply configuration
         _settingsBridge = new GameSettingsBridge(_playerController, _asteroidFieldController,
-                                          _largeSaucerController, _smallSaucerController);
+                                          _largeSaucerController, _smallSaucerController, _beats);
         _gameSettings = GameSettingsPersistence.Load(_SETTINGS_SAVE_PATH) ?? GameSettingsPresets.GetSettings(SettingsPresets.Normal);
         _settingsBridge.Apply(_gameSettings);
 
@@ -183,7 +177,7 @@ public partial class Main : Node
 
             // Create a new demo asteroid field if the current one has become too sparse
             // after a grace period
-            if (_asteroidFieldController.AsteroidCount < _minAsteroidsOnDemoScreen && _endOfGameGracePeriodExpired)
+            if (_asteroidFieldController.AsteroidCount < _minAsteroidsOnDemoScreen) // && _endOfGameGracePeriodExpired)
             {
                 CreateDemoScreen();
             }
@@ -233,6 +227,7 @@ public partial class Main : Node
         _splashScreen = (Splash)FindChild("Splash");
         _gameOverAnimationPlayer = (AnimationPlayer)FindChild("GameOverAnimationPlayer");
         _ui = (Ui)FindChild("UI");
+        _enterHighScore = (EnterHighScore)FindChild("EnterHighScore");
     }
 
     private void SetupSceneSignals()
@@ -264,20 +259,17 @@ public partial class Main : Node
 
         // Splash screen fade completed
         _splashScreen.SplashDone += SplashOnSplashDone;
-    }
 
-    private void SetupTimers()
-    {
-        _endOfGameGracePeriodExpiredTimer = new Timer();
-        _endOfGameGracePeriodExpiredTimer.OneShot = true;
-        _endOfGameGracePeriodExpiredTimer.Timeout += EndOfGameGracePeriodExpiredOnTimeout;
-        AddChild(_endOfGameGracePeriodExpiredTimer);
+        // High score name entered
+        _enterHighScore.NameEntered += HighScoreOnNameEntered;
     }
 
     private void CreateDemoScreen()
     {
         var demoSettings = GameSettingsPresets.GetSettings(SettingsPresets.Demo);
-        _settingsBridge.Apply(demoSettings, GameSettingsBridge.Fields.Theme);
+        _settingsBridge.Apply(demoSettings, GameSettingsBridge.Fields.Theme | GameSettingsBridge.Fields.Sound);
+        EnableNewSoundFx(false);
+
         if (demoSettings.LargeSaucerEnabled)
         {
             _largeSaucerController.Activate();
@@ -345,7 +337,7 @@ public partial class Main : Node
         }
 
         // Enable FX audio according to configuration
-        EnableSoundFx(_gameSettings.SoundEnabled);
+        EnableNewSoundFx(_gameSettings.SoundEnabled);
 
         // Start playing the beats sounds
         _beats.Reset();
@@ -357,19 +349,36 @@ public partial class Main : Node
 
     private void GameOver()
     {
-        _endOfGameGracePeriodExpired = false;
-        _endOfGameGracePeriodExpiredTimer.Start(5); // TODO
-
         _beats.Stop();
         ShowAndHide(ViewableElements.FadingOverlay);
-        _gameOverAnimationPlayer.Play("GameOver");
+        EnableNewSoundFx(false);
 
+        if (_highScoreTable.IsEligibleForInclusion(_ui.Score))
+        {
+            _ui.ShowGameOverLabel();
+            _enterHighScore.Show();
+            _gameState = GameState.EnteringHighScore;
+        }
+        else
+        {
+            _gameOverAnimationPlayer.Play("GameOver");
+            WaitingToPlay();
+        }
+    }
+
+    private void HighScoreOnNameEntered(string name)
+    {
+        _highScoreTable.AddScore(name, _ui.Score);
+        HighScorePersistence.Save(_highScoreTable.GetScores(), _HIGH_SCORE_SAVE_PATH);
+        _enterHighScore.Hide();
+        ShowAndHide(ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
+        _gameOverAnimationPlayer.Play("HighScore");
         WaitingToPlay();
     }
 
     private void EndOfGameGracePeriodExpiredOnTimeout()
     {
-        _endOfGameGracePeriodExpired = true;
+        // _endOfGameGracePeriodExpired = true;
     }
 
     // <-- Game state control
@@ -566,8 +575,6 @@ public partial class Main : Node
 
     private void ShowAndHide(ViewableElements flags, ViewableElements immediate = ViewableElements.None)
     {
-        GD.Print(flags);
-
         if ((flags & ViewableElements.SplashScreen) != 0)
         {
             _splashScreen.Show();
@@ -645,13 +652,9 @@ public partial class Main : Node
 
     // Audio -->
 
-    private void EnableSoundFx(bool enable)
+    private void EnableNewSoundFx(bool enable)
     {
-        _asteroidFieldController.EnableFx(enable);
-        _playerController.EnableFx(enable);
-        _smallSaucerController.EnableFx(enable);
-        _largeSaucerController.EnableFx(enable);
-        AudioServer.SetBusMute(AudioServer.GetBusIndex(Resources.AUDIO_BUS_NAME_FX), !enable);
+        GetTree().CallGroup("SoundFx", "EnableFx", enable);  // TODO Pull out names into constants
     }
 
     // <-- Audio

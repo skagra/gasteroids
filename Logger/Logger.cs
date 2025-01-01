@@ -8,7 +8,7 @@ public class Logger
 {
     private readonly List<ILogConsumer> _logConsumers = new();
 
-    public enum LogLevel { Error, Warning, Info, Debug };
+    public enum LogLevel { None, Debug, Info, Warning, Error };
 
     public LogLevel Level { get; set; }
 
@@ -21,7 +21,7 @@ public class Logger
 
     public bool LoggingAt(LogLevel level)
     {
-        return level >= Level;
+        return level >= Level && Level != LogLevel.None;
     }
 
     private void Log(LogLevel level, string template, params object[] args)

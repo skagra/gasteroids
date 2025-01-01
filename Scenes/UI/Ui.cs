@@ -5,7 +5,7 @@ namespace Asteroids;
 public partial class Ui : CanvasLayer
 {
     private Label _gameOverLabel;
-    private Label _startLabel;
+    private FlashingLabel _startLabel;
     private Label _helpLabel;
     private Score _score;
     private Lives _lives;
@@ -14,7 +14,7 @@ public partial class Ui : CanvasLayer
     public override void _Ready()
     {
         _gameOverLabel = (Label)FindChild("Game Over");
-        _startLabel = (Label)FindChild("Push Start");
+        _startLabel = (FlashingLabel)FindChild("Push Start");
         _helpLabel = (Label)FindChild("Help");
         _score = (Score)FindChild("Score");
         _lives = (Lives)FindChild("Lives");

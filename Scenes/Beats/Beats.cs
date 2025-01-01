@@ -24,11 +24,16 @@ public partial class Beats : Node
     private float _increaseSpeedTimer;
     private AudioStreamPlayer2D _beatsAudioStream = new();
     private int _currentSample = 1;
+    private bool _fxEnabled = true;
 
     public override void _Ready()
     {
         _beatsAudioStream.Bus = Resources.AUDIO_BUS_NAME_FX;
         AddChild(_beatsAudioStream);
+    }
+    public void EnableFx(bool enabled)
+    {
+        _fxEnabled = enabled;
     }
 
     private void PlaySample()
@@ -43,7 +48,10 @@ public partial class Beats : Node
             _beatsAudioStream.Stream = _beat1;
             _currentSample = 1;
         }
-        _beatsAudioStream.Play();
+        if (_fxEnabled)
+        {
+            _beatsAudioStream.Play();
+        }
     }
 
     public void Stop()

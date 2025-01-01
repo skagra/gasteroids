@@ -134,7 +134,6 @@ public partial class GameSettingsDialog : CanvasLayer
 
     private void ConfigurationSetOnItemSelected(long index)
     {
-        GD.Print(index);
         ActiveSettings = GameSettingsPresets.GetSettings((GameSettingsPresets.SettingsPresets)index);
         CopyActiveSettingsToDialogControls();
     }

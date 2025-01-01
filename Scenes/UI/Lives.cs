@@ -11,7 +11,8 @@ public partial class Lives : Node2D
     private PackedScene _lifeScene = Resources.LifeScene;
 
     private readonly AudioStreamPlayer2D _extraLifeSoundPlayer = new();
-    private readonly List<Sprite2D> _lives = new();
+
+    private readonly List<TextureRect> _lives = new();
 
     public override void _Ready()
     {
@@ -47,7 +48,7 @@ public partial class Lives : Node2D
             _extraLifeSoundPlayer.Play();
         }
 
-        var newLife = _lifeScene.Instantiate<Sprite2D>();
+        var newLife = _lifeScene.Instantiate<TextureRect>();
         var width = newLife.Texture.GetWidth() * newLife.Scale.X;
         newLife.SetPosition(new Vector2(_lives.Count * width, 0));
         _lives.Add(newLife);

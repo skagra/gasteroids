@@ -65,6 +65,13 @@ public partial class Player : RigidBody2D
         }
     }
 
+    private bool _fxEnabled = true;
+
+    public void EnableFx(bool enable)
+    {
+        _fxEnabled = enable;
+    }
+
     public void Activate()
     {
         Activate(Screen.Centre);
@@ -177,7 +184,7 @@ public partial class Player : RigidBody2D
 
     private void ThrustPressed()
     {
-        if (!_thrustAudioStream.Playing)
+        if (!_thrustAudioStream.Playing && _fxEnabled)
         {
             _thrustAudioStream.Play();
         }

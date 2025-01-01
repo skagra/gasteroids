@@ -49,6 +49,7 @@ project/assembly_name="GadotNet"
 [global_group]
 
 Themeable=""
+SoundFx=""
 
 [gui]
 

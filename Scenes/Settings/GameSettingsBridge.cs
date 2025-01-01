@@ -9,16 +9,19 @@ public class GameSettingsBridge
     private readonly AsteroidFieldController _asteroidFieldController;
     private readonly SaucerController _largeSaucerController;
     private readonly SaucerController _smallSaucerController;
+    private readonly Beats _beats;
 
     public GameSettingsBridge(PlayerController playerController,
                               AsteroidFieldController asteroidFieldController,
                               SaucerController largeSaucerController,
-                              SaucerController smallSaucerController)
+                              SaucerController smallSaucerController,
+                              Beats beats)
     {
         _playerController = playerController;
         _asteroidFieldController = asteroidFieldController;
         _largeSaucerController = largeSaucerController;
         _smallSaucerController = smallSaucerController;
+        _beats = beats;
     }
 
     [Flags]
@@ -39,12 +42,9 @@ public class GameSettingsBridge
 
         if ((ignoreFields & Fields.Sound) == 0)
         {
-            _asteroidFieldController.EnableFx(value.SoundEnabled);
-            _playerController.EnableFx(value.SoundEnabled);
-            _smallSaucerController.EnableFx(value.SoundEnabled);
-            _largeSaucerController.EnableFx(value.SoundEnabled);
-            AudioServer.SetBusMute(AudioServer.GetBusIndex(Resources.AUDIO_BUS_NAME_FX),
-                                   !value.SoundEnabled);
+            // TODO Pull out names into constants - or even into method?
+            // TODO Arbitrarily using _asteroidFieldController to get tree is not great
+            _asteroidFieldController.GetTree().CallGroup("SoundFx", "EnableFx", value.SoundEnabled);
         }
 
         _playerController.PlayerThrustForce = value.ShipAcceleration;

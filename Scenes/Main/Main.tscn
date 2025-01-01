@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://b6s1c2c0v0c81"]
+[gd_scene load_steps=22 format=3 uid="uid://b6s1c2c0v0c81"]
 
 [ext_resource type="Script" path="res://Scenes/Main/Main.cs" id="1_4mmwa"]
 [ext_resource type="PackedScene" uid="uid://nu2biysl40aq" path="res://Scenes/UI/UI.tscn" id="2_m8vvq"]
@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://bb8s26xmfrcas" path="res://Scenes/HighScoreTable/HighScoreTable.tscn" id="13_6i0d3"]
 [ext_resource type="PackedScene" uid="uid://bbl6psak4tgdr" path="res://Controls/ShakingCamera/ShakingCamera.tscn" id="15_pa42n"]
 [ext_resource type="PackedScene" uid="uid://gkqgdo51ear1" path="res://Scenes/Splash/Splash.tscn" id="15_ymclg"]
+[ext_resource type="PackedScene" uid="uid://b7vwd47dqthjj" path="res://Scenes/EnterHighScore/EnterHighScore.tscn" id="17_y8o8g"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_b8eb2"]
 texture = ExtResource("10_5m703")
@@ -86,9 +87,31 @@ tracks/3/keys = {
 }]
 }
 
+[sub_resource type="Animation" id="Animation_bsuu6"]
+resource_name = "HighScore"
+length = 10.0
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("HighScoreTable")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 10),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [false],
+"method": &"Show"
+}, {
+"args": [false],
+"method": &"Hide"
+}]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_dba5c"]
 _data = {
-"GameOver": SubResource("Animation_rlbl8")
+"GameOver": SubResource("Animation_rlbl8"),
+"HighScore": SubResource("Animation_bsuu6")
 }
 
 [node name="Main" type="Node" groups=["Player"]]
@@ -106,20 +129,20 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_b8eb2")
 
-[node name="PlayerController" parent="." instance=ExtResource("3_c81ab")]
+[node name="PlayerController" parent="." groups=["SoundFx"] instance=ExtResource("3_c81ab")]
 ShakeTime = 0.5
 
-[node name="AsteroidFieldController" parent="." instance=ExtResource("3_37sgv")]
+[node name="AsteroidFieldController" parent="." groups=["SoundFx"] instance=ExtResource("3_37sgv")]
 
 [node name="ExclusionZone" parent="." instance=ExtResource("6_wewr6")]
 
-[node name="LargeSaucerController" parent="." instance=ExtResource("7_bcee1")]
+[node name="LargeSaucerController" parent="." groups=["SoundFx"] instance=ExtResource("7_bcee1")]
 _saucerScene = ExtResource("7_yvgho")
 
-[node name="SmallSaucerController" parent="." instance=ExtResource("7_bcee1")]
+[node name="SmallSaucerController" parent="." groups=["SoundFx"] instance=ExtResource("7_bcee1")]
 _saucerScene = ExtResource("7_lqlai")
 
-[node name="Beats" parent="." instance=ExtResource("7_kqb4t")]
+[node name="Beats" parent="." groups=["SoundFx"] instance=ExtResource("7_kqb4t")]
 
 [node name="FadingOverlay" parent="." instance=ExtResource("10_raqju")]
 visible = false
@@ -161,3 +184,7 @@ MaxRotation = 0.01
 libraries = {
 "": SubResource("AnimationLibrary_dba5c")
 }
+
+[node name="EnterHighScore" parent="." instance=ExtResource("17_y8o8g")]
+offset = Vector2(0, 200)
+transform = Transform2D(1, 0, 0, 1, 0, 200)
