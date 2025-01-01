@@ -171,7 +171,20 @@ public partial class GameSettingsDialog : CanvasLayer
             PlayerMaxMissiles = (int)_playerMaxMissiles.Value,
             PlayerMissilesSpeed = (float)_playerMissilesSpeed.Value,
             PlayerMissilesLifespan = (float)_playerMissilesLifespan.Value,
-            // TODO and in next also
+
+            LargeSaucerEnabled = _largeSaucerEnabled.ButtonPressed,
+            LargeSaucerSpeed = (float)_largeSaucerSpeed.Value,
+            LargeSaucerSpawnFrequency = (float)_largeSaucerSpawnFrequency.Value,
+            LargeSaucerMaxMissiles = (int)_largeSaucerMaxMissiles.Value,
+            LargeSaucerMissilesSpeed = (float)_largeSaucerMissilesSpeed.Value,
+            LargeSaucerMissilesLifespan = (float)_largeSaucerMissilesLifespan.Value,
+
+            SmallSaucerEnabled = _smallSaucerEnabled.ButtonPressed,
+            SmallSaucerSpeed = (float)_smallSaucerSpeed.Value,
+            SmallSaucerSpawnFrequency = (float)_smallSaucerSpawnFrequency.Value,
+            SmallSaucerMaxMissiles = (int)_smallSaucerMaxMissiles.Value,
+            SmallSaucerMissilesSpeed = (float)_smallSaucerMissilesSpeed.Value,
+            SmallSaucerMissilesLifespan = (float)_smallSaucerMissilesLifespan.Value
         };
     }
 
@@ -204,6 +217,21 @@ public partial class GameSettingsDialog : CanvasLayer
         _playerMaxMissiles.Value = ActiveSettings.PlayerMaxMissiles;
         _playerMissilesSpeed.Value = ActiveSettings.PlayerMissilesSpeed;
         _playerMissilesLifespan.Value = ActiveSettings.PlayerMissilesLifespan;
+
+
+        _largeSaucerEnabled.ButtonPressed = ActiveSettings.LargeSaucerEnabled;
+        _largeSaucerSpeed.Value = ActiveSettings.LargeSaucerSpeed;
+        _largeSaucerSpawnFrequency.Value = ActiveSettings.LargeSaucerSpawnFrequency;
+        _largeSaucerMaxMissiles.Value = ActiveSettings.LargeSaucerMaxMissiles;
+        _largeSaucerMissilesSpeed.Value = ActiveSettings.LargeSaucerMissilesSpeed;
+        _largeSaucerMissilesLifespan.Value = ActiveSettings.LargeSaucerMissilesLifespan;
+
+        _smallSaucerEnabled.ButtonPressed = ActiveSettings.SmallSaucerEnabled;
+        _smallSaucerSpeed.Value = ActiveSettings.SmallSaucerSpeed;
+        _smallSaucerSpawnFrequency.Value = ActiveSettings.SmallSaucerSpawnFrequency;
+        _smallSaucerMaxMissiles.Value = ActiveSettings.SmallSaucerMaxMissiles;
+        _smallSaucerMissilesSpeed.Value = ActiveSettings.SmallSaucerMissilesSpeed;
+        _smallSaucerMissilesLifespan.Value = ActiveSettings.SmallSaucerMissilesLifespan;
     }
 
     // Show the settings dialog with currently active settings

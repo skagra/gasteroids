@@ -32,6 +32,24 @@ public partial class SaucerController : Node
         set => _saucer.Speed = value;
     }
 
+    public float MissileSpeed
+    {
+        get => _missileController.MissileSpeed;
+        set => _missileController.MissileSpeed = value;
+    }
+
+    public float MissileLifespan
+    {
+        get => _missileController.MissileDuration;
+        set => _missileController.MissileDuration = value;
+    }
+
+    public int MaxMissiles
+    {
+        get => _missileController.MissileCount;
+        set => _missileController.MissileCount = value;
+    }
+
     private Saucer _saucer;
 
     private MissileController _missileController;
@@ -77,7 +95,7 @@ public partial class SaucerController : Node
         _missileController.EnableFx(enable);
     }
 
-    public override void _Process(double delta)
+    public override void _PhysicsProcess(double delta)
     {
         if (IsActive)
         {

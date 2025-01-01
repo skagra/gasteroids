@@ -88,7 +88,8 @@ public partial class Main : Node
     private GameState _gameState;
 
     // Configurable settings
-    private GameSettingsBridge _settings;
+    private GameSettingsBridge _settingsBridge;
+    private GameSettings _gameSettings;
 
     public override void _EnterTree()
     {
@@ -118,10 +119,10 @@ public partial class Main : Node
         _exclusionZone.Position = _shipSpawnPosition;
 
         // Load and apply configuration
-        _settings = new GameSettingsBridge(_playerController, _asteroidFieldController,
+        _settingsBridge = new GameSettingsBridge(_playerController, _asteroidFieldController,
                                           _largeSaucerController, _smallSaucerController);
-        var settings = GameSettingsPersistence.Load(_SETTINGS_SAVE_PATH);
-        _settings.GameSettings = settings ?? GameSettingsPresets.GetSettings(SettingsPresets.Normal);
+        _gameSettings = GameSettingsPersistence.Load(_SETTINGS_SAVE_PATH) ?? GameSettingsPresets.GetSettings(SettingsPresets.Normal);
+        _settingsBridge.Apply(_gameSettings);
 
         // Load and apply high scores
         var highScores = HighScorePersistence.Load(_HIGH_SCORE_SAVE_PATH);
@@ -275,16 +276,19 @@ public partial class Main : Node
 
     private void CreateDemoScreen()
     {
-        EnableSoundFx(false);
+        var demoSettings = GameSettingsPresets.GetSettings(SettingsPresets.Demo);
+        _settingsBridge.Apply(demoSettings, GameSettingsBridge.Fields.Theme);
+        if (demoSettings.LargeSaucerEnabled)
+        {
+            _largeSaucerController.Activate();
+        }
 
-        _smallSaucerController.SpawnTimerMax = _smallSaucerStartMinSpawnTimer;
-        _smallSaucerController.SpawnTimerMin = _smallSaucerStartMaxSpawnTimer;
-        _largeSaucerController.SpawnTimerMax = _largeSaucerStartMinSpawnTimer;
-        _largeSaucerController.SpawnTimerMin = _largeSaucerStartMaxSpawnTimer;
+        if (demoSettings.SmallSaucerEnabled)
+        {
+            _smallSaucerController.Activate();
+        }
 
-        _largeSaucerController.Activate();
-
-        _asteroidFieldController.SpawnField(_startAsteroidsOnDemoScreen, new Rect2(), false);
+        _asteroidFieldController.SpawnField(demoSettings.AsteroidsInitialQuantity, new Rect2(), false);
     }
 
     // <-- Setup
@@ -299,17 +303,20 @@ public partial class Main : Node
 
     private void NewGame()
     {
+        // Apply the current configuration
+        _settingsBridge.Apply(_gameSettings);
+
         // Starting lives
-        _ui.Lives = _settings.PlayerStartingLives;
+        _ui.Lives = _gameSettings.PlayerStartingLives;
 
         // Reset score to 0
         _ui.Score = 0;
 
         // Threshold for first extra life
-        _extraLifeThresholdNext = _settings.PlayerExtraLifeScoreThreshold;
+        _extraLifeThresholdNext = _gameSettings.PlayerExtraLifeScoreThreshold;
 
         // Starting quantity of asteroids
-        _asteroidsCurrentInitialQuantity = _settings.AsteroidsInitialQuantity;
+        _asteroidsCurrentInitialQuantity = _gameSettings.AsteroidsInitialQuantity;
 
         // Don't need the exclusion zone as we are creating new asteroids
         _exclusionZoneCollisionShape.Disabled = true;
@@ -324,24 +331,21 @@ public partial class Main : Node
                      _safeZoneRadius * 2, _safeZoneRadius * 2),
            true);
 
-        // Set up saucers TODO - these will be pulled from config and current values will be increased per sheet
-        _largeSaucerController.SpawnTimerMax = _largeSaucerStartMinSpawnTimer;
-        _largeSaucerController.SpawnTimerMin = _largeSaucerStartMaxSpawnTimer;
+        // Saucers
         _largeSaucerController.Deactivate(true);
-        if (_settings.LargeSaucerEnabled)
+        if (_gameSettings.LargeSaucerEnabled)
         {
             _largeSaucerController.Activate();
         }
-        _smallSaucerController.SpawnTimerMax = _smallSaucerStartMinSpawnTimer;
-        _smallSaucerController.SpawnTimerMin = _smallSaucerStartMaxSpawnTimer;
+
         _smallSaucerController.Deactivate(true);
-        if (_settings.SmallSaucerEnabled)
+        if (_gameSettings.SmallSaucerEnabled)
         {
             _smallSaucerController.Activate();
         }
 
         // Enable FX audio according to configuration
-        EnableSoundFx(_settings.SoundEnabled);
+        EnableSoundFx(_gameSettings.SoundEnabled);
 
         // Start playing the beats sounds
         _beats.Reset();
@@ -404,10 +408,10 @@ public partial class Main : Node
     private void IncreaseScore(int increase)
     {
         _ui.Score += increase;
-        if (_ui.Score > _extraLifeThresholdNext && _ui.Lives < _settings.PlayerMaxLives)
+        if (_ui.Score > _extraLifeThresholdNext && _ui.Lives < _gameSettings.PlayerMaxLives)
         {
             _ui.AddLife();
-            _extraLifeThresholdNext += _settings.PlayerExtraLifeScoreThreshold;
+            _extraLifeThresholdNext += _gameSettings.PlayerExtraLifeScoreThreshold;
         }
     }
 
@@ -429,7 +433,7 @@ public partial class Main : Node
     {
         // Increment number of asteroids to spawn and keep it within permitted range
         _asteroidsCurrentInitialQuantity += _asteroidsNewSheetDelta;
-        _asteroidsCurrentInitialQuantity = Mathf.Min(_asteroidsCurrentInitialQuantity, _settings.AsteroidsMaxQuantity);
+        _asteroidsCurrentInitialQuantity = Mathf.Min(_asteroidsCurrentInitialQuantity, _gameSettings.AsteroidsMaxQuantity);
 
         // Increase the frequency at which saucers spawn
         _largeSaucerController.SpawnTimerMax = Mathf.Max(_largeSaucerController.SpawnTimerMax * _largeSaucerSpawnTimerDeltaProportion, _largeSaucerSpawnTimerFloor);
@@ -464,7 +468,7 @@ public partial class Main : Node
             _beats.Stop();
 
             // If we don't have infinite lives selected then decrement remaining lives
-            if (!_settings.PlayerInfiniteLives)
+            if (!_gameSettings.PlayerInfiniteLives)
             {
                 _ui.RemoveLife();
             }
@@ -499,7 +503,8 @@ public partial class Main : Node
     private void ShowConfigDialog()
     {
         _gameOverAnimationPlayer.Stop();
-        _settingsDialog.ActiveSettings = _settings.GameSettings;
+        _settingsDialog.ActiveSettings = _gameSettings;
+
         ShowAndHide(ViewableElements.SettingsDialog | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
 
         _gameState = GameState.ShowingConfigDialog;
@@ -508,7 +513,8 @@ public partial class Main : Node
     private void SettingsDialogOnOkPressed()
     {
         ShowAndHide(ViewableElements.StartLabel | ViewableElements.HelpLabel | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
-        _settings.GameSettings = _settingsDialog.ActiveSettings;
+        _gameSettings = new GameSettings(_settingsDialog.ActiveSettings); // TODO Or better dialog can give back a copy
+        _settingsBridge.Apply(_gameSettings, GameSettingsBridge.Fields.Sound);
         GameSettingsPersistence.Save(_settingsDialog.ActiveSettings, _SETTINGS_SAVE_PATH);
 
         _gameState = GameState.WaitingToPlay;

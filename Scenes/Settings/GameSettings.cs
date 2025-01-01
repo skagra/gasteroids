@@ -36,7 +36,7 @@ public class GameSettings
         LargeSaucerEnabled = configSettings.LargeSaucerEnabled;
         LargeSaucerSpeed = configSettings.LargeSaucerSpeed;
         LargeSaucerSpawnFrequency = configSettings.LargeSaucerSpawnFrequency;
-        LargeSaucerMaximumMissiles = configSettings.LargeSaucerMaximumMissiles;
+        LargeSaucerMaxMissiles = configSettings.LargeSaucerMaxMissiles;
         LargeSaucerMissilesSpeed = configSettings.LargeSaucerMissilesSpeed;
         LargeSaucerMissilesLifespan = configSettings.LargeSaucerMissilesLifespan;
 
@@ -80,17 +80,25 @@ public class GameSettings
     public bool AsteroidsGravityEnabled { get; set; }
     public float AsteroidsGravitationalConstant { get; set; }
 
+    // Saucers
+    private static float SaucerSpawnFrequencyToMinTime(float frequency) => 60f / frequency; // TODO
+    private static float SaucerSpawnFrequencyToMaxTime(float frequency) => 1.5f * 60f / frequency; // TODO
+
     // Large saucer
     public bool LargeSaucerEnabled { get; set; }
     public float LargeSaucerSpeed { get; set; }
+    public float LargeSaucerMinSpawnTime { get => SaucerSpawnFrequencyToMinTime(LargeSaucerSpawnFrequency); }
+    public float LargeSaucerMaxSpawnTime { get => SaucerSpawnFrequencyToMaxTime(LargeSaucerSpawnFrequency); }
     public float LargeSaucerSpawnFrequency { get; set; }
-    public int LargeSaucerMaximumMissiles { get; set; }
+    public int LargeSaucerMaxMissiles { get; set; }
     public float LargeSaucerMissilesSpeed { get; set; }
     public float LargeSaucerMissilesLifespan { get; set; }
 
     // Small saucer
     public bool SmallSaucerEnabled { get; set; }
     public float SmallSaucerSpeed { get; set; }
+    public float SmallSaucerMinSpawnTime { get => SaucerSpawnFrequencyToMinTime(SmallSaucerSpawnFrequency); }
+    public float SmallSaucerMaxSpawnTime { get => SaucerSpawnFrequencyToMaxTime(SmallSaucerSpawnFrequency); }
     public float SmallSaucerSpawnFrequency { get; set; }
     public int SmallSaucerMaxMissiles { get; set; }
     public float SmallSaucerMissilesSpeed { get; set; }
