@@ -1,0 +1,38 @@
+[gd_scene load_steps=3 format=3 uid="uid://b7vwd47dqthjj"]
+
+[ext_resource type="Theme" uid="uid://cphlitqn3odss" path="res://Themes/Modern.tres" id="1_cwwwj"]
+[ext_resource type="Script" path="res://Scenes/EnterHighScore/EnterHighScore.cs" id="1_lhc5o"]
+
+[node name="EnterHighScore" type="CanvasLayer"]
+script = ExtResource("1_lhc5o")
+
+[node name="PanelContainer" type="PanelContainer" parent="." groups=["Themeable"]]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -234.0
+offset_right = 234.0
+offset_bottom = 171.0
+grow_horizontal = 2
+theme = ExtResource("1_cwwwj")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+
+[node name="Gratz Label" type="Label" parent="PanelContainer/VBoxContainer" groups=["Themeable"]]
+layout_mode = 2
+theme_type_variation = &"DialogHeading"
+text = "You have achieved
+a high score"
+horizontal_alignment = 1
+
+[node name="Instructions Label" type="Label" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Please enter your name followed by [Return]"
+
+[node name="High Score" type="LineEdit" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+alignment = 1
+max_length = 10
+expand_to_text_length = true
