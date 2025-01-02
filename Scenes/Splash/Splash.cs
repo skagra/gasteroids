@@ -1,14 +1,25 @@
 using Godot;
 
+namespace Asteroids;
+
 public partial class Splash : CanvasLayer
 {
     [Signal]
     public delegate void SplashDoneEventHandler();
 
+    [Export]
+    private AudioStream _splashSound;
+
+    private AudioStreamPlayer2D _audioStreamPlayer = new();
+
     private AnimationPlayer _animationPlayer;
 
     public override void _Ready()
     {
+        _audioStreamPlayer.Bus = Resources.AUDIO_BUS_NAME_UI;
+        _audioStreamPlayer.Stream = _splashSound;
+        AddChild(_audioStreamPlayer);
+
         _animationPlayer = (AnimationPlayer)FindChild("AnimationPlayer");
         _animationPlayer.AnimationFinished += OnAnimationFinished;
     }
@@ -23,6 +34,7 @@ public partial class Splash : CanvasLayer
 
     public void Activate()
     {
+        _audioStreamPlayer.Play();
         _animationPlayer.Play("FadeOut");
     }
 }

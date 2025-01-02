@@ -99,10 +99,13 @@ public partial class PlayerController : Node
         _player.Collided += PlayerOnCollided;
         _player.Shoot += PlayerOnShoot;
 
+        _player.HyperspaceAccident += PlayerOnHyperspaceAccident;
+
         _missileController.Collided += MissileControllerOnCollided;
 
         _player.Deactivate();
     }
+
 
     public void EnableFx(bool enable)
     {
@@ -142,6 +145,12 @@ public partial class PlayerController : Node
     {
         Logger.I.SignalReceived(this, collidedWith, Area2D.SignalName.AreaEntered);
 
+        Deactivate();
+        SpawnExplosion();
+    }
+
+    private void PlayerOnHyperspaceAccident(Player player)
+    {
         Deactivate();
         SpawnExplosion();
     }

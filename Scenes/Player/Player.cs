@@ -19,6 +19,9 @@ public partial class Player : RigidBody2D
     [Signal]
     public delegate void CollidedEventHandler(Player player, Node collidedWith);
 
+    [Signal]
+    public delegate void HyperspaceAccidentEventHandler(Player player);
+
     [ExportCategory("General Settings")]
     [Export]
     public float ThrustForce { get; set; } = 300;
@@ -31,7 +34,6 @@ public partial class Player : RigidBody2D
     private Vector2 _spriteSize;
     private AudioStreamPlayer2D _thrustAudioStream;
 
-    //private float _savedLinearDamp;
     private bool _isActive = false;
     private bool _hasCollidedThisFrame = false;
 
@@ -52,8 +54,6 @@ public partial class Player : RigidBody2D
 
         // TODO Scaling
         _spriteSize = _sprite.SpriteFrames.GetFrameTexture(_sprite.Animation, _sprite.Frame).GetSize();
-
-        // _savedLinearDamp = LinearDamp;
 
         if (GetParent() is not Window)
         {
@@ -160,21 +160,25 @@ public partial class Player : RigidBody2D
         Position = Screen.ClampToViewport(Position);
     }
 
+    // Current position + long dimension of spite in the direction of its rotation
+    // https://steamcommunity.com/app/400020/discussions/0/3855581634402220944/
+    //  It looks like the exact odds are: choose a random even number from 0-62, explode if 
+    // random_number >= number_of_asteroids + 44. 
+    // So, looks like hyperspace should never randomly explode if there are at least 19 asteroids on the screen. 
+    // Anything less, and there's a chance. But that's just eyeballing the code
+    private int _CONST_HYPERSPACE_ACCIDENT_THRESHOLD = 2;
     private void HyperspacePressed()
     {
-        // TODO Chance to explode!
         Position = new Vector2((float)GD.RandRange(Screen.Left, Screen.Right),
                                (float)GD.RandRange(Screen.Top, Screen.Bottom));
+        if (GD.Randi() % _CONST_HYPERSPACE_ACCIDENT_THRESHOLD == 0)
+        {
+            EmitSignal(SignalName.HyperspaceAccident, this);
+        }
     }
 
     private void FirePressed()
     {
-        // Current position + long dimension of spite in the direction of its rotation
-        // https://steamcommunity.com/app/400020/discussions/0/3855581634402220944/
-        //  It looks like the exact odds are: choose a random even number from 0-62, explode if 
-        // random_number >= number_of_asteroids + 44. 
-        // So, looks like hyperspace should never randomly explode if there are at least 19 asteroids on the screen. 
-        // Anything less, and there's a chance. But that's just eyeballing the code.
         var position = Position + ((_spriteSize.X / 2.0f) * Vector2.Right.Rotated(_area2D.Rotation));
 
         Logger.I.SignalSent(this, SignalName.Shoot, position, LinearVelocity, _area2D.Rotation);

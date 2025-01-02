@@ -49,8 +49,9 @@ public partial class Lives : Node2D
         }
 
         var newLife = _lifeScene.Instantiate<TextureRect>();
-        var width = newLife.Texture.GetWidth() * newLife.Scale.X;
-        newLife.SetPosition(new Vector2(_lives.Count * width, 0));
+        // Y sizes are used for width because the image is rotated 270 degrees
+        var width = newLife.Size.Y * newLife.Scale.Y;
+        newLife.SetPosition(new Vector2(_lives.Count * width - 1, 0));
         _lives.Add(newLife);
         AddChild(newLife);
     }

@@ -1,15 +1,25 @@
-using System;
 using Godot;
+
+namespace Asteroids;
 
 public partial class EnterHighScore : CanvasLayer
 {
     [Signal]
     public delegate void NameEnteredEventHandler(string name);
 
+    [Export]
+    private AudioStream _errorBeep;
+
+    private AudioStreamPlayer2D _audioStreamPlayer = new();
+
     private LineEdit _highScore;
 
     public override void _Ready()
     {
+        _audioStreamPlayer.Bus = Resources.AUDIO_BUS_NAME_UI;
+        _audioStreamPlayer.Stream = _errorBeep;
+        AddChild(_audioStreamPlayer);
+
         _highScore = (LineEdit)FindChild("High Score");
         _highScore.TextChangeRejected += OnTextChangeRejected;
         _highScore.TextSubmitted += OnTextSubmitted;
@@ -36,14 +46,14 @@ public partial class EnterHighScore : CanvasLayer
         }
         else
         {
-            GD.Print("Beeeep!");
+            _audioStreamPlayer?.Play();
         }
     }
 
 
     private void OnTextChangeRejected(string rejectedSubstring)
     {
-        GD.Print("BEEEEEEP!");
+        _audioStreamPlayer?.Play();
     }
 
 }

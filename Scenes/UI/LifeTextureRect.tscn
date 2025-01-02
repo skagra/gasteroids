@@ -19,6 +19,6 @@ offset_bottom = 33.0
 grow_horizontal = 2
 grow_vertical = 2
 rotation = 4.71239
-scale = Vector2(0.75, 0.75)
+scale = Vector2(0.4, 0.4)
 texture = SubResource("AtlasTexture_hs5nt")
 stretch_mode = 4
