@@ -186,8 +186,6 @@ public partial class PlayerController : Node
     {
         Logger.I.SignalReceived(this, playerExplosion, Explosion.SignalName.ExplosionCompleted);
 
-
-
         RemoveChild(playerExplosion);
         playerExplosion.QueueFree();
 
