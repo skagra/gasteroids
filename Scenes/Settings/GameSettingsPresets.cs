@@ -23,39 +23,39 @@ public static class GameSettingsPresets
         SoundEnabled = true,
 
         PlayerInfiniteLives = false,
-        PlayerStartingLives = 1,
+        PlayerStartingLives = 3,
         PlayerMaxLives = 6,
         PlayerExtraLifeScoreThreshold = 10000,
 
-        ShipAcceleration = 300f,
-        ShipTurnSpeed = 5f,
-        ShipLinearDampening = 2f,
+        ShipAcceleration = 550f,
+        ShipTurnSpeed = 5.5f,
+        ShipLinearDampening = 0.9f,
 
         PlayerMaxMissiles = 8,
-        PlayerMissilesSpeed = 200,
-        PlayerMissilesLifespan = 1.5f,
+        PlayerMissilesSpeed = 550,
+        PlayerMissilesLifespan = 2f,
 
-        AsteroidsRotationEnabled = true,
+        AsteroidsRotationEnabled = false,
         AsteroidsInitialQuantity = 4,
         AsteroidsMaxQuantity = 20,
-        AsteroidsMinSpeed = 100,
-        AsteroidsMaxSpeed = 150,
-        AsteroidsGravityEnabled = true,
-        AsteroidsGravitationalConstant = 1500,
+        AsteroidsMinSpeed = 200,
+        AsteroidsMaxSpeed = 400,
+        AsteroidsGravityEnabled = false,
+        AsteroidsGravitationalConstant = 1200,
 
         LargeSaucerEnabled = true,
-        LargeSaucerSpeed = 100,
-        LargeSaucerSpawnFrequency = 20,
+        LargeSaucerSpeed = 330,
+        LargeSaucerSpawnFrequency = 5f,
         LargeSaucerMaxMissiles = 6,
-        LargeSaucerMissilesSpeed = 100,
-        LargeSaucerMissilesLifespan = 5,
+        LargeSaucerMissilesSpeed = 450,
+        LargeSaucerMissilesLifespan = 1.8f,
 
         SmallSaucerEnabled = true,
-        SmallSaucerSpeed = 150,
-        SmallSaucerSpawnFrequency = 10,
+        SmallSaucerSpeed = 400,
+        SmallSaucerSpawnFrequency = 1.5f,
         SmallSaucerMaxMissiles = 6,
-        SmallSaucerMissilesSpeed = 100,
-        SmallSaucerMissilesLifespan = 5
+        SmallSaucerMissilesSpeed = 450,
+        SmallSaucerMissilesLifespan = 2f
     };
 
     private static readonly GameSettings EasyGameSettings = new()
@@ -67,39 +67,39 @@ public static class GameSettingsPresets
         SoundEnabled = true,
 
         PlayerInfiniteLives = false,
-        PlayerStartingLives = 2,
+        PlayerStartingLives = 3,
         PlayerMaxLives = 6,
-        PlayerExtraLifeScoreThreshold = 10000,
+        PlayerExtraLifeScoreThreshold = 1000,
 
-        ShipAcceleration = 300f,
-        ShipTurnSpeed = 5f,
-        ShipLinearDampening = 2f,
+        ShipAcceleration = 400f,
+        ShipTurnSpeed = 4f,
+        ShipLinearDampening = 1.5f,
 
         PlayerMaxMissiles = 8,
-        PlayerMissilesSpeed = 200,
-        PlayerMissilesLifespan = 1.5f,
+        PlayerMissilesSpeed = 550,
+        PlayerMissilesLifespan = 2f,
 
         AsteroidsRotationEnabled = true,
         AsteroidsInitialQuantity = 4,
-        AsteroidsMaxQuantity = 20,
+        AsteroidsMaxQuantity = 10,
         AsteroidsMinSpeed = 100,
-        AsteroidsMaxSpeed = 150,
-        AsteroidsGravityEnabled = true,
-        AsteroidsGravitationalConstant = 1500,
+        AsteroidsMaxSpeed = 250,
+        AsteroidsGravityEnabled = false,
+        AsteroidsGravitationalConstant = 1200,
 
         LargeSaucerEnabled = true,
-        LargeSaucerSpeed = 100,
-        LargeSaucerSpawnFrequency = 20,
-        LargeSaucerMaxMissiles = 6,
-        LargeSaucerMissilesSpeed = 100,
-        LargeSaucerMissilesLifespan = 5,
+        LargeSaucerSpeed = 200,
+        LargeSaucerSpawnFrequency = 3f,
+        LargeSaucerMaxMissiles = 4,
+        LargeSaucerMissilesSpeed = 200,
+        LargeSaucerMissilesLifespan = 1f,
 
         SmallSaucerEnabled = true,
-        SmallSaucerSpeed = 150,
-        SmallSaucerSpawnFrequency = 10,
-        SmallSaucerMaxMissiles = 6,
-        SmallSaucerMissilesSpeed = 100,
-        SmallSaucerMissilesLifespan = 5
+        SmallSaucerSpeed = 300,
+        SmallSaucerSpawnFrequency = 1f,
+        SmallSaucerMaxMissiles = 4,
+        SmallSaucerMissilesSpeed = 300,
+        SmallSaucerMissilesLifespan = 1.5f
     };
 
     private static readonly GameSettings NormalGameSettings = new()
@@ -115,35 +115,35 @@ public static class GameSettingsPresets
         PlayerMaxLives = 6,
         PlayerExtraLifeScoreThreshold = 10000,
 
-        ShipAcceleration = 300f,
-        ShipTurnSpeed = 5f,
-        ShipLinearDampening = 2f,
+        ShipAcceleration = 550f,
+        ShipTurnSpeed = 5.5f,
+        ShipLinearDampening = 0.9f,
 
         PlayerMaxMissiles = 8,
-        PlayerMissilesSpeed = 200,
-        PlayerMissilesLifespan = 1.5f,
+        PlayerMissilesSpeed = 550,
+        PlayerMissilesLifespan = 2f,
 
         AsteroidsRotationEnabled = true,
         AsteroidsInitialQuantity = 4,
         AsteroidsMaxQuantity = 20,
-        AsteroidsMinSpeed = 100,
-        AsteroidsMaxSpeed = 150,
+        AsteroidsMinSpeed = 200,
+        AsteroidsMaxSpeed = 400,
         AsteroidsGravityEnabled = true,
-        AsteroidsGravitationalConstant = 1500,
+        AsteroidsGravitationalConstant = 1200,
 
         LargeSaucerEnabled = true,
-        LargeSaucerSpeed = 100,
-        LargeSaucerSpawnFrequency = 20,
+        LargeSaucerSpeed = 330,
+        LargeSaucerSpawnFrequency = 5f,
         LargeSaucerMaxMissiles = 6,
-        LargeSaucerMissilesSpeed = 100,
-        LargeSaucerMissilesLifespan = 5,
+        LargeSaucerMissilesSpeed = 450,
+        LargeSaucerMissilesLifespan = 1.8f,
 
         SmallSaucerEnabled = true,
-        SmallSaucerSpeed = 150,
-        SmallSaucerSpawnFrequency = 10,
+        SmallSaucerSpeed = 400,
+        SmallSaucerSpawnFrequency = 1.5f,
         SmallSaucerMaxMissiles = 6,
-        SmallSaucerMissilesSpeed = 100,
-        SmallSaucerMissilesLifespan = 5
+        SmallSaucerMissilesSpeed = 450,
+        SmallSaucerMissilesLifespan = 2f
     };
 
     private static readonly GameSettings HardGameSettings = new()
@@ -155,39 +155,39 @@ public static class GameSettingsPresets
         SoundEnabled = true,
 
         PlayerInfiniteLives = false,
-        PlayerStartingLives = 4,
+        PlayerStartingLives = 3,
         PlayerMaxLives = 6,
         PlayerExtraLifeScoreThreshold = 10000,
 
-        ShipAcceleration = 300f,
-        ShipTurnSpeed = 5f,
-        ShipLinearDampening = 2f,
+        ShipAcceleration = 700f,
+        ShipTurnSpeed = 7f,
+        ShipLinearDampening = 0.5f,
 
         PlayerMaxMissiles = 8,
-        PlayerMissilesSpeed = 200,
-        PlayerMissilesLifespan = 1.5f,
+        PlayerMissilesSpeed = 550,
+        PlayerMissilesLifespan = 2f,
 
         AsteroidsRotationEnabled = true,
-        AsteroidsInitialQuantity = 4,
+        AsteroidsInitialQuantity = 6,
         AsteroidsMaxQuantity = 20,
-        AsteroidsMinSpeed = 100,
-        AsteroidsMaxSpeed = 150,
+        AsteroidsMinSpeed = 300,
+        AsteroidsMaxSpeed = 500,
         AsteroidsGravityEnabled = true,
         AsteroidsGravitationalConstant = 1500,
 
         LargeSaucerEnabled = true,
-        LargeSaucerSpeed = 100,
-        LargeSaucerSpawnFrequency = 20,
-        LargeSaucerMaxMissiles = 6,
-        LargeSaucerMissilesSpeed = 100,
-        LargeSaucerMissilesLifespan = 5,
+        LargeSaucerSpeed = 450,
+        LargeSaucerSpawnFrequency = 7f,
+        LargeSaucerMaxMissiles = 8,
+        LargeSaucerMissilesSpeed = 600,
+        LargeSaucerMissilesLifespan = 2f,
 
         SmallSaucerEnabled = true,
-        SmallSaucerSpeed = 150,
-        SmallSaucerSpawnFrequency = 10,
-        SmallSaucerMaxMissiles = 6,
-        SmallSaucerMissilesSpeed = 100,
-        SmallSaucerMissilesLifespan = 5
+        SmallSaucerSpeed = 550,
+        SmallSaucerSpawnFrequency = 5f,
+        SmallSaucerMaxMissiles = 8,
+        SmallSaucerMissilesSpeed = 700,
+        SmallSaucerMissilesLifespan = 2f
     };
 
     private static readonly GameSettings CrazyGameSettings = new()
@@ -199,39 +199,39 @@ public static class GameSettingsPresets
         SoundEnabled = true,
 
         PlayerInfiniteLives = false,
-        PlayerStartingLives = 5,
+        PlayerStartingLives = 3,
         PlayerMaxLives = 6,
         PlayerExtraLifeScoreThreshold = 10000,
 
-        ShipAcceleration = 300f,
-        ShipTurnSpeed = 5f,
-        ShipLinearDampening = 2f,
+        ShipAcceleration = 900,
+        ShipTurnSpeed = 8f,
+        ShipLinearDampening = 0.2f,
 
         PlayerMaxMissiles = 8,
-        PlayerMissilesSpeed = 200,
-        PlayerMissilesLifespan = 1.5f,
+        PlayerMissilesSpeed = 550,
+        PlayerMissilesLifespan = 2f,
 
         AsteroidsRotationEnabled = true,
-        AsteroidsInitialQuantity = 4,
+        AsteroidsInitialQuantity = 6,
         AsteroidsMaxQuantity = 20,
-        AsteroidsMinSpeed = 100,
-        AsteroidsMaxSpeed = 150,
+        AsteroidsMinSpeed = 400,
+        AsteroidsMaxSpeed = 650,
         AsteroidsGravityEnabled = true,
-        AsteroidsGravitationalConstant = 1500,
+        AsteroidsGravitationalConstant = 2500,
 
         LargeSaucerEnabled = true,
-        LargeSaucerSpeed = 100,
-        LargeSaucerSpawnFrequency = 20,
-        LargeSaucerMaxMissiles = 6,
-        LargeSaucerMissilesSpeed = 100,
-        LargeSaucerMissilesLifespan = 5,
+        LargeSaucerSpeed = 600,
+        LargeSaucerSpawnFrequency = 8f,
+        LargeSaucerMaxMissiles = 8,
+        LargeSaucerMissilesSpeed = 700,
+        LargeSaucerMissilesLifespan = 2f,
 
         SmallSaucerEnabled = true,
-        SmallSaucerSpeed = 150,
-        SmallSaucerSpawnFrequency = 10,
-        SmallSaucerMaxMissiles = 6,
-        SmallSaucerMissilesSpeed = 100,
-        SmallSaucerMissilesLifespan = 5
+        SmallSaucerSpeed = 750,
+        SmallSaucerSpawnFrequency = 6f,
+        SmallSaucerMaxMissiles = 8,
+        SmallSaucerMissilesSpeed = 800,
+        SmallSaucerMissilesLifespan = 2f
     };
 
     private static readonly GameSettings DemoGameSettings = new()
@@ -243,39 +243,39 @@ public static class GameSettingsPresets
         SoundEnabled = false,
 
         PlayerInfiniteLives = false,
-        PlayerStartingLives = 1,
+        PlayerStartingLives = 3,
         PlayerMaxLives = 6,
         PlayerExtraLifeScoreThreshold = 10000,
 
-        ShipAcceleration = 300f,
-        ShipTurnSpeed = 5f,
-        ShipLinearDampening = 2f,
+        ShipAcceleration = 550f,
+        ShipTurnSpeed = 5.5f,
+        ShipLinearDampening = 0.9f,
 
         PlayerMaxMissiles = 8,
-        PlayerMissilesSpeed = 200,
-        PlayerMissilesLifespan = 1.5f,
+        PlayerMissilesSpeed = 550,
+        PlayerMissilesLifespan = 2f,
 
         AsteroidsRotationEnabled = true,
         AsteroidsInitialQuantity = 10,
         AsteroidsMaxQuantity = 20,
-        AsteroidsMinSpeed = 150,
-        AsteroidsMaxSpeed = 250,
+        AsteroidsMinSpeed = 100,
+        AsteroidsMaxSpeed = 400,
         AsteroidsGravityEnabled = true,
-        AsteroidsGravitationalConstant = 1500,
+        AsteroidsGravitationalConstant = 1200,
 
         LargeSaucerEnabled = true,
-        LargeSaucerSpeed = 300,
-        LargeSaucerSpawnFrequency = 10,
+        LargeSaucerSpeed = 330,
+        LargeSaucerSpawnFrequency = 7f,
         LargeSaucerMaxMissiles = 6,
-        LargeSaucerMissilesSpeed = 300,
-        LargeSaucerMissilesLifespan = 3,
+        LargeSaucerMissilesSpeed = 450,
+        LargeSaucerMissilesLifespan = 1.8f,
 
         SmallSaucerEnabled = true,
-        SmallSaucerSpeed = 500,
-        SmallSaucerSpawnFrequency = 5,
+        SmallSaucerSpeed = 400,
+        SmallSaucerSpawnFrequency = 4f,
         SmallSaucerMaxMissiles = 6,
-        SmallSaucerMissilesSpeed = 400,
-        SmallSaucerMissilesLifespan = 3
+        SmallSaucerMissilesSpeed = 450,
+        SmallSaucerMissilesLifespan = 2f
     };
 
     private static readonly Dictionary<SettingsPresets, GameSettings> _presets = new()

@@ -16,7 +16,7 @@ public partial class Splash : CanvasLayer
 
     public override void _Ready()
     {
-        _audioStreamPlayer.Bus = Resources.AUDIO_BUS_NAME_UI;
+        _audioStreamPlayer.Bus = Resources.AUDIO_BUS_NAME_FX;
         _audioStreamPlayer.Stream = _splashSound;
         AddChild(_audioStreamPlayer);
 

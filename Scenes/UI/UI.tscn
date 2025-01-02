@@ -92,5 +92,6 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Lives" type="Node2D" parent="Control"]
+position = Vector2(25, 71)
 script = ExtResource("2_t60xm")
 _extraLifeSound = ExtResource("5_0wcbj")
