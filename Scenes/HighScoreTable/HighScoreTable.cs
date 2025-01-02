@@ -7,7 +7,7 @@ namespace Asteroids;
 public partial class HighScoreTable : CanvasLayer
 {
     private const int _MAX_SCORES = 10;
-    private const string _DEFAULT_NAME = "---";
+    private const string _DEFAULT_NAME = "----------";
 
     private readonly List<ScoreDetails> _scoreDetails = new();
 
