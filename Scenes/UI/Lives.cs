@@ -54,7 +54,6 @@ public partial class Lives : Node2D
         newLife.SetPosition(new Vector2(_lives.Count * width - 1, 0));
         _lives.Add(newLife);
         AddChild(newLife);
-        GD.Print("Added child");
     }
 
     public void RemoveLife()
