@@ -14,14 +14,18 @@ public static class HighScorePersistence
     {
         List<ScoreDetails> result = null;
 
-        try
+        var globalizedPath = ProjectSettings.GlobalizePath(userPath);
+        if (File.Exists(globalizedPath))
         {
-            var jsonString = File.ReadAllText(ProjectSettings.GlobalizePath(userPath));
-            result = JsonSerializer.Deserialize<List<ScoreDetails>>(jsonString);
-        }
-        catch (Exception e)
-        {
-            Logger.I.Error("Failed to load save file '{0}'", e.ToString());
+            try
+            {
+                var jsonString = File.ReadAllText(globalizedPath);
+                result = JsonSerializer.Deserialize<List<ScoreDetails>>(jsonString);
+            }
+            catch (Exception e)
+            {
+                Logger.I.Error("Failed to load save file '{0}'", e.ToString());
+            }
         }
 
         return result;

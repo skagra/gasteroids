@@ -9,7 +9,7 @@ public partial class Ui : CanvasLayer
     private Label _helpLabel;
     private Score _score;
     private Lives _lives;
-    private Label _highScore;
+    private HighScore _highScore;
 
     public override void _Ready()
     {
@@ -18,7 +18,7 @@ public partial class Ui : CanvasLayer
         _helpLabel = (Label)FindChild("Help");
         _score = (Score)FindChild("Score");
         _lives = (Lives)FindChild("Lives");
-        _highScore = (Label)FindChild("High Score");
+        _highScore = (HighScore)FindChild("High Score");
     }
 
     public void ShowGameOverLabel()
@@ -75,7 +75,7 @@ public partial class Ui : CanvasLayer
 
     public int HighScore
     {
-        get => int.Parse(_highScore.Text);
-        set => _highScore.Text = value.ToString();
+        get => _highScore.Value;
+        set => _highScore.Value = value;
     }
 }

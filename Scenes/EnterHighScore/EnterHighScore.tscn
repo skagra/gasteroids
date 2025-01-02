@@ -36,5 +36,5 @@ text = "Please enter your name followed by [Return]"
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 alignment = 1
-max_length = 10
+max_length = 14
 expand_to_text_length = true

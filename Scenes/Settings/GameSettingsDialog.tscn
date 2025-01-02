@@ -54,7 +54,10 @@ columns = 2
 [node name="Configuration Set Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Precanned Container"]
 layout_mode = 2
 size_flags_horizontal = 3
-tooltip_text = "Enable or disable background image"
+tooltip_text = "Select an overall configuration set.
+
+These  are pre-canned difficulty-based
+configurations and will adjust all settings."
 mouse_filter = 0
 text = "Configuration Set
 "
@@ -88,7 +91,9 @@ columns = 2
 [node name="Theme Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Theme Container"]
 layout_mode = 2
 size_flags_horizontal = 3
-tooltip_text = "Enable or disable background image"
+tooltip_text = "Select a user inferface theme, either
+a modern look or one which reflects
+the original arcade game."
 mouse_filter = 0
 text = "Theme
 "
@@ -116,7 +121,7 @@ columns = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-tooltip_text = "Enable or disable sound effects"
+tooltip_text = "Enable or disable sound effects."
 mouse_filter = 0
 text = "Sound Enabled"
 
@@ -137,7 +142,7 @@ columns = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-tooltip_text = "Enable or disable sound effects"
+tooltip_text = "Select infinite ships to never lose a life!"
 mouse_filter = 0
 text = "Infinite Ships"
 
@@ -150,7 +155,7 @@ button_pressed = true
 layout_mode = 2
 size_flags_horizontal = 2
 tooltip_text = "The number of ships at the
-beginning of a new game"
+beginning of a new game."
 mouse_filter = 0
 text = "Starting Ships"
 
@@ -165,7 +170,7 @@ value = 3.0
 layout_mode = 2
 size_flags_horizontal = 2
 tooltip_text = "The maximum number of ships that
-may be earned"
+may be earned."
 mouse_filter = 0
 text = "Maximum Ships"
 
@@ -179,8 +184,8 @@ value = 3.0
 [node name="Player Extra Life Score Threshold Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Ship Category Container"]
 layout_mode = 2
 size_flags_horizontal = 2
-tooltip_text = "An extra ship is earned every time
-this threshold is passed"
+tooltip_text = "The score threshold at which new
+ships are earned."
 mouse_filter = 0
 text = "Extra Ship Score Threshold"
 
@@ -195,7 +200,7 @@ value = 10000.0
 [node name="Ship Acceleration Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Ship Category Container"]
 layout_mode = 2
 size_flags_horizontal = 2
-tooltip_text = "How quickly your ship accelerates"
+tooltip_text = "How quickly your ship accelerates."
 mouse_filter = 0
 text = "Acceleration"
 
@@ -210,7 +215,7 @@ value = 300.0
 [node name="Ship Turn Speed Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Ship Category Container"]
 layout_mode = 2
 size_flags_horizontal = 2
-tooltip_text = "How quickly your ship turns"
+tooltip_text = "How quickly your ship turns."
 mouse_filter = 0
 text = "Turn Speed"
 
@@ -226,6 +231,8 @@ value = 5.0
 [node name="Ship Linear Dampening Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Ship Category Container"]
 layout_mode = 2
 size_flags_horizontal = 2
+tooltip_text = "How quickly your ships slows when
+not thrusting."
 mouse_filter = 0
 text = "Linear Dampening"
 
@@ -249,10 +256,10 @@ columns = 2
 [node name="Player Max Missiles Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Player Missiles Category Container"]
 layout_mode = 2
 size_flags_horizontal = 2
-tooltip_text = "Maximum number of missiles on 
-the screen at once"
+tooltip_text = "Maximum number of player missiles 
+on the screen at once."
 mouse_filter = 0
-text = "Maximum Quantity"
+text = "Maximum"
 
 [node name="Player Max Missiles" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Player Missiles Category Container" instance=ExtResource("3_k6nax")]
 layout_mode = 2
@@ -264,7 +271,7 @@ value = 8.0
 [node name="Player Missiles Speed Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Player Missiles Category Container"]
 layout_mode = 2
 size_flags_horizontal = 2
-tooltip_text = "Missile speed, relative to ship velocity"
+tooltip_text = "Player missile speed, relative to ship velocity."
 mouse_filter = 0
 text = "Speed"
 
@@ -280,7 +287,7 @@ value = 250.0
 [node name="Player Missiles Lifespan Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Player Missiles Category Container"]
 layout_mode = 2
 size_flags_horizontal = 2
-tooltip_text = "Lifespan of a missile"
+tooltip_text = "Lifespan of player missiles."
 mouse_filter = 0
 text = "Lifespan"
 
@@ -319,7 +326,7 @@ button_pressed = true
 [node name="Asteroids Initial Quantity Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Asteroids Category Container"]
 layout_mode = 2
 tooltip_text = "The number of asteroids at the 
-beginning of a new game"
+beginning of a new game."
 mouse_filter = 0
 text = "Starting Quantity"
 
@@ -346,7 +353,7 @@ value = 4.0
 
 [node name="Asteroids Min Speed Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Asteroids Category Container"]
 layout_mode = 2
-tooltip_text = "The minimum speed at which asteroids may travel"
+tooltip_text = "The minimum speed at which asteroids travel."
 mouse_filter = 0
 text = "Minimum Speed"
 
@@ -361,7 +368,7 @@ value = 100.0
 
 [node name="Asteroids Max Speed Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Asteroids Category Container"]
 layout_mode = 2
-tooltip_text = "The maximum speed at which asteroids may travel"
+tooltip_text = "The maximum speed at which asteroids travel."
 mouse_filter = 0
 text = "Maximum Speed"
 
@@ -375,7 +382,7 @@ value = 150.0
 
 [node name="Asteroids Gravity Enabled Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Asteroids Category Container"]
 layout_mode = 2
-tooltip_text = "Enable or disable gravitational pull of asteroids"
+tooltip_text = "Enable or disable gravitational pull of asteroids."
 mouse_filter = 0
 text = "Gravity Enabled
 "
@@ -410,6 +417,7 @@ columns = 2
 
 [node name="Large Saucer Enabled Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Large Saucer Category Container"]
 layout_mode = 2
+tooltip_text = "Enable or disable the large saucer ship."
 mouse_filter = 0
 text = "Enabled"
 
@@ -421,7 +429,7 @@ button_pressed = true
 [node name="Large Saucer Speed Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Large Saucer Category Container"]
 layout_mode = 2
 size_flags_horizontal = 2
-tooltip_text = "Missile speed, relative to ship velocity"
+tooltip_text = "Speed of the large saucer."
 mouse_filter = 0
 text = "Speed"
 
@@ -436,8 +444,9 @@ value = 100.0
 
 [node name="Large Saucer Spawn Frequency Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Large Saucer Category Container"]
 layout_mode = 2
+tooltip_text = "How often the large saucer spawns."
 mouse_filter = 0
-text = "Frequency"
+text = "Spawn Frequency"
 
 [node name="Large Saucer Spawn Frequency" type="HSlider" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Large Saucer Category Container"]
 layout_mode = 2
@@ -451,10 +460,10 @@ value = 10.0
 [node name="Large Saucer Max Missiles Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Large Saucer Category Container"]
 layout_mode = 2
 size_flags_horizontal = 2
-tooltip_text = "Maximum number of missiles on 
-the screen at once"
+tooltip_text = "Maximum number of large saucer missiles 
+on the screen at once."
 mouse_filter = 0
-text = "Maximum Quantity"
+text = "Maximum Missles"
 
 [node name="Large Saucer Max Missiles" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Large Saucer Category Container" instance=ExtResource("3_k6nax")]
 layout_mode = 2
@@ -466,9 +475,9 @@ value = 8.0
 [node name="Large Saucer Missiles Speed Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Large Saucer Category Container"]
 layout_mode = 2
 size_flags_horizontal = 2
-tooltip_text = "Missile speed, relative to ship velocity"
+tooltip_text = "Speed of large saucer missiles."
 mouse_filter = 0
-text = "Speed"
+text = "Missile Speed"
 
 [node name="Large Saucer Missiles Speed" type="HSlider" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Large Saucer Category Container"]
 layout_mode = 2
@@ -482,9 +491,9 @@ value = 250.0
 [node name="Large Saucer Missiles Lifespan Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Large Saucer Category Container"]
 layout_mode = 2
 size_flags_horizontal = 2
-tooltip_text = "Lifespan of a missile"
+tooltip_text = "Lifespan of large saucer missiles."
 mouse_filter = 0
-text = "Lifespan"
+text = "Missile Lifespan"
 
 [node name="Large Saucer Missiles Lifespan" type="HSlider" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Large Saucer Category Container"]
 layout_mode = 2
@@ -506,6 +515,7 @@ columns = 2
 
 [node name="Small Saucer Enabled Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Small Saucer Category Container"]
 layout_mode = 2
+tooltip_text = "Enable or disable the small saucer ship."
 mouse_filter = 0
 text = "Enabled"
 
@@ -517,7 +527,7 @@ button_pressed = true
 [node name="Small Saucer Speed Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Small Saucer Category Container"]
 layout_mode = 2
 size_flags_horizontal = 2
-tooltip_text = "Missile speed, relative to ship velocity"
+tooltip_text = "Speed of the small saucer."
 mouse_filter = 0
 text = "Speed"
 
@@ -532,8 +542,9 @@ value = 100.0
 
 [node name="Small Saucer Spawn Frequency Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Small Saucer Category Container"]
 layout_mode = 2
+tooltip_text = "How often the small saucer spawns."
 mouse_filter = 0
-text = "Frequency"
+text = "Spawn Frequency"
 
 [node name="Small Saucer Spawn Frequency" type="HSlider" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Small Saucer Category Container"]
 layout_mode = 2
@@ -546,10 +557,10 @@ value = 10.0
 [node name="Small Saucer Max Missiles Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Small Saucer Category Container"]
 layout_mode = 2
 size_flags_horizontal = 2
-tooltip_text = "Maximum number of missiles on 
-the screen at once"
+tooltip_text = "Maximum number of small saucer missiles
+on the screen at once."
 mouse_filter = 0
-text = "Maximum Quantity"
+text = "Maximum Missiles"
 
 [node name="Small Saucer Max Missiles" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Small Saucer Category Container" instance=ExtResource("3_k6nax")]
 layout_mode = 2
@@ -561,9 +572,9 @@ value = 8.0
 [node name="Small Saucer Missiles Speed Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Small Saucer Category Container"]
 layout_mode = 2
 size_flags_horizontal = 2
-tooltip_text = "Missile speed, relative to ship velocity"
+tooltip_text = "Speed of small saucer missiles."
 mouse_filter = 0
-text = "Speed"
+text = "Missile Speed"
 
 [node name="Small Saucer Missiles Speed" type="HSlider" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Small Saucer Category Container"]
 layout_mode = 2
@@ -577,9 +588,9 @@ value = 250.0
 [node name="Small Saucer Missiles Lifespan Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Small Saucer Category Container"]
 layout_mode = 2
 size_flags_horizontal = 2
-tooltip_text = "Lifespan of a missile"
+tooltip_text = "Lifespan of small saucer missiles."
 mouse_filter = 0
-text = "Lifespan"
+text = "Missile Lifespan"
 
 [node name="Small Saucer Missiles Lifespan" type="HSlider" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Small Saucer Category Container"]
 layout_mode = 2
