@@ -4,8 +4,8 @@ The following lists all external resources (fonts, graphics and sound) used in t
 
 ## Audio
 
-* Audio Samples were downloaded from the [Classic Gaming](https://classicgaming.cc/classics/asteroids/sounds) site.
-* Splash screen [sound](https://pixabay.com/sound-effects/tension-booster-03-253279/) is by [Peter Barbaix](https://pixabay.com/users/thefealdoproject-4574887/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=253279) from [Pixabay](https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=253279)
+* Game audio effects were downloaded from the [Classic Gaming](https://classicgaming.cc/classics/asteroids/sounds) site.
+* The splash screen [sound](https://pixabay.com/sound-effects/tension-booster-03-253279/) is by [Peter Barbaix](https://pixabay.com/users/thefealdoproject-4574887/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=253279) from [Pixabay](https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=253279)
 
 ## Sprites
 
@@ -14,7 +14,7 @@ The following lists all external resources (fonts, graphics and sound) used in t
 ## Fonts
 
 * The [Astrospace](https://www.fontspace.com/a-astro-space-font-f46028) font by [wepfont](https://wepfont.com/) is used for the *modern* UI theme.
-* The [Hyperspace](https://www.dafont.com/hyperspace.font) font by [Pixel Sagas](http://www.pixelsagas.com/) is used for the game and general are for the *classic* UI theme.
+* The [Hyperspace](https://www.dafont.com/hyperspace.font) font by [Pixel Sagas](http://www.pixelsagas.com/) is used for the *classic* UI theme.
 
 ## Background
 
