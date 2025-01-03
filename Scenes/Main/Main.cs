@@ -1,9 +1,9 @@
 using System;
-using System.Collections.Generic;
 using Godot;
 
 namespace Asteroids;
 
+using static Asteroids.UiUtils;
 using SettingsPresets = GameSettingsPresets.SettingsPresets;
 
 public partial class Main : Node
@@ -20,17 +20,10 @@ public partial class Main : Node
 
     [ExportCategory("Saucers")]
     [Export]
-    private float _largeSaucerStartMinSpawnTimer = 10;
-    [Export]
-    private float _largeSaucerStartMaxSpawnTimer = 20;
-    [Export]
     private float _largeSaucerSpawnTimerFloor = 5;
     [Export]
     private float _largeSaucerSpawnTimerDeltaProportion = 0.5f;
-    [Export]
-    private float _smallSaucerStartMinSpawnTimer = 60;
-    [Export]
-    private float _smallSaucerStartMaxSpawnTimer = 120;
+
     [Export]
     private float _smallSaucerSpawnTimerFloor = 5;
     [Export]
@@ -75,13 +68,19 @@ public partial class Main : Node
     private GameSettingsBridge _settingsBridge;
     private GameSettings _gameSettings;
 
+    // UI hide and show utils
+    UiUtils _uiUtils;
+
     public override void _Ready()
     {
         // Scene references
         SetupSceneReferences();
 
-        // Scenes
+        // Signals
         SetupSceneSignals();
+
+        // Set up UI utils
+        _uiUtils = new UiUtils(_splashScreen, _ui, _fadingOverlay, _highScoreTable, _helpDialog, _settingsDialog);
 
         // New ship spawn location
         _shipSpawnPosition = Screen.Centre;
@@ -114,20 +113,19 @@ public partial class Main : Node
         // Background asteroid field
         CreateDemoScreen();
 
-        // Splash screen
+        // Splash screen followed by main animation loop
         _mainAnimationPlayer.PlaySplash();
     }
 
     private void ActivateSplashScreen()
     {
-        ShowAndHide(ViewableElements.SplashScreen | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
-
+        _uiUtils.ShowAndHide(ViewableElements.SplashScreen | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
         _splashScreen.Activate();
     }
 
     private void SplashOnSplashDone()
     {
-        ShowAndHide(ViewableElements.HelpLabel | ViewableElements.StartLabel | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
+        _uiUtils.ShowAndHide(ViewableElements.HelpLabel | ViewableElements.StartLabel | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
     }
 
     public override void _Process(double delta)
@@ -155,7 +153,6 @@ public partial class Main : Node
             }
 
             // Create a new demo asteroid field if the current one has become too sparse
-            // after a grace period
             if (_asteroidFieldController.AsteroidCount < _minAsteroidsOnDemoScreen) // && _endOfGameGracePeriodExpired)
             {
                 CreateDemoScreen();
@@ -269,7 +266,7 @@ public partial class Main : Node
 
     private void WaitingToPlay()
     {
-        ShowAndHide(ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
+        _uiUtils.ShowAndHide(ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
         _gameState = GameState.WaitingToPlay;
     }
 
@@ -295,7 +292,7 @@ public partial class Main : Node
 
         // Hide UI elements
         _mainAnimationPlayer.Stop();
-        ShowAndHide(ViewableElements.None);
+        _uiUtils.ShowAndHide(ViewableElements.None);
 
         // Create the new asteroid fields
         _asteroidFieldController.SpawnField(_asteroidsCurrentInitialQuantity,
@@ -329,10 +326,16 @@ public partial class Main : Node
 
     private void GameOver()
     {
+        // Stop playing the background beats
         _beats.Stop();
-        ShowAndHide(ViewableElements.FadingOverlay);
+
+        // Show the fading overlay
+        _uiUtils.ShowAndHide(ViewableElements.FadingOverlay);
+
+        // Disable all new sound fxs
         EnableNewSoundFx(false);
 
+        // Check if the score is high enough to be included in the high score table
         if (_highScoreTable.IsEligibleForInclusion(_ui.Score))
         {
             _ui.ShowGameOverLabel();
@@ -351,8 +354,10 @@ public partial class Main : Node
         _highScoreTable.AddScore(name, _ui.Score);
         HighScorePersistence.Save(_highScoreTable.GetScores(), _HIGH_SCORE_SAVE_PATH);
         _enterHighScore.Hide();
-        ShowAndHide(ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
+
+        _uiUtils.ShowAndHide(ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
         _mainAnimationPlayer.PlayMainLoop();
+
         WaitingToPlay();
     }
 
@@ -490,13 +495,13 @@ public partial class Main : Node
     {
         _mainAnimationPlayer.Stop();
         _settingsDialog.ActiveSettings = _gameSettings;
-        ShowAndHide(ViewableElements.SettingsDialog | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
+        _uiUtils.ShowAndHide(ViewableElements.SettingsDialog | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
         _gameState = GameState.ShowingConfigDialog;
     }
 
     private void SettingsDialogOnOkPressed()
     {
-        ShowAndHide(ViewableElements.StartLabel | ViewableElements.HelpLabel | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
+        _uiUtils.ShowAndHide(ViewableElements.StartLabel | ViewableElements.HelpLabel | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
         _gameSettings = new GameSettings(_settingsDialog.ActiveSettings); // TODO Or better dialog can give back a copy
         _settingsBridge.Apply(_gameSettings, GameSettingsBridge.Fields.Sound);
         GameSettingsPersistence.Save(_settingsDialog.ActiveSettings, _SETTINGS_SAVE_PATH);
@@ -506,7 +511,7 @@ public partial class Main : Node
 
     private void SettingsDialogOnCancel()
     {
-        ShowAndHide(ViewableElements.StartLabel | ViewableElements.HelpLabel | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
+        _uiUtils.ShowAndHide(ViewableElements.StartLabel | ViewableElements.HelpLabel | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
         _mainAnimationPlayer.PlayDelayedMainLoop();
         _gameState = GameState.WaitingToPlay;
     }
@@ -518,112 +523,19 @@ public partial class Main : Node
     private void ShowHelpDialog()
     {
         _mainAnimationPlayer.Stop();
-        ShowAndHide(ViewableElements.HelpDialog | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
+        _uiUtils.ShowAndHide(ViewableElements.HelpDialog | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
 
         _gameState = GameState.ShowingHelpDialog;
     }
 
     private void HelpDialogOnOkPressed()
     {
-        ShowAndHide(ViewableElements.StartLabel | ViewableElements.HelpLabel | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
+        _uiUtils.ShowAndHide(ViewableElements.StartLabel | ViewableElements.HelpLabel | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
         _mainAnimationPlayer.PlayDelayedMainLoop();
         _gameState = GameState.WaitingToPlay;
     }
 
     // <-- Help dialog
-
-    // UI utilities -->
-
-    [Flags]
-    private enum ViewableElements
-    {
-        None = 0b_0000_0000,
-        SplashScreen = 0b_0000_0001,
-        HelpLabel = 0b_0000_0010,
-        StartLabel = 0b_0000_0100,
-        GameOverLabel = 0b0000_1000,
-        HighScoreTable = 0b0001_0000,
-        HelpDialog = 0b0010_0000,
-        SettingsDialog = 0b0100_0000,
-        FadingOverlay = 0b1000_0000
-    }
-
-    private void ShowAndHide(ViewableElements flags, ViewableElements immediate = ViewableElements.None)
-    {
-        if ((flags & ViewableElements.SplashScreen) != 0)
-        {
-            _splashScreen.Show();
-        }
-        else
-        {
-            _splashScreen.Hide();
-        }
-
-        if ((flags & ViewableElements.HelpLabel) != 0)
-        {
-            _ui.ShowHelpLabel();
-        }
-        else
-        {
-            _ui.HideHelpLabel();
-        }
-
-        if ((flags & ViewableElements.StartLabel) != 0)
-        {
-            _ui.ShowStartLabel();
-        }
-        else
-        {
-            _ui.HideStartLabel();
-        }
-
-        if ((flags & ViewableElements.GameOverLabel) != 0)
-        {
-            _ui.ShowGameOverLabel();
-        }
-        else
-        {
-            _ui.HideGameOverLabel();
-        }
-
-        if ((flags & ViewableElements.HighScoreTable) != 0)
-        {
-            _highScoreTable.Show((immediate & ViewableElements.HighScoreTable) != 0);
-        }
-        else
-        {
-            _highScoreTable.Hide((immediate & ViewableElements.HighScoreTable) != 0);
-        }
-
-        if ((flags & ViewableElements.HelpDialog) != 0)
-        {
-            _helpDialog.Show((immediate & ViewableElements.HelpDialog) != 0);
-        }
-        else
-        {
-            _helpDialog.Hide((immediate & ViewableElements.HelpDialog) != 0);
-        }
-
-        if ((flags & ViewableElements.SettingsDialog) != 0)
-        {
-            _settingsDialog.Show((immediate & ViewableElements.SettingsDialog) != 0);
-        }
-        else
-        {
-            _settingsDialog.Hide((immediate & ViewableElements.SettingsDialog) != 0);
-        }
-
-        if ((flags & ViewableElements.FadingOverlay) != 0)
-        {
-            _fadingOverlay.Show((immediate & ViewableElements.FadingOverlay) != 0);
-        }
-        else
-        {
-            _fadingOverlay.Hide((immediate & ViewableElements.FadingOverlay) != 0);
-        }
-    }
-
-    // <-- UI utilities
 
     // Audio -->
 
