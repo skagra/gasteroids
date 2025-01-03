@@ -22,7 +22,7 @@ Find out [How to Play](docs/howtoplay.md), see the [Credits](docs/credits.md) wh
 
 # Status
 
-The game is nearing being feature complete with a first beta release being imminent.
+The game is nearing feature completion with a first beta release being imminent.
 
 # License
 
