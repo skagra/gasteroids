@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 namespace Asteroids;
@@ -13,9 +14,9 @@ public partial class HelpDialog : CanvasLayer
 
     public override void _Ready()
     {
-        _fadingPanelContainer = (FadingPanelContainer)FindChild("FadingPanelContainer");
+        _fadingPanelContainer = (FadingPanelContainer)FindChild("FadingPanelContainer") ?? throw new NullReferenceException("FadingPanelContainer not found");
 
-        _okButton = (Button)FindChild("OK Button");
+        _okButton = (Button)FindChild("OK Button") ?? throw new NullReferenceException("OK Button not found");
         _okButton.Pressed += OkButtonPressed;
 
         Hide(true);

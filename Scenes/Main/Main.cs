@@ -64,7 +64,7 @@ public partial class Main : Node
     private enum GameState { WaitingToPlay, AwaitingNewShip, Playing, ShowingConfigDialog, ShowingHelpDialog, EnteringHighScore };
     private GameState _gameState;
 
-    // Configurable settings
+    // Game settings
     private GameSettingsBridge _settingsBridge;
     private GameSettings _gameSettings;
 
@@ -73,6 +73,8 @@ public partial class Main : Node
 
     public override void _Ready()
     {
+        Logger.I.Debug("Main scene ready");
+
         // Scene references
         SetupSceneReferences();
 
@@ -189,22 +191,22 @@ public partial class Main : Node
     private void SetupSceneReferences()
     {
         // Get references too all required scenes
-        _playerController = GetNode<PlayerController>("PlayerController");
-        _asteroidFieldController = GetNode<AsteroidFieldController>("AsteroidFieldController");
-        _exclusionZone = GetNode<Area2D>("ExclusionZone");
-        _exclusionZoneCollisionShape = _exclusionZone.GetNode<CollisionShape2D>("CollisionShape2D");
-        _beats = GetNode<Beats>("Beats");
-        _settingsDialog = GetNode<GameSettingsDialog>("Game Settings Dialog");
-        _helpDialog = GetNode<HelpDialog>("Help Dialog");
-        _largeSaucerController = GetNode<SaucerController>("LargeSaucerController");
-        _smallSaucerController = GetNode<SaucerController>("SmallSaucerController");
-        _highScoreTable = GetNode<HighScoreTable>("HighScoreTable");
-        _fadingOverlay = (FadingPanelContainer)FindChild("FadingOverlay");
-        _splashScreen = (Splash)FindChild("Splash");
-        _mainAnimationPlayer = (MainAnimationPlayer)FindChild("MainAnimationPlayer");
-        _ui = (Ui)FindChild("UI");
-        _enterHighScore = (EnterHighScore)FindChild("EnterHighScore");
-        _scores = (Scores)FindChild("Scores");
+        _playerController = GetNode<PlayerController>("PlayerController") ?? throw new NullReferenceException("PlayerController not found");
+        _asteroidFieldController = GetNode<AsteroidFieldController>("AsteroidFieldController") ?? throw new NullReferenceException("AsteroidFieldController not found");
+        _exclusionZone = GetNode<Area2D>("ExclusionZone") ?? throw new NullReferenceException("ExclusionZone not found");
+        _exclusionZoneCollisionShape = _exclusionZone.GetNode<CollisionShape2D>("CollisionShape2D") ?? throw new NullReferenceException("CollisionShape2D not found");
+        _beats = GetNode<Beats>("Beats") ?? throw new NullReferenceException("Beats not found");
+        _settingsDialog = GetNode<GameSettingsDialog>("Game Settings Dialog") ?? throw new NullReferenceException("Game Settings Dialog not found");
+        _helpDialog = GetNode<HelpDialog>("Help Dialog") ?? throw new NullReferenceException("Help Dialog not found");
+        _largeSaucerController = GetNode<SaucerController>("LargeSaucerController") ?? throw new NullReferenceException("LargeSaucerController not found");
+        _smallSaucerController = GetNode<SaucerController>("SmallSaucerController") ?? throw new NullReferenceException("SmallSaucerController not found");
+        _highScoreTable = GetNode<HighScoreTable>("HighScoreTable") ?? throw new NullReferenceException("HighScoreTable not found");
+        _fadingOverlay = (FadingPanelContainer)FindChild("FadingOverlay") ?? throw new NullReferenceException("FadingOverlay not found");
+        _splashScreen = (Splash)FindChild("Splash") ?? throw new NullReferenceException("Splash not found");
+        _mainAnimationPlayer = (MainAnimationPlayer)FindChild("MainAnimationPlayer") ?? throw new NullReferenceException("MainAnimationPlayer not found");
+        _ui = (Ui)FindChild("UI") ?? throw new NullReferenceException("UI not found");
+        _enterHighScore = (EnterHighScore)FindChild("EnterHighScore") ?? throw new NullReferenceException("EnterHighScore not found");
+        _scores = (Scores)FindChild("Scores") ?? throw new NullReferenceException("Scores not found");
     }
 
     private void SetupSceneSignals()
@@ -267,6 +269,7 @@ public partial class Main : Node
     private void WaitingToPlay()
     {
         _uiUtils.ShowAndHide(ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
+        Logger.I.Debug("Setting game state to {0}", GameState.WaitingToPlay);
         _gameState = GameState.WaitingToPlay;
     }
 
@@ -321,6 +324,7 @@ public partial class Main : Node
         _beats.Start();
 
         // Flag we are ready to spawn a new ship
+        Logger.I.Debug("Setting game state to {0}", GameState.AwaitingNewShip);
         _gameState = GameState.AwaitingNewShip;
     }
 
@@ -340,6 +344,7 @@ public partial class Main : Node
         {
             _ui.ShowGameOverLabel();
             _enterHighScore.Show();
+            Logger.I.Debug("Setting game state to {0}", GameState.EnteringHighScore);
             _gameState = GameState.EnteringHighScore;
         }
         else
@@ -397,15 +402,20 @@ public partial class Main : Node
     private void IncreaseScore(int increase)
     {
         _ui.Score += increase;
-        if (_ui.Score > _extraLifeThresholdNext && _ui.Lives < _gameSettings.PlayerMaxLives)
+        if (_ui.Score > _extraLifeThresholdNext)
         {
-            _ui.AddLife();
             _extraLifeThresholdNext += _gameSettings.PlayerExtraLifeScoreThreshold;
+            if (_ui.Lives < _gameSettings.PlayerMaxLives)
+            {
+                _ui.AddLife();
+            }
         }
     }
 
-    private void AsteroidFieldControllerOnFieldCleared()
+    private void AsteroidFieldControllerOnFieldCleared(AsteroidFieldController asteroidFieldController)
     {
+        Logger.I.SignalReceived(this, asteroidFieldController, AsteroidFieldController.SignalName.FieldCleared);
+
         IncreaseDifficulty();
 
         // Spawn the new field of asteroids
@@ -436,8 +446,10 @@ public partial class Main : Node
         _smallSaucerController.SpawnTimerMin = Mathf.Max(_smallSaucerController.SpawnTimerMin * _smallSaucerSpawnTimerDeltaProportion, _smallSaucerSpawnTimerFloor);
     }
 
-    private void PlayerOnExploded()
+    private void PlayerOnExploded(PlayerController playerController)
     {
+        Logger.I.SignalReceived(this, playerController, PlayerController.SignalName.Exploded);
+
         if (_gameState == GameState.Playing)
         {
             // Hide the player/stop processing
@@ -445,13 +457,16 @@ public partial class Main : Node
 
             // This is safe wrt signal delivery order
             // as there is a gap between "Exploding" and "Exploded"
+            Logger.I.Debug("Setting game state to {0}", GameState.AwaitingNewShip);
             _gameState = GameState.AwaitingNewShip;
             _beats.Start();
         }
     }
 
-    private void PlayerOnExploding()
+    private void PlayerOnExploding(PlayerController playerController)
     {
+        Logger.I.SignalReceived(this, playerController, PlayerController.SignalName.Exploding);
+
         // Just a safety check!
         if (_ui.Lives > 0)
         {
@@ -496,6 +511,7 @@ public partial class Main : Node
         _mainAnimationPlayer.Stop();
         _settingsDialog.ActiveSettings = _gameSettings;
         _uiUtils.ShowAndHide(ViewableElements.SettingsDialog | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
+        Logger.I.Debug("Setting game state to {0}", GameState.ShowingConfigDialog);
         _gameState = GameState.ShowingConfigDialog;
     }
 
@@ -506,6 +522,7 @@ public partial class Main : Node
         _settingsBridge.Apply(_gameSettings, GameSettingsBridge.Fields.Sound);
         GameSettingsPersistence.Save(_settingsDialog.ActiveSettings, _SETTINGS_SAVE_PATH);
         _mainAnimationPlayer.PlayDelayedMainLoop();
+        Logger.I.Debug("Setting game state to {0}", GameState.WaitingToPlay);
         _gameState = GameState.WaitingToPlay;
     }
 
@@ -513,6 +530,7 @@ public partial class Main : Node
     {
         _uiUtils.ShowAndHide(ViewableElements.StartLabel | ViewableElements.HelpLabel | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
         _mainAnimationPlayer.PlayDelayedMainLoop();
+        Logger.I.Debug("Setting game state to {0}", GameState.WaitingToPlay);
         _gameState = GameState.WaitingToPlay;
     }
 
@@ -524,7 +542,7 @@ public partial class Main : Node
     {
         _mainAnimationPlayer.Stop();
         _uiUtils.ShowAndHide(ViewableElements.HelpDialog | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
-
+        Logger.I.Debug("Setting game state to {0}", GameState.ShowingHelpDialog);
         _gameState = GameState.ShowingHelpDialog;
     }
 
@@ -532,6 +550,7 @@ public partial class Main : Node
     {
         _uiUtils.ShowAndHide(ViewableElements.StartLabel | ViewableElements.HelpLabel | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
         _mainAnimationPlayer.PlayDelayedMainLoop();
+        Logger.I.Debug("Setting game state to {0}", GameState.WaitingToPlay);
         _gameState = GameState.WaitingToPlay;
     }
 

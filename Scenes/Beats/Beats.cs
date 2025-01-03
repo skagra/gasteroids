@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Godot;
 
 namespace Asteroids;
@@ -28,6 +29,9 @@ public partial class Beats : Node
 
     public override void _Ready()
     {
+        Debug.Assert(_beat1 != null, "Beat 1 not set");
+        Debug.Assert(_beat2 != null, "Beat 2 not set");
+
         _beatsAudioStream.Bus = Resources.AUDIO_BUS_NAME_FX;
         AddChild(_beatsAudioStream);
     }

@@ -49,7 +49,7 @@ public partial class Saucer : Area2D
         _collisionPolygon = GetNode<CollisionPolygon2D>("CollisionPolygon2D");
 
         _saucerSoundPlayer.Bus = Resources.AUDIO_BUS_NAME_FX;
-        _saucerSoundPlayer.Stream = _saucerSound;
+        _saucerSoundPlayer.Stream = _saucerSound ?? throw new NullReferenceException("Saucer sound not set");
         AddChild(_saucerSoundPlayer);
 
         AreaEntered += Entered;
@@ -77,6 +77,7 @@ public partial class Saucer : Area2D
 
                 _collisionFlaggedThisFrame = true;
 
+                Logger.I.SignalSent(this, SignalName.Collided, collidedWith);
                 EmitSignal(SignalName.Collided, this, collidedWith);
             }
         }

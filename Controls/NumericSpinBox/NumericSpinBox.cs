@@ -15,7 +15,7 @@ public partial class NumericSpinBox : SpinBox
     public override void _Ready()
     {
         _audioStreamPlayer.Bus = Resources.AUDIO_BUS_NAME_UI;
-        _audioStreamPlayer.Stream = _errorBeep;
+        _audioStreamPlayer.Stream = _errorBeep ?? throw new NullReferenceException("Error beep not set");
         AddChild(_audioStreamPlayer);
 
         Alignment = HorizontalAlignment.Right;
@@ -33,7 +33,7 @@ public partial class NumericSpinBox : SpinBox
             var key = inputEventKey.Keycode;
             if (!Char.IsDigit(character[0]) && ((key & Key.Special) == 0))
             {
-                _audioStreamPlayer?.Play();
+                _audioStreamPlayer.Play();
                 AcceptEvent();
             }
         }

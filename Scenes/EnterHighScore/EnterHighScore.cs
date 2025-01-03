@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 namespace Asteroids;
@@ -17,12 +18,13 @@ public partial class EnterHighScore : CanvasLayer
     public override void _Ready()
     {
         _audioStreamPlayer.Bus = Resources.AUDIO_BUS_NAME_UI;
-        _audioStreamPlayer.Stream = _errorBeep;
+        _audioStreamPlayer.Stream = _errorBeep ?? throw new NullReferenceException("Error beep not set");
         AddChild(_audioStreamPlayer);
 
-        _highScore = (LineEdit)FindChild("High Score");
+        _highScore = (LineEdit)FindChild("High Score") ?? throw new NullReferenceException("High Score not found");
         _highScore.TextChangeRejected += OnTextChangeRejected;
         _highScore.TextSubmitted += OnTextSubmitted;
+
         Hide();
 
         if (GetParent() is Window)
@@ -46,14 +48,14 @@ public partial class EnterHighScore : CanvasLayer
         }
         else
         {
-            _audioStreamPlayer?.Play();
+            _audioStreamPlayer.Play();
         }
     }
 
 
     private void OnTextChangeRejected(string rejectedSubstring)
     {
-        _audioStreamPlayer?.Play();
+        _audioStreamPlayer.Play();
     }
 
 }

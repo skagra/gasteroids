@@ -171,8 +171,10 @@ public partial class Player : RigidBody2D
     {
         Position = new Vector2((float)GD.RandRange(Screen.Left, Screen.Right),
                                (float)GD.RandRange(Screen.Top, Screen.Bottom));
+
         if (GD.Randi() % _CONST_HYPERSPACE_ACCIDENT_THRESHOLD == 0)
         {
+            Logger.I.SignalSent(this, SignalName.HyperspaceAccident);
             EmitSignal(SignalName.HyperspaceAccident, this);
         }
     }
@@ -182,7 +184,6 @@ public partial class Player : RigidBody2D
         var position = Position + ((_spriteSize.X / 2.0f) * Vector2.Right.Rotated(_area2D.Rotation));
 
         Logger.I.SignalSent(this, SignalName.Shoot, position, LinearVelocity, _area2D.Rotation);
-
         EmitSignal(SignalName.Shoot, position, LinearVelocity, _area2D.Rotation);
     }
 

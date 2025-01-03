@@ -1,4 +1,5 @@
 using Godot;
+using System;
 using System.Collections.Generic;
 
 namespace Asteroids;
@@ -55,7 +56,7 @@ public partial class MissileController : Node
     public override void _Ready()
     {
         _shootAudioStream.Bus = Resources.AUDIO_BUS_NAME_FX;
-        _shootAudioStream.Stream = _missileExplosionSound;
+        _shootAudioStream.Stream = _missileExplosionSound ?? throw new NullReferenceException("Missile explosion sound not set");
         AddChild(_shootAudioStream);
 
         SetUpMissiles();

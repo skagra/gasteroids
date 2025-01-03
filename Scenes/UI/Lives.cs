@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Godot;
 
@@ -17,7 +18,7 @@ public partial class Lives : Node2D
     public override void _Ready()
     {
         _extraLifeSoundPlayer.Bus = Resources.AUDIO_BUS_NAME_FX;
-        _extraLifeSoundPlayer.Stream = _extraLifeSound;
+        _extraLifeSoundPlayer.Stream = _extraLifeSound ?? throw new NullReferenceException("Extra life sound not set");
         AddChild(_extraLifeSoundPlayer);
     }
 

@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 namespace Asteroids;
@@ -8,8 +9,7 @@ public partial class FlashingLabel : Label
 
     public override void _Ready()
     {
-        _animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
-
+        _animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer") ?? throw new NullReferenceException("AnimationPlayer not found");
         Hide();
 
         if (GetParent() is Window)

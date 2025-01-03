@@ -25,7 +25,7 @@ public partial class AsteroidFieldController : Node
     public delegate void CollidedEventHandler(Asteroid asteroid, AsteroidSize size, Node collidedWith);
 
     [Signal]
-    public delegate void FieldClearedEventHandler();
+    public delegate void FieldClearedEventHandler(AsteroidFieldController sender);
 
     // Values configurable via the inspector
     [Export]
@@ -105,13 +105,13 @@ public partial class AsteroidFieldController : Node
     {
         // Set up audio streams
         _audioStreamPlayerBangLarge.Bus = Resources.AUDIO_BUS_NAME_FX;
-        _audioStreamPlayerBangLarge.Stream = _bangLarge;
+        _audioStreamPlayerBangLarge.Stream = _bangLarge ?? throw new NullReferenceException("Bang Large not set");
         AddChild(_audioStreamPlayerBangLarge);
         _audioStreamPlayerBangMedium.Bus = Resources.AUDIO_BUS_NAME_FX;
-        _audioStreamPlayerBangMedium.Stream = _bangMedium;
+        _audioStreamPlayerBangMedium.Stream = _bangMedium ?? throw new NullReferenceException("Bang Medium not set");
         AddChild(_audioStreamPlayerBangMedium);
         _audioStreamPlayerBangSmall.Bus = Resources.AUDIO_BUS_NAME_FX;
-        _audioStreamPlayerBangSmall.Stream = _bangSmall;
+        _audioStreamPlayerBangSmall.Stream = _bangSmall ?? throw new NullReferenceException("Bang Small not set");
         AddChild(_audioStreamPlayerBangSmall);
 
         // Test mode
@@ -345,8 +345,7 @@ public partial class AsteroidFieldController : Node
         if (_activeAsteroids.Count <= 0)
         {
             Logger.I.SignalSent(this, SignalName.FieldCleared);
-
-            EmitSignal(SignalName.FieldCleared);
+            EmitSignal(SignalName.FieldCleared, this);
         }
     }
 }

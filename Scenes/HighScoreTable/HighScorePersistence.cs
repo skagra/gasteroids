@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 using Godot;
@@ -12,6 +13,8 @@ public static class HighScorePersistence
 
     public static List<ScoreDetails> Load(string userPath)
     {
+        Debug.Assert(!string.IsNullOrEmpty(userPath), "User path is null or empty");
+
         List<ScoreDetails> result = null;
 
         var globalizedPath = ProjectSettings.GlobalizePath(userPath);
@@ -33,6 +36,8 @@ public static class HighScorePersistence
 
     public static void Save(List<ScoreDetails> scores, string userPath)
     {
+        Debug.Assert(!string.IsNullOrEmpty(userPath), "User path is null or empty");
+
         try
         {
             var json = JsonSerializer.Serialize(scores, _jsonOptions);

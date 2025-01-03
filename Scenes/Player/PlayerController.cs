@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using Godot;
 
 namespace Asteroids;
@@ -6,10 +7,10 @@ namespace Asteroids;
 public partial class PlayerController : Node
 {
     [Signal]
-    public delegate void ExplodingEventHandler();
+    public delegate void ExplodingEventHandler(PlayerController playerController);
 
     [Signal]
-    public delegate void ExplodedEventHandler();
+    public delegate void ExplodedEventHandler(PlayerController playerController);
 
     [Export]
     private PackedScene _explosion;
@@ -83,17 +84,18 @@ public partial class PlayerController : Node
 
     public override void _Ready()
     {
+        Debug.Assert(_explosion != null, "Explosion not set");
+
         _camera = (ShakingCamera)GetViewport().GetCamera2D();
         _shakeTimer.OneShot = true;
         _shakeTimer.Timeout += ShakeTimerOnTimeout;
-
         AddChild(_shakeTimer);
 
         _explosionPlayer.Bus = Resources.AUDIO_BUS_NAME_FX;
-        _explosionPlayer.Stream = _explosionSound;
+        _explosionPlayer.Stream = _explosionSound ?? throw new NullReferenceException("Explosion sound not set");
         AddChild(_explosionPlayer);
 
-        _player = GetNode<Player>("Player");
+        _player = GetNode<Player>("Player") ?? throw new NullReferenceException("Player not found");
         _missileController = GetNode<MissileController>("MissileController");
 
         _player.Collided += PlayerOnCollided;
@@ -179,7 +181,7 @@ public partial class PlayerController : Node
         playerExplosion.ExplosionCompleted += ExplosionOnExplosionCompleted;
 
         Logger.I.SignalSent(this, SignalName.Exploding);
-        EmitSignal(SignalName.Exploding);
+        EmitSignal(SignalName.Exploding, this);
     }
 
     private void ExplosionOnExplosionCompleted(Explosion playerExplosion)
@@ -189,7 +191,7 @@ public partial class PlayerController : Node
         RemoveChild(playerExplosion);
         playerExplosion.QueueFree();
 
-        EmitSignal(SignalName.Exploded);
+        EmitSignal(SignalName.Exploded, this);
         Logger.I.SignalSent(this, SignalName.Exploded);
 
     }

@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 namespace Asteroids;
@@ -20,10 +21,10 @@ public partial class Splash : CanvasLayer
     {
         _terminating = false;
         _audioStreamPlayer.Bus = Resources.AUDIO_BUS_NAME_FX;
-        _audioStreamPlayer.Stream = _splashSound;
+        _audioStreamPlayer.Stream = _splashSound ?? throw new NullReferenceException("Splash sound not set");
         AddChild(_audioStreamPlayer);
 
-        _animationPlayer = (AnimationPlayer)FindChild("AnimationPlayer");
+        _animationPlayer = (AnimationPlayer)FindChild("AnimationPlayer") ?? throw new NullReferenceException("AnimationPlayer not found");
         _animationPlayer.AnimationFinished += OnAnimationFinished;
     }
 

@@ -1,3 +1,5 @@
+using System;
+using System.Diagnostics;
 using Godot;
 
 namespace Asteroids;
@@ -17,7 +19,7 @@ public partial class FadingPanelContainer : PanelContainer
 
     public override void _Ready()
     {
-        _animationPlayer = (AnimationPlayer)FindChild("AnimationPlayer");
+        _animationPlayer = (AnimationPlayer)FindChild("AnimationPlayer") ?? throw new NullReferenceException("AnimationPlayer not found");
     }
 
     public void Show(bool immediate = false)

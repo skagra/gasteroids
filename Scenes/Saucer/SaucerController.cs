@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using Godot;
 
 namespace Asteroids;
@@ -71,8 +72,11 @@ public partial class SaucerController : Node
 
     public override void _Ready()
     {
+        Debug.Assert(_explosion != null, "Explosion not set");
+        Debug.Assert(_saucerScene != null, "Saucer scene not set");
+
         _explosionPlayer.Bus = Resources.AUDIO_BUS_NAME_FX;
-        _explosionPlayer.Stream = _explosionSound;
+        _explosionPlayer.Stream = _explosionSound ?? throw new NullReferenceException("Explosion sound not set");
         AddChild(_explosionPlayer);
 
         _saucer = _saucerScene.Instantiate<Saucer>();
