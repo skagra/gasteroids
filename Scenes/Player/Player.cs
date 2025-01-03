@@ -171,10 +171,11 @@ public partial class Player : RigidBody2D
     // Anything less, and there's a chance. But that's just eyeballing the code
     private void HyperspacePressed()
     {
+        Debug.Assert(GetAsteroidsCount != null, "GetAsteroidsCount is null");
+
         Position = new Vector2((float)GD.RandRange(Screen.Left, Screen.Right),
                                (float)GD.RandRange(Screen.Top, Screen.Bottom));
 
-        var chanceToExplode = GD.Randi() % 63;
         if ((GD.Randi() % 63) >= GetAsteroidsCount() + 44)
         {
             Logger.I.SignalSent(this, SignalName.HyperspaceAccident);
