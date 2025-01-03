@@ -1,6 +1,6 @@
 # Credits
 
-Downloaded copies of all relevant licenses may be found in the [Licenses](Licenses) folder.
+The following lists all external resources (fonts, graphics and sound) used in the game.
 
 ## Audio
 
