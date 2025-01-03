@@ -91,7 +91,7 @@ columns = 2
 [node name="Theme Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Theme Container"]
 layout_mode = 2
 size_flags_horizontal = 3
-tooltip_text = "Select a user inferface theme, either
+tooltip_text = "Select a user interface theme, either
 a modern look or one which reflects
 the original arcade game."
 mouse_filter = 0
