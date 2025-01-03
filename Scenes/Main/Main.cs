@@ -84,6 +84,9 @@ public partial class Main : Node
         // Set up UI utils
         _uiUtils = new UiUtils(_splashScreen, _ui, _fadingOverlay, _highScoreTable, _helpDialog, _settingsDialog);
 
+        // Asteroids count callback - used in hyperspace accident calculation
+        _playerController.GetAsteroidsCount = () => _asteroidFieldController.AsteroidCount;
+
         // New ship spawn location
         _shipSpawnPosition = Screen.Centre;
 

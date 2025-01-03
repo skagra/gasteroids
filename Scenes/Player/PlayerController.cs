@@ -74,6 +74,12 @@ public partial class PlayerController : Node
         set => _player.GravitationalPullCallback = value;
     }
 
+    public Func<int> GetAsteroidsCount
+    {
+        get => _player.GetAsteroidsCount;
+        set => _player.GetAsteroidsCount = value;
+    }
+
     private Player _player;
     private MissileController _missileController;
     private AudioStreamPlayer2D _explosionPlayer = new();

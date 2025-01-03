@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using Godot;
 
 namespace Asteroids;
@@ -28,6 +29,8 @@ public partial class Player : RigidBody2D
     [Export]
     public float RotationSpeed { get; set; } = 5.0f;
 
+    public Func<int> GetAsteroidsCount { get; set; }
+
     private Area2D _area2D;
     private AnimatedSprite2D _sprite;
     private CollisionPolygon2D _collisionPolygon;
@@ -44,10 +47,10 @@ public partial class Player : RigidBody2D
 
     public override void _Ready()
     {
-        _area2D = GetNode<Area2D>("Player Area2D");
-        _collisionPolygon = _area2D.GetNode<CollisionPolygon2D>("CollisionPolygon2D");
-        _sprite = _area2D.GetNode<AnimatedSprite2D>("AnimatedSprite2D");
-        _thrustAudioStream = _area2D.GetNode<AudioStreamPlayer2D>("ThrustAudioPlayer");
+        _area2D = GetNode<Area2D>("Player Area2D") ?? throw new NullReferenceException("Player Area2D not found");
+        _collisionPolygon = _area2D.GetNode<CollisionPolygon2D>("CollisionPolygon2D") ?? throw new NullReferenceException("CollisionPolygon2D not found");
+        _sprite = _area2D.GetNode<AnimatedSprite2D>("AnimatedSprite2D") ?? throw new NullReferenceException("AnimatedSprite2D not found");
+        _thrustAudioStream = _area2D.GetNode<AudioStreamPlayer2D>("ThrustAudioPlayer") ?? throw new NullReferenceException("ThrustAudioPlayer not found");
         _thrustAudioStream.Bus = Resources.AUDIO_BUS_NAME_FX;
 
         _area2D.AreaEntered += Area2DAreaEntered;
@@ -162,17 +165,17 @@ public partial class Player : RigidBody2D
 
     // Current position + long dimension of spite in the direction of its rotation
     // https://steamcommunity.com/app/400020/discussions/0/3855581634402220944/
-    //  It looks like the exact odds are: choose a random even number from 0-62, explode if 
+    // It looks like the exact odds are: choose a random even number from 0-62, explode if 
     // random_number >= number_of_asteroids + 44. 
     // So, looks like hyperspace should never randomly explode if there are at least 19 asteroids on the screen. 
     // Anything less, and there's a chance. But that's just eyeballing the code
-    private int _CONST_HYPERSPACE_ACCIDENT_THRESHOLD = 2;
     private void HyperspacePressed()
     {
         Position = new Vector2((float)GD.RandRange(Screen.Left, Screen.Right),
                                (float)GD.RandRange(Screen.Top, Screen.Bottom));
 
-        if (GD.Randi() % _CONST_HYPERSPACE_ACCIDENT_THRESHOLD == 0)
+        var chanceToExplode = GD.Randi() % 63;
+        if ((GD.Randi() % 63) >= GetAsteroidsCount() + 44)
         {
             Logger.I.SignalSent(this, SignalName.HyperspaceAccident);
             EmitSignal(SignalName.HyperspaceAccident, this);
