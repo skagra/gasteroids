@@ -71,7 +71,7 @@ public partial class Main : Node
     private HighScoreTable _highScoreTable;
     private FadingPanelContainer _fadingOverlay;
     private Splash _splashScreen;
-    private AnimationPlayer _gameOverAnimationPlayer;
+    private MainAnimationPlayer _mainAnimationPlayer;
     private Ui _ui;
     private EnterHighScore _enterHighScore;
 
@@ -136,7 +136,7 @@ public partial class Main : Node
         CreateDemoScreen();
 
         // Splash screen
-        ActivateSplashScreen();
+        _mainAnimationPlayer.PlaySplash();
     }
 
     private void ActivateSplashScreen()
@@ -225,7 +225,7 @@ public partial class Main : Node
         _highScoreTable = GetNode<HighScoreTable>("HighScoreTable");
         _fadingOverlay = (FadingPanelContainer)FindChild("FadingOverlay");
         _splashScreen = (Splash)FindChild("Splash");
-        _gameOverAnimationPlayer = (AnimationPlayer)FindChild("GameOverAnimationPlayer");
+        _mainAnimationPlayer = (MainAnimationPlayer)FindChild("MainAnimationPlayer");
         _ui = (Ui)FindChild("UI");
         _enterHighScore = (EnterHighScore)FindChild("EnterHighScore");
     }
@@ -289,7 +289,7 @@ public partial class Main : Node
 
     private void WaitingToPlay()
     {
-        ShowAndHide(ViewableElements.StartLabel | ViewableElements.HelpLabel | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
+        ShowAndHide(ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
         _gameState = GameState.WaitingToPlay;
     }
 
@@ -314,7 +314,7 @@ public partial class Main : Node
         _exclusionZoneCollisionShape.Disabled = true;
 
         // Hide UI elements
-        _gameOverAnimationPlayer.Stop();
+        _mainAnimationPlayer.Stop();
         ShowAndHide(ViewableElements.None);
 
         // Create the new asteroid fields
@@ -361,7 +361,7 @@ public partial class Main : Node
         }
         else
         {
-            _gameOverAnimationPlayer.Play("GameOver");
+            _mainAnimationPlayer.PlayGameOver();
             WaitingToPlay();
         }
     }
@@ -372,13 +372,8 @@ public partial class Main : Node
         HighScorePersistence.Save(_highScoreTable.GetScores(), _HIGH_SCORE_SAVE_PATH);
         _enterHighScore.Hide();
         ShowAndHide(ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
-        _gameOverAnimationPlayer.Play("HighScore");
+        _mainAnimationPlayer.PlayMainLoop();
         WaitingToPlay();
-    }
-
-    private void EndOfGameGracePeriodExpiredOnTimeout()
-    {
-        // _endOfGameGracePeriodExpired = true;
     }
 
     // <-- Game state control
@@ -511,11 +506,9 @@ public partial class Main : Node
 
     private void ShowConfigDialog()
     {
-        _gameOverAnimationPlayer.Stop();
+        _mainAnimationPlayer.Stop();
         _settingsDialog.ActiveSettings = _gameSettings;
-
         ShowAndHide(ViewableElements.SettingsDialog | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
-
         _gameState = GameState.ShowingConfigDialog;
     }
 
@@ -525,14 +518,14 @@ public partial class Main : Node
         _gameSettings = new GameSettings(_settingsDialog.ActiveSettings); // TODO Or better dialog can give back a copy
         _settingsBridge.Apply(_gameSettings, GameSettingsBridge.Fields.Sound);
         GameSettingsPersistence.Save(_settingsDialog.ActiveSettings, _SETTINGS_SAVE_PATH);
-
+        _mainAnimationPlayer.PlayDelayedMainLoop();
         _gameState = GameState.WaitingToPlay;
     }
 
     private void SettingsDialogOnCancel()
     {
         ShowAndHide(ViewableElements.StartLabel | ViewableElements.HelpLabel | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
-
+        _mainAnimationPlayer.PlayDelayedMainLoop();
         _gameState = GameState.WaitingToPlay;
     }
 
@@ -542,7 +535,7 @@ public partial class Main : Node
 
     private void ShowHelpDialog()
     {
-        _gameOverAnimationPlayer.Stop();
+        _mainAnimationPlayer.Stop();
         ShowAndHide(ViewableElements.HelpDialog | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
 
         _gameState = GameState.ShowingHelpDialog;
@@ -551,7 +544,7 @@ public partial class Main : Node
     private void HelpDialogOnOkPressed()
     {
         ShowAndHide(ViewableElements.StartLabel | ViewableElements.HelpLabel | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
-
+        _mainAnimationPlayer.PlayDelayedMainLoop();
         _gameState = GameState.WaitingToPlay;
     }
 

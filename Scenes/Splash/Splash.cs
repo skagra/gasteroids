@@ -44,9 +44,13 @@ public partial class Splash : CanvasLayer
         }
     }
 
-    public void Activate()
+    public void Activate(bool mute = false)
     {
-        _audioStreamPlayer.Play();
+        _animationPlayer.SpeedScale = 1f;
+        if (!mute)
+        {
+            _audioStreamPlayer.Play();
+        }
         _animationPlayer.Play("FadeOut");
     }
 }

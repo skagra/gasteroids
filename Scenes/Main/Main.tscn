@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://b6s1c2c0v0c81"]
+[gd_scene load_steps=25 format=3 uid="uid://b6s1c2c0v0c81"]
 
 [ext_resource type="Script" path="res://Scenes/Main/Main.cs" id="1_4mmwa"]
 [ext_resource type="PackedScene" uid="uid://nu2biysl40aq" path="res://Scenes/UI/UI.tscn" id="2_m8vvq"]
@@ -16,80 +16,16 @@
 [ext_resource type="PackedScene" uid="uid://bb8s26xmfrcas" path="res://Scenes/HighScoreTable/HighScoreTable.tscn" id="13_6i0d3"]
 [ext_resource type="PackedScene" uid="uid://bbl6psak4tgdr" path="res://Controls/ShakingCamera/ShakingCamera.tscn" id="15_pa42n"]
 [ext_resource type="PackedScene" uid="uid://gkqgdo51ear1" path="res://Scenes/Splash/Splash.tscn" id="15_ymclg"]
+[ext_resource type="Script" path="res://Scenes/Main/MainAnimationPlayer.cs" id="17_imr0y"]
 [ext_resource type="PackedScene" uid="uid://b7vwd47dqthjj" path="res://Scenes/EnterHighScore/EnterHighScore.tscn" id="17_y8o8g"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_b8eb2"]
 texture = ExtResource("10_5m703")
 
-[sub_resource type="Animation" id="Animation_rlbl8"]
-resource_name = "GameOver"
-length = 18.0
-tracks/0/type = "method"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("HighScoreTable")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(5, 15),
-"transitions": PackedFloat32Array(1, 1),
-"values": [{
-"args": [false],
-"method": &"Show"
-}, {
-"args": [false],
-"method": &"Hide"
-}]
-}
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("UI")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 5),
-"transitions": PackedFloat32Array(1, 1),
-"values": [{
-"args": [],
-"method": &"ShowGameOverLabel"
-}, {
-"args": [],
-"method": &"HideGameOverLabel"
-}]
-}
-tracks/2/type = "method"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("UI")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(18),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"ShowHelpLabel"
-}]
-}
-tracks/3/type = "method"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("UI")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(18),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"ShowStartLabel"
-}]
-}
-
-[sub_resource type="Animation" id="Animation_bsuu6"]
-resource_name = "HighScore"
-length = 10.0
+[sub_resource type="Animation" id="Animation_qwevq"]
+resource_name = "Main Loop"
+length = 60.0
+loop_mode = 1
 tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -107,11 +43,157 @@ tracks/0/keys = {
 "method": &"Hide"
 }]
 }
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("UI")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"HideGameOverLabel"
+}]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("UI")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 30),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"ShowHelpLabel"
+}, {
+"args": [],
+"method": &"HideHelpLabel"
+}]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("UI")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 30),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"ShowStartLabel"
+}, {
+"args": [],
+"method": &"HideStartLabel"
+}]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Splash")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(30),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [true],
+"method": &"Activate"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_rlbl8"]
+resource_name = "Game Over"
+length = 10.0
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("UI")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"ShowGameOverLabel"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MainAnimationPlayer")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(10),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"PlayMainLoop"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_o46ww"]
+resource_name = "Delayed Main Loop"
+length = 10.0
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MainAnimationPlayer")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(10),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"PlayMainLoop"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_vgpro"]
+resource_name = "Splash"
+length = 20.0
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Splash")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [false],
+"method": &"Activate"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MainAnimationPlayer")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(20),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"PlayMainLoop"
+}]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_dba5c"]
 _data = {
-"GameOver": SubResource("Animation_rlbl8"),
-"HighScore": SubResource("Animation_bsuu6")
+"Delayed Main Loop": SubResource("Animation_o46ww"),
+"Game Over": SubResource("Animation_rlbl8"),
+"Main Loop": SubResource("Animation_qwevq"),
+"Splash": SubResource("Animation_vgpro")
 }
 
 [node name="Main" type="Node" groups=["Player"]]
@@ -180,10 +262,11 @@ MaxOffsetX = 10.0
 MaxOffsetY = 10.0
 MaxRotation = 0.01
 
-[node name="GameOverAnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="MainAnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_dba5c")
 }
+script = ExtResource("17_imr0y")
 
 [node name="EnterHighScore" parent="." instance=ExtResource("17_y8o8g")]
 offset = Vector2(0, 200)
