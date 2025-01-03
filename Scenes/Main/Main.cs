@@ -11,19 +11,6 @@ public partial class Main : Node
     private const string _SETTINGS_SAVE_PATH = "user://settings.json";
     private const string _HIGH_SCORE_SAVE_PATH = "user://highscores.json";
 
-    // Inspector configuration values
-    [ExportCategory("Scores")]
-    [Export]
-    private int _scoreAsteroidLarge = 20;
-    [Export]
-    private int _scoreAsteroidMedium = 50;
-    [Export]
-    private int _scoreAsteroidSmall = 100;
-    [Export]
-    private int _scoreSaucerLarge = 200;
-    [Export]
-    private int _scoreSaucerSmall = 1000;
-
     [ExportCategory("Asteroids")]
 
     [Export]
@@ -57,9 +44,6 @@ public partial class Main : Node
     [Export]
     private int _minAsteroidsOnDemoScreen = 4;
 
-    // Score table
-    private readonly Dictionary<AsteroidSize, int> _asteroidScores = new();
-
     // Scene references
     private AsteroidFieldController _asteroidFieldController;
     private PlayerController _playerController;
@@ -76,6 +60,7 @@ public partial class Main : Node
     private MainAnimationPlayer _mainAnimationPlayer;
     private Ui _ui;
     private EnterHighScore _enterHighScore;
+    private Scores _scores;
 
     // State
     private int _asteroidsCurrentInitialQuantity;
@@ -89,14 +74,6 @@ public partial class Main : Node
     // Configurable settings
     private GameSettingsBridge _settingsBridge;
     private GameSettings _gameSettings;
-
-    public override void _EnterTree()
-    {
-        // Set up score table
-        _asteroidScores[AsteroidSize.Large] = _scoreAsteroidLarge;
-        _asteroidScores[AsteroidSize.Medium] = _scoreAsteroidMedium;
-        _asteroidScores[AsteroidSize.Small] = _scoreAsteroidSmall;
-    }
 
     public override void _Ready()
     {
@@ -230,6 +207,7 @@ public partial class Main : Node
         _mainAnimationPlayer = (MainAnimationPlayer)FindChild("MainAnimationPlayer");
         _ui = (Ui)FindChild("UI");
         _enterHighScore = (EnterHighScore)FindChild("EnterHighScore");
+        _scores = (Scores)FindChild("Scores");
     }
 
     private void SetupSceneSignals()
@@ -387,7 +365,7 @@ public partial class Main : Node
         Logger.I.SignalReceived(this, saucer, Saucer.SignalName.Collided, collidedWith, "SMALL");
         if (collidedWith is Missile)
         {
-            IncreaseScore(_scoreSaucerSmall);
+            IncreaseScore(_scores.SaucerSmall);
         }
     }
 
@@ -396,7 +374,7 @@ public partial class Main : Node
         Logger.I.SignalReceived(this, saucer, Saucer.SignalName.Collided, collidedWith, "LARGE");
         if (collidedWith is Missile)
         {
-            IncreaseScore(_scoreSaucerLarge);
+            IncreaseScore(_scores.SaucerLarge);
         }
     }
 
@@ -407,7 +385,7 @@ public partial class Main : Node
         {
             if (missile.GetParent()?.GetParent() is PlayerController)
             {
-                IncreaseScore(_asteroidScores[size]);
+                IncreaseScore(_scores.AsteroidScore(size));
             }
         }
     }

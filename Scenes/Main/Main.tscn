@@ -1,6 +1,7 @@
-[gd_scene load_steps=25 format=3 uid="uid://b6s1c2c0v0c81"]
+[gd_scene load_steps=26 format=3 uid="uid://b6s1c2c0v0c81"]
 
 [ext_resource type="Script" path="res://Scenes/Main/Main.cs" id="1_4mmwa"]
+[ext_resource type="Script" path="res://Scenes/Main/Scores.cs" id="2_4ldx0"]
 [ext_resource type="PackedScene" uid="uid://nu2biysl40aq" path="res://Scenes/UI/UI.tscn" id="2_m8vvq"]
 [ext_resource type="PackedScene" uid="uid://bx0l2shyhmj8q" path="res://Scenes/AsteroidFieldController/AsteroidFieldController.tscn" id="3_37sgv"]
 [ext_resource type="PackedScene" uid="uid://ccd52kbej7r3l" path="res://Scenes/Player/PlayerController.tscn" id="3_c81ab"]
@@ -198,6 +199,9 @@ _data = {
 
 [node name="Main" type="Node" groups=["Player"]]
 script = ExtResource("1_4mmwa")
+
+[node name="Scores" type="Node" parent="."]
+script = ExtResource("2_4ldx0")
 
 [node name="Background" type="Panel" parent="."]
 anchors_preset = 15
