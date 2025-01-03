@@ -251,7 +251,7 @@ public static class GameSettingsPresets
         ShipTurnSpeed = 5.5f,
         ShipLinearDampening = 0.9f,
 
-        PlayerMaxMissiles = 8,
+        PlayerMaxMissiles = 4,
         PlayerMissilesSpeed = 550,
         PlayerMissilesLifespan = 2f,
 

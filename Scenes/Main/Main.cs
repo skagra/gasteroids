@@ -27,7 +27,9 @@ public partial class Main : Node
     [ExportCategory("Asteroids")]
 
     [Export]
-    private int _asteroidsNewSheetDelta = 1;
+    private int _asteroidsNewSheetDelta = 2;
+    [Export]
+    private float _asteroidsSpeedDelta = 1.2f;
 
     [ExportCategory("Saucers")]
     [Export]
@@ -435,9 +437,13 @@ public partial class Main : Node
 
     private void IncreaseDifficulty()
     {
-        // Increment number of asteroids to spawn and keep it within permitted range
+        // Increase the number of asteroids to spawn and keep it within permitted range
         _asteroidsCurrentInitialQuantity += _asteroidsNewSheetDelta;
         _asteroidsCurrentInitialQuantity = Mathf.Min(_asteroidsCurrentInitialQuantity, _gameSettings.AsteroidsMaxQuantity);
+
+        // Increase asteroid speed
+        _asteroidFieldController.MinSpeed *= _asteroidsSpeedDelta;
+        _asteroidFieldController.MaxSpeed *= _asteroidsSpeedDelta;
 
         // Increase the frequency at which saucers spawn
         _largeSaucerController.SpawnTimerMax = Mathf.Max(_largeSaucerController.SpawnTimerMax * _largeSaucerSpawnTimerDeltaProportion, _largeSaucerSpawnTimerFloor);
@@ -445,8 +451,6 @@ public partial class Main : Node
 
         _smallSaucerController.SpawnTimerMax = Mathf.Max(_smallSaucerController.SpawnTimerMax * _smallSaucerSpawnTimerDeltaProportion, _smallSaucerSpawnTimerFloor);
         _smallSaucerController.SpawnTimerMin = Mathf.Max(_smallSaucerController.SpawnTimerMin * _smallSaucerSpawnTimerDeltaProportion, _smallSaucerSpawnTimerFloor);
-
-        // TODO Increase asteroid speed
     }
 
     private void PlayerOnExploded()
