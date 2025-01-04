@@ -72,7 +72,7 @@ grow_vertical = 2
 mouse_default_cursor_shape = 4
 theme = ExtResource("1_wn4t5")
 
-[node name="Title Label" type="Label" parent="Control"]
+[node name="Title Label" type="Label" parent="Control" groups=["Themeable"]]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -89,7 +89,7 @@ theme_type_variation = &"TitleLabel"
 text = "Asteroids"
 horizontal_alignment = 1
 
-[node name="By Line Label" type="Label" parent="Control"]
+[node name="By Line Label" type="Label" parent="Control" groups=["Themeable"]]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -107,7 +107,7 @@ theme_type_variation = &"ByLineLabel"
 text = "Paul Harvey"
 horizontal_alignment = 1
 
-[node name="Gitlab Label" type="Label" parent="Control"]
+[node name="Gitlab Label" type="Label" parent="Control" groups=["Themeable"]]
 layout_mode = 0
 offset_left = 2.0
 offset_top = 543.0
