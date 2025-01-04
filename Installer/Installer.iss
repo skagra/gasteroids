@@ -16,7 +16,7 @@ Source: {#RELEASE_DIR}\*; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
 
 [Icons]
 Name: "{group}\{#APP_NAME}"; Filename: "{app}\{#EXE_NAME}"
-Name: "{group}\README"; Filename: "https://github.com/skagra/gasteroids/blob/main/README.md"
+Name: "{group}\README"; Filename: "https://github.com/skagra/gasteroids#readme"
 Name: "{group}\Source Code"; Filename: "https://github.com/skagra/gasteroids/"
 Name: "{group}\License"; Filename: "https://github.com/skagra/gasteroids/blob/main/LICENSE"
 
