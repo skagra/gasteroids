@@ -12,7 +12,7 @@ The following tooling was used to develop Asteroids:
 * [Inno](https://jrsoftware.org/isinfo.php) - Installer tool for Windows.
 * [Gimp](https://www.gimp.org/) - The GNU image manipulation program.
 * [Git](https://git-scm.com/downloads/win) - The Git source code management system.
-* [7zip](https://www.7-zip.org/) - File archiving tool.
+* [7Zip](https://www.7-zip.org/) - File archiving tool.
 
 # Development Set Up
 
