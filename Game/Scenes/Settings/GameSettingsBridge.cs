@@ -42,9 +42,7 @@ public class GameSettingsBridge
 
         if ((ignoreFields & Fields.Sound) == 0)
         {
-            // TODO Pull out names into constants - or even into method?
-            // TODO Arbitrarily using _asteroidFieldController to get tree is not great
-            _asteroidFieldController.GetTree().CallGroup("SoundFx", "EnableFx", value.SoundEnabled);
+            Resources.EnableNewSoundFx(value.SoundEnabled);
         }
 
         _playerController.PlayerThrustForce = value.ShipAcceleration;

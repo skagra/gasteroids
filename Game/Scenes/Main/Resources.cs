@@ -34,7 +34,8 @@ public partial class Resources : Node
 
     public static readonly PackedScene LifeScene = GD.Load<PackedScene>("res://Scenes/UI/LifeTextureRect.tscn");
 
-    public static Panel _background;
+    private static Panel _background;
+
     public override void _EnterTree()
     {
         _I = this;
@@ -58,5 +59,10 @@ public partial class Resources : Node
                 _background.Show();
                 break;
         }
+    }
+
+    public static void EnableNewSoundFx(bool enable)
+    {
+        _I.GetTree().CallGroup("SoundFx", "EnableFx", enable);
     }
 }

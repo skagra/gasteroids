@@ -142,6 +142,7 @@ public partial class Main : Node
             // point is free from asteroids
             if (!_exclusionZone.HasOverlappingAreas())
             {
+                Logger.I.Debug("Entering game state {0}", GameState.Playing);
                 _gameState = GameState.Playing;
                 _exclusionZoneCollisionShape.Disabled = true;
                 _playerController.Activate(_shipSpawnPosition);
@@ -250,7 +251,7 @@ public partial class Main : Node
     {
         var demoSettings = GameSettingsPresets.GetSettings(SettingsPresets.Demo);
         _settingsBridge.Apply(demoSettings, GameSettingsBridge.Fields.Theme | GameSettingsBridge.Fields.Sound);
-        EnableNewSoundFx(false);
+        Resources.EnableNewSoundFx(false);
 
         if (demoSettings.LargeSaucerEnabled)
         {
@@ -320,7 +321,7 @@ public partial class Main : Node
         }
 
         // Enable FX audio according to configuration
-        EnableNewSoundFx(_gameSettings.SoundEnabled);
+        Resources.EnableNewSoundFx(_gameSettings.SoundEnabled);
 
         // Start playing the beats sounds
         _beats.Reset();
@@ -340,7 +341,7 @@ public partial class Main : Node
         _uiUtils.ShowAndHide(ViewableElements.FadingOverlay);
 
         // Disable all new sound fxs
-        EnableNewSoundFx(false);
+        Resources.EnableNewSoundFx(false);
 
         // Check if the score is high enough to be included in the high score table
         if (_highScoreTable.IsEligibleForInclusion(_ui.Score))
@@ -460,7 +461,7 @@ public partial class Main : Node
 
             // This is safe wrt signal delivery order
             // as there is a gap between "Exploding" and "Exploded"
-            Logger.I.Debug("Setting game state to {0}", GameState.AwaitingNewShip);
+            Logger.I.Debug("Entering game state {0}", GameState.AwaitingNewShip);
             _gameState = GameState.AwaitingNewShip;
             _beats.Start();
         }
@@ -514,7 +515,7 @@ public partial class Main : Node
         _mainAnimationPlayer.Stop();
         _settingsDialog.ActiveSettings = _gameSettings;
         _uiUtils.ShowAndHide(ViewableElements.SettingsDialog | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
-        Logger.I.Debug("Setting game state to {0}", GameState.ShowingConfigDialog);
+        Logger.I.Debug("Entering game state {0}", GameState.ShowingConfigDialog);
         _gameState = GameState.ShowingConfigDialog;
     }
 
@@ -525,7 +526,7 @@ public partial class Main : Node
         _settingsBridge.Apply(_gameSettings, GameSettingsBridge.Fields.Sound);
         GameSettingsPersistence.Save(_settingsDialog.ActiveSettings, _SETTINGS_SAVE_PATH);
         _mainAnimationPlayer.PlayDelayedMainLoop();
-        Logger.I.Debug("Setting game state to {0}", GameState.WaitingToPlay);
+        Logger.I.Debug("Entering game state {0}", GameState.WaitingToPlay);
         _gameState = GameState.WaitingToPlay;
     }
 
@@ -533,7 +534,7 @@ public partial class Main : Node
     {
         _uiUtils.ShowAndHide(ViewableElements.StartLabel | ViewableElements.HelpLabel | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
         _mainAnimationPlayer.PlayDelayedMainLoop();
-        Logger.I.Debug("Setting game state to {0}", GameState.WaitingToPlay);
+        Logger.I.Debug("Entering game state {0}", GameState.WaitingToPlay);
         _gameState = GameState.WaitingToPlay;
     }
 
@@ -545,7 +546,7 @@ public partial class Main : Node
     {
         _mainAnimationPlayer.Stop();
         _uiUtils.ShowAndHide(ViewableElements.HelpDialog | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
-        Logger.I.Debug("Setting game state to {0}", GameState.ShowingHelpDialog);
+        Logger.I.Debug("Entering game state {0}", GameState.ShowingHelpDialog);
         _gameState = GameState.ShowingHelpDialog;
     }
 
@@ -553,18 +554,9 @@ public partial class Main : Node
     {
         _uiUtils.ShowAndHide(ViewableElements.StartLabel | ViewableElements.HelpLabel | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
         _mainAnimationPlayer.PlayDelayedMainLoop();
-        Logger.I.Debug("Setting game state to {0}", GameState.WaitingToPlay);
+        Logger.I.Debug("Entering game state {0}", GameState.WaitingToPlay);
         _gameState = GameState.WaitingToPlay;
     }
 
     // <-- Help dialog
-
-    // Audio -->
-
-    private void EnableNewSoundFx(bool enable)
-    {
-        GetTree().CallGroup("SoundFx", "EnableFx", enable);  // TODO Pull out names into constants
-    }
-
-    // <-- Audio
 }
