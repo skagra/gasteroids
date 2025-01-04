@@ -22,20 +22,23 @@ public partial class Main : Node
     [Export]
     private float _largeSaucerSpawnTimerFloor = 5;
     [Export]
-    private float _largeSaucerSpawnTimerDeltaProportion = 0.5f;
+    private float _largeSaucerSpawnTimerDeltaProportion = 0.75f;
 
     [Export]
     private float _smallSaucerSpawnTimerFloor = 5;
     [Export]
-    private float _smallSaucerSpawnTimerDeltaProportion = 0.5f;
+    private float _smallSaucerSpawnTimerDeltaProportion = 0.75f;
 
-    [ExportCategory("Misc")]
-    [Export]
-    private int _safeZoneRadius = 200;
+    [ExportCategory("Demo Asteroid Field")]
     [Export]
     private int _startAsteroidsOnDemoScreen = 15;
     [Export]
     private int _minAsteroidsOnDemoScreen = 4;
+
+    [ExportCategory("Misc")]
+    [Export]
+    private int _safeZoneRadius = 200;
+
 
     // Scene references
     private AsteroidFieldController _asteroidFieldController;
@@ -403,6 +406,7 @@ public partial class Main : Node
             }
         }
     }
+
     private void IncreaseScore(int increase)
     {
         _ui.Score += increase;
