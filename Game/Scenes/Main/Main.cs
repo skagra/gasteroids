@@ -434,7 +434,7 @@ public partial class Main : Node
 
     private void IncreaseDifficulty()
     {
-        // Increase the number of asteroids to spawn and keep it within permitted range
+        // Increase the number of asteroids but keep it within permitted range
         _asteroidsCurrentInitialQuantity += _asteroidsNewSheetDelta;
         _asteroidsCurrentInitialQuantity = Mathf.Min(_asteroidsCurrentInitialQuantity, _gameSettings.AsteroidsMaxQuantity);
 
