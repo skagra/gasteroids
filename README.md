@@ -18,11 +18,13 @@ While Asteroids remains the core of the game this version is highly configurable
 * There are many small tweaks such as rotating asteroids, UI fade-ins and camera shake.
 * Many aspects of the behaviour of the player ship, asteroids and saucers may be customized via difficulty-based presets.  In addition  individual game play settings may be tweaked e.g. the rate of player ship acceleration, the frequency at which saucers spawn and the magnitude of gravitational pull.
 
-Find out [How to Play](docs/howtoplay.md), see the [Credits](docs/credits.md) where I've pulled in 3rd party graphics, fonts and sounds, and consult the [References](docs/references.md) I found useful during development.
+Find out [How to Play](docs/howtoplay.md), see the [Credits](docs/credits.md) where I've pulled in 3rd party graphics, fonts and sounds, and consult the [References](docs/references.md) I found useful during development.  
+
+Should you be interested in further developing the game, or just fancy poking around under the hood there some information on the tooling you'll need together with build instructions [here](docs/building-and-tools).
 
 # Status
 
-The game is nearing feature completion with a first beta release being imminent.
+The game has reached feature completion and an initial beta is available for [download](https://github.com/skagra/gasteroids/releases/tag/1.0.0b1).
 
 # License
 

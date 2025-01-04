@@ -8,7 +8,7 @@ UninstallDisplayIcon="{app}\{#EXE_NAME}""
 Compression=lzma2
 SolidCompression=yes
 OutputDir="{#INSTALLER_DIR}"
-OutputBaseFilename="{#APP_NAME}-{#VERSION}-win-setup"
+OutputBaseFilename="{#APP_NAME}-win-setup-{#VERSION}"
 WizardImageFile="{#WIZARD_IMAGE}"
 
 [Files]
