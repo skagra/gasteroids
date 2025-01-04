@@ -42,7 +42,7 @@ win-distro: win-release
 	cd  $(WIN_RELEASE_DIR) & ${ZIP} a -tzip -r ..\$(APP_NAME)-win-$(VERSION).zip .
 
 linux-distro: linux-release
-	cd  $(LINUX_RELEASE_DIR) & ${ZIP} a -tzip -r ..\$(APP_NAME)-linux-$(VERSION)-linux.zip .
+	cd  $(LINUX_RELEASE_DIR) & ${ZIP} a -tzip -r ..\$(APP_NAME)-linux-$(VERSION).zip .
 
 clean:
 	rmdir /S /Q $(BIN_DIR)
