@@ -5,6 +5,7 @@ ZIP=7z.exe
 BIN_DIR=Bin
 DEBUG_DIR=$(BIN_DIR)\Debug
 RELEASE_DIR=$(BIN_DIR)\Release
+LINUX_DIR=$(BIN_DIR)\Linux
 ASSETS_DIR=Assets
 
 GAME_DIR=..\Game

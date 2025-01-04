@@ -1,6 +1,6 @@
 include Vars.mk
 
-TARGETS = release debug install distro
+TARGETS = release debug install linux-release distro linux-distro
 
 all: $(TARGETS)
 
@@ -15,6 +15,9 @@ $(DEBUG_DIR): $(BIN_DIR)
 $(RELEASE_DIR): $(BIN_DIR)
 	if not exist $(RELEASE_DIR) mkdir $(RELEASE_DIR)
 
+$(LINUX_DIR): $(BIN_DIR)
+	if not exist $(LINUX_DIR) mkdir $(LINUX_DIR)
+
 $(INSTALLER_DIR): $(BIN_DIR)
 	if not exist $(INSTALLER_DIR) mkdir $(INSTALLER_DIR)
 
@@ -23,6 +26,9 @@ release: $(RELEASE_DIR)
 
 debug: $(DEBUG_DIR)
 	$(GODOT) --path $(GAME_DIR) --export-debug "Windows Desktop" ..\Installer\$(RELEASE_DIR)\$(ASTEROIDS_EXE) --display-driver headless --audio-driver Dummy
+
+linux-release: $(LINUX_DIR)
+	$(GODOT) --path $(GAME_DIR) --export-release "Linux" ..\Installer\$(LINUX_DIR)\$(ASTEROIDS_EXE) --display-driver headless --audio-driver Dummy
 
 install: release
 	$(ISCC) /O$(BIN_DIR) /Qp \
@@ -34,6 +40,9 @@ install: release
 
 distro: release
 	cd  $(RELEASE_DIR) & ${ZIP} a -tzip -r ..\$(APP_NAME)-$(VERSION).zip .
+
+linux-distro: linux-release
+	cd  $(LINUX_DIR) & ${ZIP} a -tzip -r ..\$(APP_NAME)-$(VERSION)-linux.zip .
 
 clean:
 	rmdir /S /Q $(BIN_DIR)
