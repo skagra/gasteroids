@@ -20,7 +20,7 @@ While Asteroids remains the core of the game this version is highly configurable
 
 Find out [How to Play](docs/howtoplay.md), see the [Credits](docs/credits.md) where I've pulled in 3rd party graphics, fonts and sounds, and consult the [References](docs/references.md) I found useful during development.  
 
-Should you be interested in further developing the game, or just fancy poking around under the hood, then you'll find some information on the tooling you'll need together with build instructions [here](docs/building-and-tools).
+Should you be interested in further developing the game, or just fancy poking around under the hood, then you'll find some information on the tooling you'll need together with build instructions [here](docs/building-and-tools.md).
 
 # Status
 
