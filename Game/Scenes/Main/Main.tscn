@@ -246,6 +246,10 @@ size_flags_vertical = 3
 
 [node name="UI" parent="." instance=ExtResource("2_m8vvq")]
 
+[node name="EnterHighScore" parent="." instance=ExtResource("17_y8o8g")]
+offset = Vector2(0, 200)
+transform = Transform2D(1, 0, 0, 1, 0, 200)
+
 [node name="Help Dialog" parent="." instance=ExtResource("9_4054w")]
 visible = false
 
@@ -271,7 +275,3 @@ libraries = {
 "": SubResource("AnimationLibrary_dba5c")
 }
 script = ExtResource("17_imr0y")
-
-[node name="EnterHighScore" parent="." instance=ExtResource("17_y8o8g")]
-offset = Vector2(0, 200)
-transform = Transform2D(1, 0, 0, 1, 0, 200)

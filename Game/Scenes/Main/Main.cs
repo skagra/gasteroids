@@ -123,6 +123,9 @@ public partial class Main : Node
 
         // Splash screen followed by main animation loop
         _mainAnimationPlayer.PlaySplash();
+
+        // Hide the cursor
+        Input.MouseMode = Input.MouseModeEnum.Hidden;
     }
 
     private void ActivateSplashScreen()
@@ -190,6 +193,29 @@ public partial class Main : Node
             {
                 ShowHelpDialog();
             }
+        }
+    }
+
+    public override void _Notification(int what)
+    {
+        /// Maybe better to
+        switch ((long)what)
+        {
+            case NotificationApplicationFocusIn:
+                if (_gameState == GameState.WaitingToPlay || _gameState == GameState.AwaitingNewShip || _gameState == GameState.Playing)
+                {
+                    Input.MouseMode = Input.MouseModeEnum.Hidden;
+                }
+                else
+                {
+                    Input.MouseMode = Input.MouseModeEnum.Visible;
+                }
+                break;
+            case NotificationApplicationFocusOut:
+                Input.MouseMode = Input.MouseModeEnum.Visible;
+                break;
+            default:
+                break;
         }
     }
 
@@ -516,6 +542,7 @@ public partial class Main : Node
 
     private void ShowConfigDialog()
     {
+        Input.MouseMode = Input.MouseModeEnum.Visible;
         _mainAnimationPlayer.Stop();
         _settingsDialog.ActiveSettings = _gameSettings;
         _uiUtils.ShowAndHide(ViewableElements.SettingsDialog | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
@@ -525,6 +552,7 @@ public partial class Main : Node
 
     private void SettingsDialogOnOkPressed()
     {
+        Input.MouseMode = Input.MouseModeEnum.Hidden;
         _uiUtils.ShowAndHide(ViewableElements.StartLabel | ViewableElements.HelpLabel | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
         _gameSettings = new GameSettings(_settingsDialog.ActiveSettings); // TODO Or better dialog can give back a copy
         _settingsBridge.Apply(_gameSettings, GameSettingsBridge.Fields.Sound);
@@ -536,6 +564,7 @@ public partial class Main : Node
 
     private void SettingsDialogOnCancel()
     {
+        Input.MouseMode = Input.MouseModeEnum.Hidden;
         _uiUtils.ShowAndHide(ViewableElements.StartLabel | ViewableElements.HelpLabel | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
         _mainAnimationPlayer.PlayDelayedMainLoop();
         Logger.I.Debug("Entering game state {0}", GameState.WaitingToPlay);
@@ -548,6 +577,7 @@ public partial class Main : Node
 
     private void ShowHelpDialog()
     {
+        Input.MouseMode = Input.MouseModeEnum.Visible;
         _mainAnimationPlayer.Stop();
         _uiUtils.ShowAndHide(ViewableElements.HelpDialog | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
         Logger.I.Debug("Entering game state {0}", GameState.ShowingHelpDialog);
@@ -556,6 +586,7 @@ public partial class Main : Node
 
     private void HelpDialogOnOkPressed()
     {
+        Input.MouseMode = Input.MouseModeEnum.Hidden;
         _uiUtils.ShowAndHide(ViewableElements.StartLabel | ViewableElements.HelpLabel | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
         _mainAnimationPlayer.PlayDelayedMainLoop();
         Logger.I.Debug("Entering game state {0}", GameState.WaitingToPlay);

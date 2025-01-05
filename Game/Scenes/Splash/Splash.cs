@@ -30,7 +30,7 @@ public partial class Splash : CanvasLayer
 
     public override void _PhysicsProcess(double delta)
     {
-        if (!_terminating && Input.IsAnythingPressed())
+        if (!_terminating && Input.IsActionPressed("Skip"))
         {
             _terminating = true;
             _animationPlayer.SpeedScale = 10f;
@@ -47,6 +47,7 @@ public partial class Splash : CanvasLayer
 
     public void Activate(bool mute = false)
     {
+        _terminating = false;
         _animationPlayer.SpeedScale = 1f;
         if (!mute)
         {
