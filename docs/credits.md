@@ -9,7 +9,7 @@ The following lists all external resources (fonts, graphics and sound) used in t
 
 ## Sprites
 
-* Sprite images were downloaded from [Open Game Art](https://opengameart.org/content/asteroids-vector-style-sprites) and were created by by Joe Strout.
+* Sprite images were downloaded from [Open Game Art](https://opengameart.org/content/asteroids-vector-style-sprites) and were created by by Joe Strout.  I've modified these a little to address a problem in cutting out each of the sprites without compromising the glow effect.
 
 ## Fonts
 
