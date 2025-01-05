@@ -4,9 +4,9 @@
 [ext_resource type="AudioStream" uid="uid://c8us0o6o07gid" path="res://Audio/saucerSmall.wav" id="2_s406a"]
 [ext_resource type="Texture2D" uid="uid://bonlrwqihq7e" path="res://Graphics/Asteroids.png" id="3_468m4"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_0m5mj"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_ohms7"]
 atlas = ExtResource("3_468m4")
-region = Rect2(419, 164, 92, 77)
+region = Rect2(409, 217, 119, 100)
 
 [node name="SmallSaucer" instance=ExtResource("1_euscf")]
 collision_layer = 16
@@ -14,7 +14,7 @@ _saucerSound = ExtResource("2_s406a")
 
 [node name="Sprite2D" parent="." index="0"]
 scale = Vector2(0.5, 0.5)
-texture = SubResource("AtlasTexture_0m5mj")
+texture = SubResource("AtlasTexture_ohms7")
 
 [node name="CollisionPolygon2D" parent="." index="1"]
-polygon = PackedVector2Array(-4, -12, 3, -12, 14, 1, 6, 8, -7, 8, -15, 1)
+polygon = PackedVector2Array(-2, -10, 4, -10, 16, 4, 7, 11, -5, 11, -15, 4)

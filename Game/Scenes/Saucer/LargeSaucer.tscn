@@ -4,15 +4,15 @@
 [ext_resource type="Texture2D" uid="uid://bonlrwqihq7e" path="res://Graphics/Asteroids.png" id="1_fkrqp"]
 [ext_resource type="AudioStream" uid="uid://cqrf4or8yw26i" path="res://Audio/saucerBig.wav" id="2_ytwoy"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_pyiya"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_gwuhj"]
 atlas = ExtResource("1_fkrqp")
-region = Rect2(414, 159, 98, 84)
+region = Rect2(414, 221, 113, 98)
 
 [node name="LargeSaucer" instance=ExtResource("1_d4b0j")]
 _saucerSound = ExtResource("2_ytwoy")
 
 [node name="Sprite2D" parent="." index="0"]
-texture = SubResource("AtlasTexture_pyiya")
+texture = SubResource("AtlasTexture_gwuhj")
 
 [node name="CollisionPolygon2D" parent="." index="1"]
-polygon = PackedVector2Array(-6, -24, -28, 4, -11, 17, 12, 17, 28, 4, 8, -24)
+polygon = PackedVector2Array(-7, -22, -31, 5, -12, 19, 12, 19, 30, 5, 7, -22)
