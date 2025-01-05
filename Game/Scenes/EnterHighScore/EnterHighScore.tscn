@@ -34,7 +34,7 @@ text = "Please enter your name followed by [Return]"
 
 [node name="High Score" type="LineEdit" parent="PanelContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 30
+theme_type_variation = &"HighScoreNameEntry"
 alignment = 1
 max_length = 14
 expand_to_text_length = true
