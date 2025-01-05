@@ -1,10 +1,12 @@
 # Building and Tools
 
+This page describes both what's needed to further develop Asteroids as well as how to create a distribution. 
+
 # Tooling
 
-The following tooling was used to develop Asteroids:
+The following software was used to develop Asteroids:
 
-* [Godot](https://godotengine.org/) - The Godot game engine, version 4.3
+* [Godot](https://godotengine.org/) - The Godot game engine, version 4.3.
 * [VSCode](https://code.visualstudio.com/) - Code editor/IDE. 
 * [C#/.Net](https://dotnet.microsoft.com/en-us/languages/csharp) - The development language and framework.
 * [rcedit](https://github.com/electron/rcedit) - Used by Godot to edit Windows exe resources as part of the export process.
@@ -12,7 +14,7 @@ The following tooling was used to develop Asteroids:
 * [Inno](https://jrsoftware.org/isinfo.php) - Installer tool for Windows.
 * [Gimp](https://www.gimp.org/) - The GNU image manipulation program.
 * [Git](https://git-scm.com/downloads/win) - The Git source code management system.
-* [7Zip](https://www.7-zip.org/) - File archiving tool.
+* [7Zip](https://www.7-zip.org/) - A file archiving tool.
 
 # Development Set Up
 
@@ -38,7 +40,9 @@ With the required programmes installed:
 
 # Release Set Up
 
-In addition to the tools needed to develop Asteroids described above, to create a release, you'll need to have `rcedit`, `make`, `7Zip` and `Inno` installed and in your path.
+In addition to the tools needed to develop the game, in order to create a release you'll need `rcedit`, `make`, `7Zip` and `Inno` installed and in your path.  
+
+To create a release:
 
 1. In a terminal `cd` to the `Installer` directory under your cloned copy of the source.
 2. All builds are created via `make` and will be written to the `Bin` directory.  The `Makefile` has the following targets:
@@ -52,5 +56,9 @@ In addition to the tools needed to develop Asteroids described above, to create 
     `win-distro` - Create a Zip of a Windows release in `Bin\Asteroids-win-{version}.zip`.
 
     `linux-distro` - Create a Zip of a Linux release in `Bin\Asteroids-linux-{version}.zip`
+
+    So for example to create a Windows installer for the game type:
+
+    `make win-install`
 
 
