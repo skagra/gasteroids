@@ -72,7 +72,7 @@ public partial class Main : Node
     private GameSettings _gameSettings;
 
     // UI hide and show utils
-    UiUtils _uiUtils;
+    private UiUtils _uiUtils;
 
     public override void _Ready()
     {
