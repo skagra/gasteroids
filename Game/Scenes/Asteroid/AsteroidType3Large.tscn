@@ -5,7 +5,7 @@
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8ng4t"]
 atlas = ExtResource("2_1vv3w")
-region = Rect2(325, 11, 150, 146)
+region = Rect2(418, 21, 171, 168)
 
 [node name="AsteroidType3Large" instance=ExtResource("1_0kbts")]
 
@@ -13,4 +13,4 @@ region = Rect2(325, 11, 150, 146)
 texture = SubResource("AtlasTexture_8ng4t")
 
 [node name="CollisionPolygon2D" parent="." index="1"]
-polygon = PackedVector2Array(-52, -18, -13, -56, 26, -56, 54, -18, 54, 11, 28, 48, -24, 46, -51, 9)
+polygon = PackedVector2Array(-52, -18, -16, -52, 22, -53, 52, -12, 52, 15, 22, 52, -27, 52, -52, 14)

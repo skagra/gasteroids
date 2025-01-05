@@ -5,7 +5,7 @@
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5qurw"]
 atlas = ExtResource("2_wdrrr")
-region = Rect2(0, 0, 160, 160)
+region = Rect2(28, 22, 170, 170)
 
 [node name="AsteroidInherited" instance=ExtResource("1_v2obi")]
 

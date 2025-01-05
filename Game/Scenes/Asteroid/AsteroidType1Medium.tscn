@@ -5,7 +5,7 @@
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_j4sgu"]
 atlas = ExtResource("2_s3gpf")
-region = Rect2(0, 166, 86, 86)
+region = Rect2(34, 209, 111, 111)
 
 [node name="AsteroidType1Medium" instance=ExtResource("1_hfpox")]
 

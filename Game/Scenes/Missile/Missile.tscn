@@ -5,10 +5,10 @@
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2jvkt"]
 atlas = ExtResource("2_moky6")
-region = Rect2(480, 288, 32, 32)
+region = Rect2(577, 359, 47, 47)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_jaqsg"]
-radius = 5.09902
+radius = 5.0
 
 [node name="Missile" type="Area2D"]
 collision_layer = 2

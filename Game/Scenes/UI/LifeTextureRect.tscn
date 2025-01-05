@@ -1,9 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://cehbsncml262w"]
+[gd_scene load_steps=4 format=3 uid="uid://cehbsncml262w"]
 
-[ext_resource type="Texture2D" uid="uid://bg6wnum516ph2" path="res://Graphics/Ships.png" id="1_xcdmb"]
+[ext_resource type="Texture2D" uid="uid://bonlrwqihq7e" path="res://Graphics/Asteroids.png" id="1_3cqur"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7mawu"]
+atlas = ExtResource("1_3cqur")
+region = Rect2(322, 344, 95, 75)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hs5nt"]
-atlas = ExtResource("1_xcdmb")
+atlas = SubResource("AtlasTexture_7mawu")
 region = Rect2(0, 0, 86, 66)
 
 [node name="LifeTextureRect" type="TextureRect"]
