@@ -21,6 +21,13 @@ public partial class NumericSpinBox : SpinBox
         Alignment = HorizontalAlignment.Right;
         _lineEdit = GetLineEdit();
         _lineEdit.GuiInput += LineEditGuiInput;
+
+        if (GetParent() is Window)
+        {
+            Position = Screen.Centre;
+            Show();
+            GrabClickFocus();
+        }
     }
 
     private void LineEditGuiInput(InputEvent inputEvent)

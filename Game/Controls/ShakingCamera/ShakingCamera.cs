@@ -1,33 +1,47 @@
 using Godot;
 
+namespace Asteroids;
+
 public partial class ShakingCamera : Camera2D
 {
     [Export]
-    public float Decay { get; set; }
+    public float MaxOffsetX { get; set; } = 10f;
     [Export]
-    public float MaxOffsetX { get; set; }
+    public float MaxOffsetY { get; set; } = 10f;
     [Export]
-    public float MaxOffsetY { get; set; }
-    [Export]
-    public float MaxRotation { get; set; }
+    public float MaxRotation { get; set; } = 1f;
 
     private bool _isActive = false;
 
     public override void _Ready()
     {
         IgnoreRotation = false;
+        SetPhysicsProcess(false);
+        if (GetParent() is Window)
+        {
+            var panel = new PanelContainer();
+            AddChild(panel);
+            panel.AddChild(new Label
+            {
+                Text = "Testing",
+                HorizontalAlignment = HorizontalAlignment.Center,
+            });
+            Activate();
+        }
     }
 
     public void Activate()
     {
+        this.Enable(true);
         _isActive = true;
     }
 
     public void Deactivate()
     {
-        _isActive = false;
+        SetPhysicsProcess(false);
         Offset = Vector2.Zero;
         Rotation = 0f;
+        SetPhysicsProcess(false);
     }
 
     public override void _PhysicsProcess(double delta)

@@ -51,7 +51,7 @@ offset_right = 19.5
 offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
-text = "Testf"
+text = "Testing"
 horizontal_alignment = 1
 script = ExtResource("1_un5tk")
 

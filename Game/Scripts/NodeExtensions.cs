@@ -26,6 +26,7 @@ public static class GodotExtensions
         node.SetPhysicsProcess(enable);
         node.SetProcessInput(enable);
     }
+
     public static void EnableDeferred(this Node node, bool enable)
     {
         node.CallDeferred(Area2D.MethodName.SetProcess, enable);

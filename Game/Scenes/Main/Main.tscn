@@ -266,8 +266,6 @@ transform = Transform2D(1, 0, 0, 1, 0, 20)
 position = Vector2(960, 540)
 anchor_mode = 1
 position_smoothing_enabled = true
-MaxOffsetX = 10.0
-MaxOffsetY = 10.0
 MaxRotation = 0.01
 
 [node name="MainAnimationPlayer" type="AnimationPlayer" parent="."]
