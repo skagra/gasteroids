@@ -71,20 +71,20 @@ public partial class AsteroidFieldController : Node
     // Asteroid scenes
     private readonly List<PackedScene> _largeAsteroidPrefabs = new() {
         Resources.AsteroidType1Large,
-        Resources.AsteroidType1Large,
-        Resources.AsteroidType1Large
+        Resources.AsteroidType2Large,
+        Resources.AsteroidType3Large
     };
 
     private readonly List<PackedScene> _mediumAsteroidPrefabs = new() {
         Resources.AsteroidType1Medium,
-        Resources.AsteroidType1Medium,
-        Resources.AsteroidType1Medium
+        Resources.AsteroidType2Medium,
+        Resources.AsteroidType3Medium
     };
 
     private readonly List<PackedScene> _smallAsteroidPrefabs = new() {
         Resources.AsteroidType1Small,
-        Resources.AsteroidType1Small,
-        Resources.AsteroidType1Small
+        Resources.AsteroidType2Small,
+        Resources.AsteroidType3Small
     };
 
     // List of all active asteroids

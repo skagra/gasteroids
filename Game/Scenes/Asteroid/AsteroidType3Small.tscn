@@ -8,7 +8,6 @@ atlas = ExtResource("2_3bply")
 region = Rect2(127, 256, 65, 64)
 
 [node name="AsteroidType3Small" instance=ExtResource("1_4dxdc")]
-_testingLinearVelocity = Vector2(0, 0)
 
 [node name="Sprite2D" parent="." index="0"]
 texture = SubResource("AtlasTexture_qu0wd")
