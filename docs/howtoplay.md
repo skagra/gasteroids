@@ -52,7 +52,7 @@ Hit the *C* key in-game to enter the configuration dialogue.
 
 At a macro level there are five pre-canned configurations which adjust all settings via a single selection.
 
-Four apply the *modern" user interface at progressively harder levels of difficulty and the fifth (*Classic*) models the original arcade machine in look and game-play. 
+Four apply the *modern* user interface at progressively harder levels of difficulty and the fifth (*Classic*) models the original arcade machine in look and game-play. 
 
 Should you wish to tweak further all of the following may be configured individually.
 
