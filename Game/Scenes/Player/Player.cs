@@ -55,7 +55,6 @@ public partial class Player : RigidBody2D
 
         _area2D.AreaEntered += Area2DAreaEntered;
 
-        // TODO Scaling
         _spriteSize = _sprite.SpriteFrames.GetFrameTexture(_sprite.Animation, _sprite.Frame).GetSize();
 
         if (GetParent() is not Window)

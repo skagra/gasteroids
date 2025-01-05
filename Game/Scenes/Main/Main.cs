@@ -554,7 +554,7 @@ public partial class Main : Node
     {
         Input.MouseMode = Input.MouseModeEnum.Hidden;
         _uiUtils.ShowAndHide(ViewableElements.StartLabel | ViewableElements.HelpLabel | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
-        _gameSettings = new GameSettings(_settingsDialog.ActiveSettings); // TODO Or better dialog can give back a copy
+        _gameSettings = new GameSettings(_settingsDialog.ActiveSettings);
         _settingsBridge.Apply(_gameSettings, GameSettingsBridge.Fields.Sound);
         GameSettingsPersistence.Save(_settingsDialog.ActiveSettings, _SETTINGS_SAVE_PATH);
         _mainAnimationPlayer.PlayDelayedMainLoop();
