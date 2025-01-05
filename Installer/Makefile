@@ -18,6 +18,9 @@ $(WIN_RELEASE_DIR): $(BIN_DIR)
 $(LINUX_RELEASE_DIR): $(BIN_DIR)
 	if not exist $(LINUX_RELEASE_DIR) mkdir $(LINUX_RELEASE_DIR)
 
+$(MACOS_RELEASE_DIR): $(BIN_DIR)
+	if not exist $(MACOS_RELEASE_DIR) mkdir $(MACOS_RELEASE_DIR)
+
 $(WIN_INSTALLER_DIR): $(BIN_DIR)
 	if not exist $(WIN_INSTALLER_DIR) mkdir $(WIN_INSTALLER_DIR)
 
@@ -29,6 +32,9 @@ win-debug: $(WIN_DEBUG_DIR)
 
 linux-release: $(LINUX_RELEASE_DIR)
 	$(GODOT) --path $(GAME_DIR) --export-release "Linux" ..\Installer\$(LINUX_RELEASE_DIR)\$(ASTEROIDS_EXE) --display-driver headless --audio-driver Dummy
+
+macos-release: $(MACOS_RELEASE_DIR)
+	$(GODOT) --path $(GAME_DIR) --export-release "macOS" ..\Installer\$(MACOS_RELEASE_DIR)\$(ASTEROIDS_EXE) --display-driver headless --audio-driver Dummy
 
 win-install: win-release
 	$(ISCC) /O$(BIN_DIR) /Qp \
@@ -43,6 +49,9 @@ win-distro: win-release
 
 linux-distro: linux-release
 	cd  $(LINUX_RELEASE_DIR) & ${ZIP} a -tzip -r ..\$(APP_NAME)-linux-$(VERSION).zip .
+
+macos-distro: macos-release
+	cd  $(MACOS_RELEASE_DIR) & ${ZIP} a -tzip -r ..\$(APP_NAME)-macos-$(VERSION).zip .
 
 clean:
 	rmdir /S /Q $(BIN_DIR)
