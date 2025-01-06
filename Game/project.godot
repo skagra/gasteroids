@@ -41,7 +41,6 @@ Resources="*res://Scenes/Main/Resources.cs"
 window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/size/mode=4
-window/size/resizable=false
 window/stretch/mode="canvas_items"
 window/stretch/aspect="ignore"
 
