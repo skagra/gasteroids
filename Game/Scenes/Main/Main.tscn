@@ -247,6 +247,7 @@ size_flags_vertical = 3
 [node name="UI" parent="." instance=ExtResource("2_m8vvq")]
 
 [node name="EnterHighScore" parent="." instance=ExtResource("17_y8o8g")]
+visible = false
 offset = Vector2(0, 200)
 transform = Transform2D(1, 0, 0, 1, 0, 200)
 
@@ -261,6 +262,7 @@ offset = Vector2(0, 20)
 transform = Transform2D(1, 0, 0, 1, 0, 20)
 
 [node name="Splash" parent="." instance=ExtResource("15_ymclg")]
+visible = false
 
 [node name="ShakingCamera" parent="." instance=ExtResource("15_pa42n")]
 position = Vector2(960, 540)

@@ -125,19 +125,19 @@ public partial class Main : Node
         _mainAnimationPlayer.PlaySplash();
 
         // Hide the cursor
-        Input.MouseMode = Input.MouseModeEnum.Hidden;
+        //Input.MouseMode = Input.MouseModeEnum.Hidden;
     }
 
-    private void ActivateSplashScreen()
-    {
-        _uiUtils.ShowAndHide(ViewableElements.SplashScreen | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
-        _splashScreen.Activate();
-    }
+    // private void ActivateSplashScreen()
+    // {
+    //     _uiUtils.ShowAndHide(ViewableElements.SplashScreen | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
+    //     _splashScreen.Activate();
+    // }
 
-    private void SplashOnSplashDone()
-    {
-        _uiUtils.ShowAndHide(ViewableElements.HelpLabel | ViewableElements.StartLabel | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
-    }
+    // private void SplashOnSplashDone()
+    // {
+    //     _uiUtils.ShowAndHide(ViewableElements.HelpLabel | ViewableElements.StartLabel | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
+    // }
 
     public override void _Process(double delta)
     {
@@ -270,7 +270,7 @@ public partial class Main : Node
         _smallSaucerController.TargetCallback = () => _playerController.PlayerPosition;
 
         // Splash screen fade completed
-        _splashScreen.SplashDone += SplashOnSplashDone;
+        //_splashScreen.SplashDone += SplashOnSplashDone;
 
         // High score name entered
         _enterHighScore.NameEntered += HighScoreOnNameEntered;
