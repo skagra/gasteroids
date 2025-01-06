@@ -24,7 +24,7 @@ Should you be interested in further developing the game, or just fancy poking ar
 
 # Status
 
-The game has reached feature completion and an initial beta is available for [download](https://github.com/skagra/gasteroids/releases/tag/1.0.0b1).
+The game has reached feature completion and beta is available for [download](https://github.com/skagra/gasteroids/releases/tag/1.0.0b2).
 
 # License
 
