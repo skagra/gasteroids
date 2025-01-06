@@ -128,17 +128,6 @@ public partial class Main : Node
         //Input.MouseMode = Input.MouseModeEnum.Hidden;
     }
 
-    // private void ActivateSplashScreen()
-    // {
-    //     _uiUtils.ShowAndHide(ViewableElements.SplashScreen | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
-    //     _splashScreen.Activate();
-    // }
-
-    // private void SplashOnSplashDone()
-    // {
-    //     _uiUtils.ShowAndHide(ViewableElements.HelpLabel | ViewableElements.StartLabel | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
-    // }
-
     public override void _Process(double delta)
     {
         // Ready to spawn new ship
@@ -268,9 +257,6 @@ public partial class Main : Node
 
         // Callback to allow small saucer to target the player
         _smallSaucerController.TargetCallback = () => _playerController.PlayerPosition;
-
-        // Splash screen fade completed
-        //_splashScreen.SplashDone += SplashOnSplashDone;
 
         // High score name entered
         _enterHighScore.NameEntered += HighScoreOnNameEntered;
