@@ -13,4 +13,4 @@ GAME_DIR=..\Game
 APP_NAME=Asteroids
 ASTEROIDS_EXE=Asteroids.exe
 
-VERSION=1.0.0b2
+VERSION=1.0.0b3
