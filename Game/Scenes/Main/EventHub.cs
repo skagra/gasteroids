@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using Godot;
 
@@ -34,7 +35,10 @@ public partial class EventHub : Node
     private SaucerController _largeSaucerController;
     [Export]
     private SaucerController _smallSaucerController;
-
+    [Export]
+    private LivesController _livesController;
+    [Export]
+    private ScoreController _scoreController;
 
     public override void _Ready()
     {
@@ -42,8 +46,10 @@ public partial class EventHub : Node
         Debug.Assert(_asteroidFieldController != null);
         Debug.Assert(_largeSaucerController != null);
         Debug.Assert(_smallSaucerController != null);
+        Debug.Assert(_livesController != null);
+        Debug.Assert(_scoreController != null);
 
-        _playerController.Exploded += OnPlayerExploding;
+        _playerController.Exploding += OnPlayerExploding;
         _playerController.Exploded += OnPlayerExploded;
 
         _asteroidFieldController.Collided += OnAsteroidCollided;
@@ -51,6 +57,32 @@ public partial class EventHub : Node
 
         _largeSaucerController.Collided += OnLargeSaucerCollided;
         _smallSaucerController.Collided += OnSmallSaucerCollided;
+
+
+        _scoreController.ScoreIncreased += OnScoreIncreased;
+
+        _livesController.LivesIncreased += OnLivesIncreased;
+        _livesController.LivesDecreased += OnLivesDecreased;
+
+    }
+
+    private void OnLivesDecreased(int newLives)
+    {
+        Logger.I.SignalReceived(this, _livesController, LivesController.SignalName.LivesDecreased);
+        Logger.I.SignalSent(this, SignalName.LivesDecreased, newLives);
+        EmitSignal(SignalName.LivesDecreased, newLives);
+    }
+
+    private void OnLivesIncreased(int newLives)
+    {
+        Logger.I.SignalReceived(this, _livesController, LivesController.SignalName.LivesIncreased);
+        Logger.I.SignalSent(this, SignalName.LivesIncreased, newLives);
+        EmitSignal(SignalName.LivesIncreased, newLives);
+    }
+
+    private void OnScoreIncreased(int newScore)
+    {
+        throw new NotImplementedException();
     }
 
     private void OnSmallSaucerCollided(Saucer saucer, Node collidedWith)

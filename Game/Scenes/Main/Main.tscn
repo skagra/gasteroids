@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://b6s1c2c0v0c81"]
+[gd_scene load_steps=29 format=3 uid="uid://b6s1c2c0v0c81"]
 
 [ext_resource type="Script" path="res://Scenes/Main/Main.cs" id="1_4mmwa"]
 [ext_resource type="Script" path="res://Scenes/Main/Scores.cs" id="2_4ldx0"]
@@ -20,6 +20,8 @@
 [ext_resource type="Script" path="res://Scenes/Main/MainAnimationPlayer.cs" id="17_imr0y"]
 [ext_resource type="PackedScene" uid="uid://b7vwd47dqthjj" path="res://Scenes/EnterHighScore/EnterHighScore.tscn" id="17_y8o8g"]
 [ext_resource type="PackedScene" uid="uid://bs1adrwlhyxde" path="res://Scenes/Main/EventHub.tscn" id="20_vgrge"]
+[ext_resource type="PackedScene" uid="uid://bymsvp7vuq1lf" path="res://Scenes/UI/ScoreController.tscn" id="21_1maun"]
+[ext_resource type="PackedScene" uid="uid://cpdoqllpnykna" path="res://Scenes/UI/LivesController.tscn" id="22_lqa1y"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_b8eb2"]
 texture = ExtResource("10_5m703")
@@ -226,11 +228,13 @@ ShakeTime = 0.5
 
 [node name="ExclusionZone" parent="." instance=ExtResource("6_wewr6")]
 
-[node name="EventHub" parent="." node_paths=PackedStringArray("_playerController", "_asteroidFieldController", "_largeSaucerController", "_smallSaucerController") instance=ExtResource("20_vgrge")]
+[node name="EventHub" parent="." node_paths=PackedStringArray("_playerController", "_asteroidFieldController", "_largeSaucerController", "_smallSaucerController", "_livesController", "_scoreController") instance=ExtResource("20_vgrge")]
 _playerController = NodePath("../PlayerController")
 _asteroidFieldController = NodePath("../AsteroidFieldController")
 _largeSaucerController = NodePath("../LargeSaucerController")
 _smallSaucerController = NodePath("../SmallSaucerController")
+_livesController = NodePath("../LivesController")
+_scoreController = NodePath("../ScoreController")
 
 [node name="LargeSaucerController" parent="." groups=["SoundFx"] instance=ExtResource("7_bcee1")]
 _saucerScene = ExtResource("7_yvgho")
@@ -285,3 +289,11 @@ libraries = {
 "": SubResource("AnimationLibrary_dba5c")
 }
 script = ExtResource("17_imr0y")
+
+[node name="ScoreController" parent="." node_paths=PackedStringArray("_ui", "_eventHub") instance=ExtResource("21_1maun")]
+_ui = NodePath("../UI")
+_eventHub = NodePath("../EventHub")
+
+[node name="LivesController" parent="." node_paths=PackedStringArray("_ui", "_eventHub") instance=ExtResource("22_lqa1y")]
+_ui = NodePath("../UI")
+_eventHub = NodePath("../EventHub")

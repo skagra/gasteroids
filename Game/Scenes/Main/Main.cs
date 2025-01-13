@@ -58,6 +58,8 @@ public partial class Main : Node
     private EnterHighScore _enterHighScore;
     private Scores _scores;
     private EventHub _eventHub;
+    private ScoreController _scoreController;
+    private LivesController _livesController;
 
     // State
     private int _asteroidsCurrentInitialQuantity;
@@ -155,7 +157,7 @@ public partial class Main : Node
             }
 
             // Create a new demo asteroid field if the current one has become too sparse
-            if (_asteroidFieldController.AsteroidCount < _minAsteroidsOnDemoScreen) // && _endOfGameGracePeriodExpired)
+            if (_asteroidFieldController.AsteroidCount < _minAsteroidsOnDemoScreen)
             {
                 CreateDemoScreen();
             }
@@ -245,22 +247,19 @@ public partial class Main : Node
         _ui = (Ui)FindChild("UI") ?? throw new NullReferenceException("UI not found");
         _enterHighScore = (EnterHighScore)FindChild("EnterHighScore") ?? throw new NullReferenceException("EnterHighScore not found");
         _scores = (Scores)FindChild("Scores") ?? throw new NullReferenceException("Scores not found");
-        _eventHub = (EventHub)FindChild("EventHub") ?? throw new NullReferenceException("Scores not found");
+        _eventHub = (EventHub)FindChild("EventHub") ?? throw new NullReferenceException("EventHub not found");
+        _livesController = (LivesController)FindChild("LivesController") ?? throw new NullReferenceException("LivesController not found");
+        _scoreController = (ScoreController)FindChild("ScoreController") ?? throw new NullReferenceException("ScoreController not found");
     }
 
     private void SetupSceneSignals()
     {
         // Player ship
-        _eventHub.PlayerExploding += PlayerOnExploding;
+        _eventHub.LivesDecreased += OnLivesDecreased;
         _eventHub.PlayerExploded += PlayerOnExploded;
 
         // Asteroids
-        _eventHub.AsteroidCollided += AsteroidFieldControllerOnCollided;
         _eventHub.AsteroidFieldCleared += AsteroidFieldControllerOnFieldCleared;
-
-        // Saucers
-        _eventHub.SmallSaucerCollided += SmallSaucerOnCollided;
-        _eventHub.LargeSaucerCollided += LargeSaucerOnCollided;
 
         // Configuration settings
         _settingsDialog.OkPressed += SettingsDialogOnOkPressed;
@@ -315,13 +314,13 @@ public partial class Main : Node
         _settingsBridge.Apply(_gameSettings);
 
         // Starting lives
-        _ui.Lives = _gameSettings.PlayerStartingLives;
+        _livesController.Lives = _gameSettings.PlayerStartingLives;
 
         // Reset score to 0
-        _ui.Score = 0;
+        _scoreController.Reset();
 
         // Threshold for first extra life
-        _extraLifeThresholdNext = _gameSettings.PlayerExtraLifeScoreThreshold;
+        _livesController.ExtraLifeThreshold = _gameSettings.PlayerExtraLifeScoreThreshold;
 
         // Starting quantity of asteroids
         _asteroidsCurrentInitialQuantity = _gameSettings.AsteroidsInitialQuantity;
@@ -406,49 +405,6 @@ public partial class Main : Node
 
     // --> Game events
 
-    private void SmallSaucerOnCollided(Saucer saucer, Node collidedWith)
-    {
-        Logger.I.SignalReceived(this, saucer, Saucer.SignalName.Collided, collidedWith, "SMALL");
-        if (collidedWith is Missile)
-        {
-            IncreaseScore(_scores.SaucerSmall);
-        }
-    }
-
-    private void LargeSaucerOnCollided(Saucer saucer, Node collidedWith)
-    {
-        Logger.I.SignalReceived(this, saucer, Saucer.SignalName.Collided, collidedWith, "LARGE");
-        if (collidedWith is Missile)
-        {
-            IncreaseScore(_scores.SaucerLarge);
-        }
-    }
-
-    private void AsteroidFieldControllerOnCollided(Asteroid asteroid, AsteroidSize size, Node collidedWith)
-    {
-        Logger.I.SignalReceived(this, asteroid, AsteroidFieldController.SignalName.Collided, size, collidedWith);
-        if (collidedWith is Missile missile)
-        {
-            if (missile.GetParent()?.GetParent() is PlayerController)
-            {
-                IncreaseScore(_scores.AsteroidScore(size));
-            }
-        }
-    }
-
-    private void IncreaseScore(int increase)
-    {
-        _ui.Score += increase;
-        if (_ui.Score > _extraLifeThresholdNext)
-        {
-            _extraLifeThresholdNext += _gameSettings.PlayerExtraLifeScoreThreshold;
-            if (_ui.Lives < _gameSettings.PlayerMaxLives)
-            {
-                _ui.AddLife();
-            }
-        }
-    }
-
     private void AsteroidFieldControllerOnFieldCleared(AsteroidFieldController asteroidFieldController)
     {
         Logger.I.SignalReceived(this, asteroidFieldController, AsteroidFieldController.SignalName.FieldCleared);
@@ -500,32 +456,22 @@ public partial class Main : Node
         }
     }
 
-    private void PlayerOnExploding(PlayerController playerController)
+    private void OnLivesDecreased(int newLives)
     {
-        Logger.I.SignalReceived(this, playerController, PlayerController.SignalName.Exploding);
+        Logger.I.SignalReceived(this, _livesController, LivesController.SignalName.LivesDecreased);
 
-        // Just a safety check!
-        if (_ui.Lives > 0)
+        // Stop playing the beats sounds
+        _beats.Stop();
+
+        // If we have no lives left then flag it
+        if (newLives == 0)
         {
-            // Stop playing the beats sounds
-            _beats.Stop();
-
-            // If we don't have infinite lives selected then decrement remaining lives
-            if (!_gameSettings.PlayerInfiniteLives)
-            {
-                _ui.RemoveLife();
-            }
-
-            // If we have no lives left then flag it
-            if (_ui.Lives == 0)
-            {
-                GameOver();
-            }
-            else
-            {
-                // Enable the exclusion zone to ensure the new player spawn will be safe
-                _exclusionZoneCollisionShape.SetDeferred(CollisionShape2D.PropertyName.Disabled, false);
-            }
+            GameOver();
+        }
+        else
+        {
+            // Enable the exclusion zone to ensure the new player spawn will be safe
+            _exclusionZoneCollisionShape.SetDeferred(CollisionShape2D.PropertyName.Disabled, false);
         }
     }
 

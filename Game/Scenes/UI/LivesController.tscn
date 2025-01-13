@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cpdoqllpnykna"]
+
+[ext_resource type="Script" path="res://Scenes/UI/LivesController.cs" id="1_68eky"]
+
+[node name="LivesController" type="Node"]
+script = ExtResource("1_68eky")
