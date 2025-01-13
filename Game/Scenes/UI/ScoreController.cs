@@ -60,18 +60,17 @@ public partial class ScoreController : Node
     {
         Logger.I.SignalReceived(this, saucer, Saucer.SignalName.Collided, collidedWith, "LARGE");
 
-        if (IsPlayerMissile(collidedWith))
+        if (Identities.IsPlayerMissile(collidedWith))
         {
             IncreaseScore(SaucerLarge);
         }
     }
 
-
     private void OnSmallSaucerCollided(Saucer saucer, Node collidedWith)
     {
         Logger.I.SignalReceived(this, saucer, Saucer.SignalName.Collided, collidedWith, "SMALL");
 
-        if (IsPlayerMissile(collidedWith))
+        if (Identities.IsPlayerMissile(collidedWith))
         {
             IncreaseScore(SaucerSmall);
         }
@@ -81,16 +80,12 @@ public partial class ScoreController : Node
     {
         Logger.I.SignalReceived(this, asteroid, AsteroidFieldController.SignalName.Collided, size, collidedWith);
 
-        if (IsPlayerMissile(collidedWith))
+        if (Identities.IsPlayerMissile(collidedWith))
         {
             IncreaseScore(AsteroidScore(size));
         }
     }
 
-    private static bool IsPlayerMissile(Node node)
-    {
-        return node is Missile missile && missile.GetParent()?.GetParent() is PlayerController;   // TODO Need a better way (groups?) and should be centralized
-    }
 
     private void IncreaseScore(int increase)
     {
