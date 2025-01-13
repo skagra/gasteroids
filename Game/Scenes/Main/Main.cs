@@ -57,6 +57,7 @@ public partial class Main : Node
     private Ui _ui;
     private EnterHighScore _enterHighScore;
     private Scores _scores;
+    private EventHub _eventHub;
 
     // State
     private int _asteroidsCurrentInitialQuantity;
@@ -244,21 +245,22 @@ public partial class Main : Node
         _ui = (Ui)FindChild("UI") ?? throw new NullReferenceException("UI not found");
         _enterHighScore = (EnterHighScore)FindChild("EnterHighScore") ?? throw new NullReferenceException("EnterHighScore not found");
         _scores = (Scores)FindChild("Scores") ?? throw new NullReferenceException("Scores not found");
+        _eventHub = (EventHub)FindChild("EventHub") ?? throw new NullReferenceException("Scores not found");
     }
 
     private void SetupSceneSignals()
     {
         // Player ship
-        _playerController.Exploding += PlayerOnExploding;
-        _playerController.Exploded += PlayerOnExploded;
+        _eventHub.PlayerExploding += PlayerOnExploding;
+        _eventHub.PlayerExploded += PlayerOnExploded;
 
         // Asteroids
-        _asteroidFieldController.Collided += AsteroidFieldControllerOnCollided;
-        _asteroidFieldController.FieldCleared += AsteroidFieldControllerOnFieldCleared;
+        _eventHub.AsteroidCollided += AsteroidFieldControllerOnCollided;
+        _eventHub.AsteroidFieldCleared += AsteroidFieldControllerOnFieldCleared;
 
         // Saucers
-        _smallSaucerController.Collided += SmallSaucerOnCollided;
-        _largeSaucerController.Collided += LargeSaucerOnCollided;
+        _eventHub.SmallSaucerCollided += SmallSaucerOnCollided;
+        _eventHub.LargeSaucerCollided += LargeSaucerOnCollided;
 
         // Configuration settings
         _settingsDialog.OkPressed += SettingsDialogOnOkPressed;

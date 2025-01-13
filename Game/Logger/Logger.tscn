@@ -4,4 +4,4 @@
 
 [node name="GodotLogger" type="Node"]
 script = ExtResource("1_w4n1w")
-Level = 4
+Level = 1

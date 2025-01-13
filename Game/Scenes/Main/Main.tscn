@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://b6s1c2c0v0c81"]
+[gd_scene load_steps=27 format=3 uid="uid://b6s1c2c0v0c81"]
 
 [ext_resource type="Script" path="res://Scenes/Main/Main.cs" id="1_4mmwa"]
 [ext_resource type="Script" path="res://Scenes/Main/Scores.cs" id="2_4ldx0"]
@@ -19,6 +19,7 @@
 [ext_resource type="PackedScene" uid="uid://gkqgdo51ear1" path="res://Scenes/Splash/Splash.tscn" id="15_ymclg"]
 [ext_resource type="Script" path="res://Scenes/Main/MainAnimationPlayer.cs" id="17_imr0y"]
 [ext_resource type="PackedScene" uid="uid://b7vwd47dqthjj" path="res://Scenes/EnterHighScore/EnterHighScore.tscn" id="17_y8o8g"]
+[ext_resource type="PackedScene" uid="uid://bs1adrwlhyxde" path="res://Scenes/Main/EventHub.tscn" id="20_vgrge"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_b8eb2"]
 texture = ExtResource("10_5m703")
@@ -278,3 +279,9 @@ libraries = {
 "": SubResource("AnimationLibrary_dba5c")
 }
 script = ExtResource("17_imr0y")
+
+[node name="EventHub" parent="." node_paths=PackedStringArray("_playerController", "_asteroidFieldController", "_largeSaucerController", "_smallSaucerController") instance=ExtResource("20_vgrge")]
+_playerController = NodePath("../PlayerController")
+_asteroidFieldController = NodePath("../AsteroidFieldController")
+_largeSaucerController = NodePath("../LargeSaucerController")
+_smallSaucerController = NodePath("../SmallSaucerController")
