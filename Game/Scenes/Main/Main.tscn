@@ -226,6 +226,12 @@ ShakeTime = 0.5
 
 [node name="ExclusionZone" parent="." instance=ExtResource("6_wewr6")]
 
+[node name="EventHub" parent="." node_paths=PackedStringArray("_playerController", "_asteroidFieldController", "_largeSaucerController", "_smallSaucerController") instance=ExtResource("20_vgrge")]
+_playerController = NodePath("../PlayerController")
+_asteroidFieldController = NodePath("../AsteroidFieldController")
+_largeSaucerController = NodePath("../LargeSaucerController")
+_smallSaucerController = NodePath("../SmallSaucerController")
+
 [node name="LargeSaucerController" parent="." groups=["SoundFx"] instance=ExtResource("7_bcee1")]
 _saucerScene = ExtResource("7_yvgho")
 
@@ -279,9 +285,3 @@ libraries = {
 "": SubResource("AnimationLibrary_dba5c")
 }
 script = ExtResource("17_imr0y")
-
-[node name="EventHub" parent="." node_paths=PackedStringArray("_playerController", "_asteroidFieldController", "_largeSaucerController", "_smallSaucerController") instance=ExtResource("20_vgrge")]
-_playerController = NodePath("../PlayerController")
-_asteroidFieldController = NodePath("../AsteroidFieldController")
-_largeSaucerController = NodePath("../LargeSaucerController")
-_smallSaucerController = NodePath("../SmallSaucerController")
