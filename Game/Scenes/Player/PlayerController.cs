@@ -19,49 +19,25 @@ public partial class PlayerController : Node
     private AudioStream _explosionSound;
 
     [Export]
-    public float PlayerThrustForce
-    {
-        get => _player.ThrustForce;
-        set => _player.ThrustForce = value;
-    }
+    public float PlayerThrustForce { get; set; }
 
     [Export]
-    public float PlayerRotationSpeed
-    {
-        get => _player.RotationSpeed;
-        set => _player.RotationSpeed = value;
-    }
+    public float PlayerRotationSpeed { get; set; }
 
     [Export]
-    public int MissileCount
-    {
-        get => _missileController.MissileCount;
-        set => _missileController.MissileCount = value;
-    }
+    public int MissileCount { get; set; }
 
     [Export]
-    public float MissileDuration
-    {
-        get => _missileController.MissileDuration;
-        set => _missileController.MissileDuration = value;
-    }
+    public float MissileDuration { get; set; }
 
     [Export]
-    public float MissileSpeed
-    {
-        get => _missileController.MissileSpeed;
-        set => _missileController.MissileSpeed = value;
-    }
+    public float MissileSpeed { get; set; }
 
     [Export]
     public float ShakeTime { get; set; }
 
     [Export]
-    public float LinearDampening
-    {
-        get => _player.LinearDamp;
-        set => _player.LinearDamp = value;
-    }
+    public float LinearDampening { get; set; }
 
     public Vector2 PlayerPosition
     {
@@ -111,9 +87,15 @@ public partial class PlayerController : Node
 
         _missileController.Collided += MissileControllerOnCollided;
 
-        _player.Deactivate();
+        if (GetParent() is Window)
+        {
+            Activate(Screen.Centre);
+        }
+        else
+        {
+            Deactivate();
+        }
     }
-
 
     public void EnableFx(bool enable)
     {
@@ -122,13 +104,15 @@ public partial class PlayerController : Node
         _player.EnableFx(enable);
     }
 
-    public void Activate()
-    {
-        _player.Activate();
-    }
-
     public void Activate(Vector2 position)
     {
+        _player.ThrustForce = PlayerThrustForce;
+        _player.RotationSpeed = PlayerRotationSpeed;
+        _player.LinearDampening = LinearDampening;
+        _missileController.MissileCount = MissileCount;
+        _missileController.MissileDuration = MissileDuration;
+        _missileController.MissileSpeed = MissileSpeed;
+
         _player.Activate(position);
     }
 
@@ -181,7 +165,6 @@ public partial class PlayerController : Node
         var playerExplosion = _explosion.Instantiate<Explosion>();
         playerExplosion.Name = "Player Explosion";
         playerExplosion.Position = _player.Position;
-        playerExplosion.AngularVelocity = _player.AngularVelocity;
         playerExplosion.LinearVelocity = _player.LinearVelocity;
         CallDeferred(MethodName.AddChild, playerExplosion);
         playerExplosion.ExplosionCompleted += ExplosionOnExplosionCompleted;

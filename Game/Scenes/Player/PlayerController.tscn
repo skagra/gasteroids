@@ -11,6 +11,13 @@
 script = ExtResource("1_pyfmb")
 _explosion = ExtResource("2_wb5yd")
 _explosionSound = ExtResource("3_2qpcp")
+PlayerThrustForce = 500.0
+PlayerRotationSpeed = 2.0
+MissileCount = 5
+MissileDuration = 4.0
+MissileSpeed = 200.0
+ShakeTime = 3.0
+LinearDampening = 200.0
 
 [node name="MissileController" parent="." instance=ExtResource("3_nfv5s")]
 _missileScene = ExtResource("4_pmy1a")

@@ -216,6 +216,9 @@ grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_b8eb2")
 
 [node name="PlayerController" parent="." groups=["SoundFx"] instance=ExtResource("3_c81ab")]
+PlayerThrustForce = 100.0
+MissileDuration = 5.0
+MissileSpeed = 100.0
 ShakeTime = 0.5
 
 [node name="AsteroidFieldController" parent="." groups=["SoundFx"] instance=ExtResource("3_37sgv")]

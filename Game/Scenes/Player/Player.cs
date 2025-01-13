@@ -4,7 +4,7 @@ using Godot;
 
 namespace Asteroids;
 
-public partial class Player : RigidBody2D
+public partial class Player : Area2D
 {
     private const string _ACTION_THRUST = "Thrust";
     private const string _ACTION_ROTATE_CW = "Rotate CW";
@@ -25,13 +25,16 @@ public partial class Player : RigidBody2D
 
     [ExportCategory("General Settings")]
     [Export]
-    public float ThrustForce { get; set; } = 300;
+    public float ThrustForce { get; set; } = 100;
     [Export]
     public float RotationSpeed { get; set; } = 5.0f;
+    [Export]
+    public float LinearDampening { get; set; } = 1.5f;
 
     public Func<int> GetAsteroidsCount { get; set; }
 
-    private Area2D _area2D;
+    public Vector2 LinearVelocity { get; private set; }
+
     private AnimatedSprite2D _sprite;
     private CollisionPolygon2D _collisionPolygon;
     private Vector2 _spriteSize;
@@ -39,6 +42,7 @@ public partial class Player : RigidBody2D
 
     private bool _isActive = false;
     private bool _hasCollidedThisFrame = false;
+    private bool _fxEnabled = true;
 
     public Func<Vector2, Vector2> GravitationalPullCallback
     {
@@ -47,27 +51,24 @@ public partial class Player : RigidBody2D
 
     public override void _Ready()
     {
-        _area2D = GetNode<Area2D>("Player Area2D") ?? throw new NullReferenceException("Player Area2D not found");
-        _collisionPolygon = _area2D.GetNode<CollisionPolygon2D>("CollisionPolygon2D") ?? throw new NullReferenceException("CollisionPolygon2D not found");
-        _sprite = _area2D.GetNode<AnimatedSprite2D>("AnimatedSprite2D") ?? throw new NullReferenceException("AnimatedSprite2D not found");
-        _thrustAudioStream = _area2D.GetNode<AudioStreamPlayer2D>("ThrustAudioPlayer") ?? throw new NullReferenceException("ThrustAudioPlayer not found");
+        _sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D") ?? throw new NullReferenceException("AnimatedSprite2D not found");
+        _collisionPolygon = GetNode<CollisionPolygon2D>("CollisionPolygon2D") ?? throw new NullReferenceException("CollisionPolygon2D not found");
+        _thrustAudioStream = GetNode<AudioStreamPlayer2D>("ThrustAudioPlayer") ?? throw new NullReferenceException("ThrustAudioPlayer not found");
         _thrustAudioStream.Bus = Resources.AUDIO_BUS_NAME_FX;
 
-        _area2D.AreaEntered += Area2DAreaEntered;
+        AreaEntered += Area2DAreaEntered;
 
         _spriteSize = _sprite.SpriteFrames.GetFrameTexture(_sprite.Animation, _sprite.Frame).GetSize();
 
-        if (GetParent() is not Window)
-        {
-            Deactivate();
-        }
-        else
+        if (GetParent() is Window)
         {
             Activate();
         }
+        else
+        {
+            Deactivate();
+        }
     }
-
-    private bool _fxEnabled = true;
 
     public void EnableFx(bool enable)
     {
@@ -79,19 +80,13 @@ public partial class Player : RigidBody2D
         Activate(Screen.Centre);
     }
 
-    public new float LinearDamp
-    {
-        get; set;
-    }
-
     public void Activate(Vector2 position)
     {
         Position = position;
-        LinearVelocity = Vector2.Zero;
-        AngularVelocity = 0f;
-        base.LinearDamp = LinearDamp;
+        Rotation = 0f;
 
-        _area2D.Rotation = 0f;
+        LinearVelocity = Vector2.Zero;
+
         _collisionPolygon.Disabled = false;
 
         _sprite.SetAnimation(_ANIMATION_THRUST);
@@ -108,9 +103,10 @@ public partial class Player : RigidBody2D
     public void Deactivate()
     {
         Hide();
+
         _collisionPolygon.SetDeferred(CollisionPolygon2D.PropertyName.Disabled, true);
 
-        this.Enable(false);
+        this.EnableDeferred(false);
 
         _isActive = false;
     }
@@ -132,15 +128,15 @@ public partial class Player : RigidBody2D
         if (_isActive)
         {
             var variableGravity = GravitationalPullCallback?.Invoke(Position) ?? Vector2.Zero;
-            ApplyCentralForce(variableGravity);
+            LinearVelocity += variableGravity * (float)delta;
 
             if (Input.IsActionPressed(_ACTION_THRUST))
             {
-                ThrustPressed();
+                ThrustPressed(delta);
             }
             else
             {
-                ThrustNotPressed();
+                ThrustNotPressed(delta);
             }
 
             if (Input.IsActionPressed(_ACTION_ROTATE_CW))
@@ -184,29 +180,37 @@ public partial class Player : RigidBody2D
 
     private void FirePressed()
     {
-        var position = Position + ((_spriteSize.X / 2.0f) * Vector2.Right.Rotated(_area2D.Rotation));
+        var position = Position + ((_spriteSize.X / 2.0f) * Vector2.Right.Rotated(Rotation));
 
-        Logger.I.SignalSent(this, SignalName.Shoot, position, LinearVelocity, _area2D.Rotation);
-        EmitSignal(SignalName.Shoot, position, LinearVelocity, _area2D.Rotation);
+        Logger.I.SignalSent(this, SignalName.Shoot, position, LinearVelocity, Rotation);
+        EmitSignal(SignalName.Shoot, position, LinearVelocity, Rotation);
     }
 
-    private void ThrustPressed()
+    private void ThrustPressed(double delta)
     {
         if (!_thrustAudioStream.Playing && _fxEnabled)
         {
             _thrustAudioStream.Play();
         }
-        ApplyCentralForce(_area2D.Transform.X * ThrustForce);
-        base.LinearDamp = 0f;
+
+        var acceleration = ThrustForce * (float)delta;
+        var shipDirectionUnitVector = Vector2.Right.Rotated(Rotation);
+        LinearVelocity += shipDirectionUnitVector * acceleration;
+        Position += LinearVelocity * (float)delta;
+
         if (!_sprite.IsPlaying())
         {
             _sprite.Play(_ANIMATION_THRUST);
         }
     }
 
-    private void ThrustNotPressed()
+    private void ThrustNotPressed(double delta)
     {
-        base.LinearDamp = LinearDamp;
+        var acceleration = LinearDampening * (float)delta;
+        LinearVelocity -= LinearVelocity.Normalized() * acceleration;
+
+        Position += LinearVelocity * (float)delta;
+
         if (!_sprite.IsPlaying() && _sprite.Animation == _ANIMATION_THRUST)
         {
             _sprite.Stop();
@@ -215,12 +219,12 @@ public partial class Player : RigidBody2D
 
     private void RotateCWPressed(double delta)
     {
-        _area2D.Rotation += RotationSpeed * (float)delta;
+        Rotation += RotationSpeed * (float)delta;
     }
 
     private void RotateACWPressed(double delta)
     {
-        _area2D.Rotation += -RotationSpeed * (float)delta;
+        Rotation += -RotationSpeed * (float)delta;
     }
 
     private void Area2DAreaEntered(Area2D collidedWith)
