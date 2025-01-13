@@ -86,7 +86,6 @@ public partial class ScoreController : Node
         }
     }
 
-
     private void IncreaseScore(int increase)
     {
         _ui.Score += increase;

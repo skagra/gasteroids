@@ -82,7 +82,9 @@ public partial class EventHub : Node
 
     private void OnScoreIncreased(int newScore)
     {
-        throw new NotImplementedException();
+        Logger.I.SignalReceived(this, _scoreController, ScoreController.SignalName.ScoreIncreased);
+        Logger.I.SignalSent(this, SignalName.ScoreIncreased, newScore);
+        EmitSignal(SignalName.ScoreIncreased, newScore);
     }
 
     private void OnSmallSaucerCollided(Saucer saucer, Node collidedWith)
