@@ -33,7 +33,7 @@ buses/default_bus_layout="res://Audio/BusLayout.tres"
 [autoload]
 
 Screen="*res://Scripts/Screen.cs"
-GodotLogger="*res://Logger/GodotLogger.tscn"
+GodotLogger="*res://Controls/Logger/GodotLogger.tscn"
 Resources="*res://Scenes/Main/Resources.cs"
 
 [debug]

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bbkmmbsyakg0h"]
 
-[ext_resource type="Script" path="res://Logger/GodotLogger.cs" id="1_w4n1w"]
+[ext_resource type="Script" path="res://Controls/Logger/GodotLogger.cs" id="1_w4n1w"]
 
 [node name="GodotLogger" type="Node"]
 script = ExtResource("1_w4n1w")
