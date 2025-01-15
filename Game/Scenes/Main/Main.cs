@@ -11,45 +11,9 @@ public partial class Main : Node
     private const string _SETTINGS_SAVE_PATH = "user://settings.json";
     private const string _HIGH_SCORE_SAVE_PATH = "user://highscores.json";
 
-    [ExportCategory("Asteroids")]
-
-    [Export]
-    private int _asteroidsNewSheetDelta = 2;
-    [Export]
-    private float _asteroidsSpeedDelta = 1.2f;
-
-    [ExportCategory("Saucers")]
-    [Export]
-    private float _largeSaucerSpawnTimerFloor = 5;
-    [Export]
-    private float _largeSaucerSpawnTimerDeltaProportion = 0.75f;
-
-    [Export]
-    private float _smallSaucerSpawnTimerFloor = 5;
-    [Export]
-    private float _smallSaucerSpawnTimerDeltaProportion = 0.75f;
-
-    [ExportCategory("Demo Asteroid Field")]
-    [Export]
-    private int _startAsteroidsOnDemoScreen = 15;
-    [Export]
-    private int _minAsteroidsOnDemoScreen = 4;
-
-    [ExportCategory("Misc")]
-    [Export]
-    private int _safeZoneRadius = 200;
-
-
     // Scene references
-    private AsteroidFieldController _asteroidFieldController;
-    private PlayerController _playerController;
-    private Area2D _exclusionZone;
-    private Beats _beats;
-    private CollisionShape2D _exclusionZoneCollisionShape;
     private GameSettingsDialog _settingsDialog;
     private HelpDialog _helpDialog;
-    private SaucerController _largeSaucerController;
-    private SaucerController _smallSaucerController;
     private HighScoreTable _highScoreTable;
     private FadingPanelContainer _fadingOverlay;
     private Splash _splashScreen;
@@ -58,20 +22,18 @@ public partial class Main : Node
     private EnterHighScore _enterHighScore;
     private Scores _scores;
     private EventHub _eventHub;
-    private ScoreController _scoreController;
-    private LivesController _livesController;
+    private GamePlayController _gamePlayController;
 
     // State
     private int _asteroidsCurrentInitialQuantity;
     private int _extraLifeThresholdNext;
-    private Vector2 _shipSpawnPosition;
 
     // Game state machine
-    private enum GameState { WaitingToPlay, AwaitingNewShip, Playing, ShowingConfigDialog, ShowingHelpDialog, EnteringHighScore };
-    private GameState _gameState;
+    private enum PreGameState { Passive, Playing, ShowingConfigDialog, ShowingHelpDialog, EnteringHighScore };
+    private PreGameState _preGameState;
 
     // Game settings
-    private GameSettingsBridge _settingsBridge;
+    // private GameSettingsBridge _settingsBridge; TODO
     private GameSettings _gameSettings;
 
     // UI hide and show utils
@@ -90,24 +52,11 @@ public partial class Main : Node
         // Set up UI utils
         _uiUtils = new UiUtils(_splashScreen, _ui, _fadingOverlay, _highScoreTable, _helpDialog, _settingsDialog);
 
-        // Asteroids count callback - used in hyperspace accident calculation
-        _playerController.GetAsteroidsCount = () => _asteroidFieldController.AsteroidCount;
-
-        // New ship spawn location
-        _shipSpawnPosition = Screen.Centre;
-
-        // Asteroid exclusion zone - ensures ship spawns are safe
-        var circleShape = (CircleShape2D)_exclusionZoneCollisionShape.Shape;
-        circleShape.Radius = _safeZoneRadius;
-        _exclusionZone.Position = _shipSpawnPosition;
-
-        // Load and apply configuration
-        _settingsBridge = new GameSettingsBridge(_playerController, _asteroidFieldController,
-                                          _largeSaucerController, _smallSaucerController, _beats);
+        // Load configuration
         _gameSettings = GameSettingsPersistence.Load(_SETTINGS_SAVE_PATH) ?? GameSettingsPresets.GetSettings(SettingsPresets.Normal);
-        _settingsBridge.Apply(_gameSettings);
+        Resources.SwitchTheme(_gameSettings.Theme);
 
-        // Load and apply high scores
+        // Load high scores
         var highScores = HighScorePersistence.Load(_HIGH_SCORE_SAVE_PATH);
         if (highScores != null)
         {
@@ -118,50 +67,13 @@ public partial class Main : Node
         // Screen overlay to dim background when not playing
         _fadingOverlay.SpeedScale = 0.1f;
 
-        // Waiting to start
-        WaitingToPlay();
-
-        // Background asteroid field
-        CreateDemoScreen();
-
         // Splash screen followed by main animation loop
         _mainAnimationPlayer.PlaySplash();
 
         // Hide the cursor
         HideMouse();
-    }
 
-    public override void _Process(double delta)
-    {
-        // Ready to spawn new ship
-        if (_gameState == GameState.AwaitingNewShip)
-        {
-            // But we need to wait until the area around the spawn
-            // point is free from asteroids
-            if (!_exclusionZone.HasOverlappingAreas())
-            {
-                Logger.I.Debug("Entering game state {0}", GameState.Playing);
-                _gameState = GameState.Playing;
-                _exclusionZoneCollisionShape.Disabled = true;
-                _playerController.Activate(_shipSpawnPosition);
-            }
-        }
-        else if (_gameState == GameState.WaitingToPlay)
-        {
-            // If we are not actively playing then disable the small saucer once it is off screen
-            if (_smallSaucerController.IsActive && !_smallSaucerController.IsSaucerActive &&
-                !_largeSaucerController.IsActive)
-            {
-                _largeSaucerController.Activate();
-                _smallSaucerController.Deactivate();
-            }
-
-            // Create a new demo asteroid field if the current one has become too sparse
-            if (_asteroidFieldController.AsteroidCount < _minAsteroidsOnDemoScreen)
-            {
-                CreateDemoScreen();
-            }
-        }
+        _preGameState = PreGameState.Passive;
     }
 
     public override void _UnhandledInput(InputEvent inputEvent)
@@ -171,7 +83,7 @@ public partial class Main : Node
             GetTree().Quit();
         }
 
-        if (_gameState == GameState.WaitingToPlay)
+        if (_preGameState == PreGameState.Passive)
         {
             if (inputEvent.IsActionPressed("Start"))
             {
@@ -194,7 +106,7 @@ public partial class Main : Node
         switch ((long)what)
         {
             case NotificationApplicationFocusIn:
-                if (_gameState == GameState.WaitingToPlay || _gameState == GameState.AwaitingNewShip || _gameState == GameState.Playing)
+                if (_preGameState != PreGameState.ShowingConfigDialog && _preGameState != PreGameState.ShowingHelpDialog)
                 {
                     HideMouse();
                 }
@@ -221,7 +133,7 @@ public partial class Main : Node
 
     }
 
-    private void HideMouse()
+    private static void HideMouse()
     {
         Input.MouseMode = Input.MouseModeEnum.Hidden;
     }
@@ -231,36 +143,21 @@ public partial class Main : Node
     private void SetupSceneReferences()
     {
         // Get references too all required scenes
-        _playerController = GetNode<PlayerController>("PlayerController") ?? throw new NullReferenceException("PlayerController not found");
-        _asteroidFieldController = GetNode<AsteroidFieldController>("AsteroidFieldController") ?? throw new NullReferenceException("AsteroidFieldController not found");
-        _exclusionZone = GetNode<Area2D>("ExclusionZone") ?? throw new NullReferenceException("ExclusionZone not found");
-        _exclusionZoneCollisionShape = _exclusionZone.GetNode<CollisionShape2D>("CollisionShape2D") ?? throw new NullReferenceException("CollisionShape2D not found");
-        _beats = GetNode<Beats>("Beats") ?? throw new NullReferenceException("Beats not found");
         _settingsDialog = GetNode<GameSettingsDialog>("Game Settings Dialog") ?? throw new NullReferenceException("Game Settings Dialog not found");
         _helpDialog = GetNode<HelpDialog>("Help Dialog") ?? throw new NullReferenceException("Help Dialog not found");
-        _largeSaucerController = GetNode<SaucerController>("LargeSaucerController") ?? throw new NullReferenceException("LargeSaucerController not found");
-        _smallSaucerController = GetNode<SaucerController>("SmallSaucerController") ?? throw new NullReferenceException("SmallSaucerController not found");
         _highScoreTable = GetNode<HighScoreTable>("HighScoreTable") ?? throw new NullReferenceException("HighScoreTable not found");
         _fadingOverlay = (FadingPanelContainer)FindChild("FadingOverlay") ?? throw new NullReferenceException("FadingOverlay not found");
         _splashScreen = (Splash)FindChild("Splash") ?? throw new NullReferenceException("Splash not found");
         _mainAnimationPlayer = (MainAnimationPlayer)FindChild("MainAnimationPlayer") ?? throw new NullReferenceException("MainAnimationPlayer not found");
         _ui = (Ui)FindChild("UI") ?? throw new NullReferenceException("UI not found");
         _enterHighScore = (EnterHighScore)FindChild("EnterHighScore") ?? throw new NullReferenceException("EnterHighScore not found");
-        _scores = (Scores)FindChild("Scores") ?? throw new NullReferenceException("Scores not found");
+        _scores = (Scores)FindChild("Scores") ?? throw new NullReferenceException("Scores not found"); // ??
         _eventHub = (EventHub)FindChild("EventHub") ?? throw new NullReferenceException("EventHub not found");
-        _livesController = (LivesController)FindChild("LivesController") ?? throw new NullReferenceException("LivesController not found");
-        _scoreController = (ScoreController)FindChild("ScoreController") ?? throw new NullReferenceException("ScoreController not found");
+        _gamePlayController = (GamePlayController)FindChild("GamePlayController") ?? throw new NullReferenceException("GamePlayController not found");
     }
 
     private void SetupSceneSignals()
     {
-        // Player ship
-        _eventHub.LivesDecreased += OnLivesDecreased;
-        _eventHub.PlayerExploded += PlayerOnExploded;
-
-        // Asteroids
-        _eventHub.AsteroidFieldCleared += AsteroidFieldControllerOnFieldCleared;
-
         // Configuration settings
         _settingsDialog.OkPressed += SettingsDialogOnOkPressed;
         _settingsDialog.Cancel += SettingsDialogOnCancel;
@@ -268,106 +165,27 @@ public partial class Main : Node
         // Controls
         _helpDialog.OkPressed += HelpDialogOnOkPressed;
 
-        // Window resize
-        GetTree().GetRoot().SizeChanged += WindowOnSizeChanged;
-
-        // Callback to allow small saucer to target the player
-        _smallSaucerController.TargetCallback = () => _playerController.PlayerPosition;
-
         // High score name entered
         _enterHighScore.NameEntered += HighScoreOnNameEntered;
-    }
 
-    private void CreateDemoScreen()
-    {
-        var demoSettings = GameSettingsPresets.GetSettings(SettingsPresets.Demo);
-        _settingsBridge.Apply(demoSettings, GameSettingsBridge.Fields.Theme | GameSettingsBridge.Fields.Sound);
-        Resources.EnableNewSoundFx(false);
-
-        if (demoSettings.LargeSaucerEnabled)
-        {
-            _largeSaucerController.Activate();
-        }
-
-        if (demoSettings.SmallSaucerEnabled)
-        {
-            _smallSaucerController.Activate();
-        }
-
-        _asteroidFieldController.SpawnField(demoSettings.AsteroidsInitialQuantity, new Rect2(), false);
+        // Game over
+        _gamePlayController.GameOver += OnGameOver;
     }
 
     // <-- Setup
 
     // Game state control ->
 
-    private void WaitingToPlay()
-    {
-        _uiUtils.ShowAndHide(ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
-        Logger.I.Debug("Setting game state to {0}", GameState.WaitingToPlay);
-        _gameState = GameState.WaitingToPlay;
-    }
-
     private void NewGame()
     {
-        // Apply the current configuration
-        _settingsBridge.Apply(_gameSettings);
-
-        // Starting lives
-        _livesController.Lives = _gameSettings.PlayerStartingLives;
-
-        // Reset score to 0
-        _scoreController.Reset();
-
-        // Threshold for first extra life
-        _livesController.ExtraLifeThreshold = _gameSettings.PlayerExtraLifeScoreThreshold;
-
-        // Starting quantity of asteroids
-        _asteroidsCurrentInitialQuantity = _gameSettings.AsteroidsInitialQuantity;
-
-        // Don't need the exclusion zone as we are creating new asteroids
-        _exclusionZoneCollisionShape.Disabled = true;
-
-        // Hide UI elements
         _mainAnimationPlayer.Stop();
         _uiUtils.ShowAndHide(ViewableElements.None);
-
-        // Create the new asteroid fields
-        _asteroidFieldController.SpawnField(_asteroidsCurrentInitialQuantity,
-           new Rect2(_shipSpawnPosition.X - _safeZoneRadius, _shipSpawnPosition.Y - _safeZoneRadius,
-                     _safeZoneRadius * 2, _safeZoneRadius * 2),
-           true);
-
-        // Saucers
-        _largeSaucerController.Deactivate(true);
-        if (_gameSettings.LargeSaucerEnabled)
-        {
-            _largeSaucerController.Activate();
-        }
-
-        _smallSaucerController.Deactivate(true);
-        if (_gameSettings.SmallSaucerEnabled)
-        {
-            _smallSaucerController.Activate();
-        }
-
-        // Enable FX audio according to configuration
-        Resources.EnableNewSoundFx(_gameSettings.SoundEnabled);
-
-        // Start playing the beats sounds
-        _beats.Reset();
-        _beats.Start();
-
-        // Flag we are ready to spawn a new ship
-        Logger.I.Debug("Setting game state to {0}", GameState.AwaitingNewShip);
-        _gameState = GameState.AwaitingNewShip;
+        _gamePlayController.NewGame(_gameSettings);
+        _preGameState = PreGameState.Playing;
     }
 
-    private void GameOver()
+    private void OnGameOver()
     {
-        // Stop playing the background beats
-        _beats.Stop();
-
         // Show the fading overlay
         _uiUtils.ShowAndHide(ViewableElements.FadingOverlay);
 
@@ -375,117 +193,33 @@ public partial class Main : Node
         Resources.EnableNewSoundFx(false);
 
         // Check if the score is high enough to be included in the high score table
-        if (_highScoreTable.IsEligibleForInclusion(_ui.Score))
+        if (_highScoreTable.IsEligibleForInclusion(_gamePlayController.Score))
         {
             _ui.ShowGameOverLabel();
             _enterHighScore.Show();
-            Logger.I.Debug("Setting game state to {0}", GameState.EnteringHighScore);
-            _gameState = GameState.EnteringHighScore;
+            Logger.I.Debug("Setting game state to {0}", PreGameState.EnteringHighScore);
+            _preGameState = PreGameState.EnteringHighScore;
         }
         else
         {
             _mainAnimationPlayer.PlayGameOver();
-            WaitingToPlay();
+            _preGameState = PreGameState.Passive;
         }
     }
 
     private void HighScoreOnNameEntered(string name)
     {
-        _highScoreTable.AddScore(name, _ui.Score);
+        _highScoreTable.AddScore(name, _gamePlayController.Score);
         HighScorePersistence.Save(_highScoreTable.GetScores(), _HIGH_SCORE_SAVE_PATH);
         _enterHighScore.Hide();
 
         _uiUtils.ShowAndHide(ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
-        _mainAnimationPlayer.PlayMainLoop();
+        _mainAnimationPlayer.PlayHighScore();
 
-        WaitingToPlay();
+        _preGameState = PreGameState.Passive;
     }
 
     // <-- Game state control
-
-    // --> Game events
-
-    private void AsteroidFieldControllerOnFieldCleared(AsteroidFieldController asteroidFieldController)
-    {
-        Logger.I.SignalReceived(this, asteroidFieldController, AsteroidFieldController.SignalName.FieldCleared);
-
-        IncreaseDifficulty();
-
-        // Spawn the new field of asteroids
-        _asteroidFieldController.SpawnField(_asteroidsCurrentInitialQuantity,
-            new Rect2(_playerController.PlayerPosition.X - _safeZoneRadius, _playerController.PlayerPosition.Y - _safeZoneRadius,
-                      _safeZoneRadius * 2, _safeZoneRadius * 2),
-                      true);
-
-        // Reset beats sounds to slowest pace
-        _beats.Reset();
-    }
-
-    private void IncreaseDifficulty()
-    {
-        // Increase the number of asteroids but keep it within permitted range
-        _asteroidsCurrentInitialQuantity += _asteroidsNewSheetDelta;
-        _asteroidsCurrentInitialQuantity = Mathf.Min(_asteroidsCurrentInitialQuantity, _gameSettings.AsteroidsMaxQuantity);
-
-        // Increase asteroid speed
-        _asteroidFieldController.MinSpeed *= _asteroidsSpeedDelta;
-        _asteroidFieldController.MaxSpeed *= _asteroidsSpeedDelta;
-
-        // Increase the frequency at which saucers spawn
-        _largeSaucerController.SpawnTimerMax = Mathf.Max(_largeSaucerController.SpawnTimerMax * _largeSaucerSpawnTimerDeltaProportion, _largeSaucerSpawnTimerFloor);
-        _largeSaucerController.SpawnTimerMin = Mathf.Max(_largeSaucerController.SpawnTimerMin * _largeSaucerSpawnTimerDeltaProportion, _largeSaucerSpawnTimerFloor);
-
-        _smallSaucerController.SpawnTimerMax = Mathf.Max(_smallSaucerController.SpawnTimerMax * _smallSaucerSpawnTimerDeltaProportion, _smallSaucerSpawnTimerFloor);
-        _smallSaucerController.SpawnTimerMin = Mathf.Max(_smallSaucerController.SpawnTimerMin * _smallSaucerSpawnTimerDeltaProportion, _smallSaucerSpawnTimerFloor);
-    }
-
-    private void PlayerOnExploded(PlayerController playerController)
-    {
-        Logger.I.SignalReceived(this, playerController, PlayerController.SignalName.Exploded);
-
-        if (_gameState == GameState.Playing)
-        {
-            // Hide the player/stop processing
-            _playerController.Deactivate();
-
-            // This is safe wrt signal delivery order
-            // as there is a gap between "Exploding" and "Exploded"
-            Logger.I.Debug("Entering game state {0}", GameState.AwaitingNewShip);
-            _gameState = GameState.AwaitingNewShip;
-            _beats.Start();
-        }
-    }
-
-    private void OnLivesDecreased(int newLives)
-    {
-        Logger.I.SignalReceived(this, _livesController, LivesController.SignalName.LivesDecreased);
-
-        // Stop playing the beats sounds
-        _beats.Stop();
-
-        // If we have no lives left then flag it
-        if (newLives == 0)
-        {
-            GameOver();
-        }
-        else
-        {
-            // Enable the exclusion zone to ensure the new player spawn will be safe
-            _exclusionZoneCollisionShape.SetDeferred(CollisionShape2D.PropertyName.Disabled, false);
-        }
-    }
-
-    // <-- Game events
-
-    // --> Other events
-
-    private void WindowOnSizeChanged()
-    {
-        _shipSpawnPosition = Screen.Centre;
-        _exclusionZone.Position = _shipSpawnPosition;
-    }
-
-    // <-- Other events
 
     // Configuration -->
 
@@ -495,8 +229,8 @@ public partial class Main : Node
         _mainAnimationPlayer.Stop();
         _settingsDialog.ActiveSettings = _gameSettings;
         _uiUtils.ShowAndHide(ViewableElements.SettingsDialog | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
-        Logger.I.Debug("Entering game state {0}", GameState.ShowingConfigDialog);
-        _gameState = GameState.ShowingConfigDialog;
+        Logger.I.Debug("Entering game state {0}", PreGameState.ShowingConfigDialog);
+        _preGameState = PreGameState.ShowingConfigDialog;
     }
 
     private void SettingsDialogOnOkPressed()
@@ -504,11 +238,11 @@ public partial class Main : Node
         HideMouse();
         _uiUtils.ShowAndHide(ViewableElements.StartLabel | ViewableElements.HelpLabel | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
         _gameSettings = new GameSettings(_settingsDialog.ActiveSettings);
-        _settingsBridge.Apply(_gameSettings, GameSettingsBridge.Fields.Sound);
+        Resources.SwitchTheme(_gameSettings.Theme);
         GameSettingsPersistence.Save(_settingsDialog.ActiveSettings, _SETTINGS_SAVE_PATH);
         _mainAnimationPlayer.PlayDelayedMainLoop();
-        Logger.I.Debug("Entering game state {0}", GameState.WaitingToPlay);
-        _gameState = GameState.WaitingToPlay;
+        Logger.I.Debug("Entering game state {0}", PreGameState.Passive);
+        _preGameState = PreGameState.Passive;
     }
 
     private void SettingsDialogOnCancel()
@@ -516,8 +250,8 @@ public partial class Main : Node
         HideMouse();
         _uiUtils.ShowAndHide(ViewableElements.StartLabel | ViewableElements.HelpLabel | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
         _mainAnimationPlayer.PlayDelayedMainLoop();
-        Logger.I.Debug("Entering game state {0}", GameState.WaitingToPlay);
-        _gameState = GameState.WaitingToPlay;
+        Logger.I.Debug("Entering game state {0}", PreGameState.Passive);
+        _preGameState = PreGameState.Passive;
     }
 
     // <-- Configuration
@@ -529,8 +263,8 @@ public partial class Main : Node
         ShowMouse(true);
         _mainAnimationPlayer.Stop();
         _uiUtils.ShowAndHide(ViewableElements.HelpDialog | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
-        Logger.I.Debug("Entering game state {0}", GameState.ShowingHelpDialog);
-        _gameState = GameState.ShowingHelpDialog;
+        Logger.I.Debug("Entering game state {0}", PreGameState.ShowingHelpDialog);
+        _preGameState = PreGameState.ShowingHelpDialog;
     }
 
     private void HelpDialogOnOkPressed()
@@ -538,8 +272,8 @@ public partial class Main : Node
         HideMouse();
         _uiUtils.ShowAndHide(ViewableElements.StartLabel | ViewableElements.HelpLabel | ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
         _mainAnimationPlayer.PlayDelayedMainLoop();
-        Logger.I.Debug("Entering game state {0}", GameState.WaitingToPlay);
-        _gameState = GameState.WaitingToPlay;
+        Logger.I.Debug("Entering game state {0}", PreGameState.Passive);
+        _preGameState = PreGameState.Passive;
     }
 
     // <-- Help dialog

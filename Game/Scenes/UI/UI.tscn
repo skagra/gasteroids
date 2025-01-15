@@ -1,11 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://nu2biysl40aq"]
+[gd_scene load_steps=5 format=3 uid="uid://nu2biysl40aq"]
 
 [ext_resource type="Script" path="res://Scenes/UI/Ui.cs" id="1_e2oad"]
-[ext_resource type="Script" path="res://Scenes/UI/Score.cs" id="1_fmhiy"]
 [ext_resource type="Theme" uid="uid://cphlitqn3odss" path="res://Themes/Modern.tres" id="1_mrqha"]
-[ext_resource type="Script" path="res://Scenes/UI/Lives.cs" id="2_t60xm"]
 [ext_resource type="Script" path="res://Scenes/UI/HighScore.cs" id="4_txtdx"]
-[ext_resource type="AudioStream" uid="uid://djk4g0usm5oip" path="res://Audio/extraShip.wav" id="5_0wcbj"]
 [ext_resource type="PackedScene" uid="uid://dwc4udqlxfm3e" path="res://Controls/FlashingLabel/FlashingLabel.tscn" id="7_4inmm"]
 
 [node name="UI" type="CanvasLayer"]
@@ -19,15 +16,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_mrqha")
-
-[node name="Score" type="Label" parent="Control"]
-layout_mode = 1
-offset_left = 20.0
-offset_right = 170.0
-offset_bottom = 85.0
-theme_type_variation = &"PlayerScore"
-text = "00000"
-script = ExtResource("1_fmhiy")
 
 [node name="High Score" type="Label" parent="Control"]
 layout_mode = 1
@@ -93,8 +81,3 @@ theme_type_variation = &"GameOverLabel"
 text = "GAME OVER"
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="Lives" type="Node2D" parent="Control"]
-position = Vector2(25, 71)
-script = ExtResource("2_t60xm")
-_extraLifeSound = ExtResource("5_0wcbj")

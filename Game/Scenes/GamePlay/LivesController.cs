@@ -12,7 +12,7 @@ public partial class LivesController : Node
     public delegate void LivesDecreasedEventHandler(int newLives);
 
     [Export]
-    private Ui _ui;
+    private Lives _lives;
 
     [Export]
     private EventHub _eventHub;
@@ -33,13 +33,13 @@ public partial class LivesController : Node
 
     public int Lives
     {
-        get => _ui.Lives;
-        set => _ui.Lives = value;
+        get => _lives.Value;
+        set => _lives.Value = value;
     }
 
     public override void _Ready()
     {
-        Debug.Assert(_ui != null);
+        Debug.Assert(_lives != null);
         Debug.Assert(_eventHub != null);
 
         _eventHub.ScoreIncreased += OnScoreIncreased;
@@ -50,7 +50,7 @@ public partial class LivesController : Node
 
     private void Reset()
     {
-        _ui.Lives = _newGameLives;
+        _lives.Value = _newGameLives;
         _nextExtraLifeThreshold = ExtraLifeThreshold;
     }
 
@@ -58,18 +58,18 @@ public partial class LivesController : Node
     {
         if (!_infiniteLives)
         {
-            _ui.RemoveLife();
-            EmitSignal(SignalName.LivesDecreased, _ui.Lives);
+            _lives.RemoveLife();
+            EmitSignal(SignalName.LivesDecreased, _lives.Value);
         }
     }
 
     private void OnScoreIncreased(int newScore)
     {
-        if (newScore > _nextExtraLifeThreshold && _ui.Lives < _maxLives)
+        if (newScore > _nextExtraLifeThreshold && _lives.Value < _maxLives)
         {
-            _ui.AddLife();
+            _lives.AddLife();
             _nextExtraLifeThreshold += ExtraLifeThreshold;
-            EmitSignal(SignalName.LivesIncreased, _ui.Lives);
+            EmitSignal(SignalName.LivesIncreased, _lives.Value);
         }
     }
 }

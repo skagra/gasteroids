@@ -28,4 +28,9 @@ public partial class MainAnimationPlayer : AnimationPlayer
     {
         Play(_SPLASH);
     }
+
+    public void PlayHighScore()
+    {
+        Play(_MAIN_LOOP_NAME);
+    }
 }

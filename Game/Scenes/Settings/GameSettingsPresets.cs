@@ -116,8 +116,8 @@ public static class GameSettingsPresets
         PlayerExtraLifeScoreThreshold = 10000,
 
         ShipAcceleration = 550f,
-        ShipTurnSpeed = 5.5f,
-        ShipLinearDampening = 0.9f,
+        ShipTurnSpeed = 5f,
+        ShipLinearDampening = 200f,
 
         PlayerMaxMissiles = 8,
         PlayerMissilesSpeed = 550,
@@ -270,7 +270,7 @@ public static class GameSettingsPresets
         LargeSaucerMissilesSpeed = 450,
         LargeSaucerMissilesLifespan = 1.8f,
 
-        SmallSaucerEnabled = true,
+        SmallSaucerEnabled = false,
         SmallSaucerSpeed = 400,
         SmallSaucerSpawnFrequency = 4f,
         SmallSaucerMaxMissiles = 6,

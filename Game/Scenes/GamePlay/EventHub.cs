@@ -25,7 +25,10 @@ public partial class EventHub : Node
     public delegate void LivesIncreasedEventHandler(int newLives);
     [Signal]
     public delegate void LivesDecreasedEventHandler(int newLives);
-
+    [Signal]
+    public delegate void GameOverEventHandler();
+    [Signal]
+    public delegate void NewGameStartedEventHandler();
     [Export]
     private PlayerController _playerController;
     [Export]
@@ -38,6 +41,8 @@ public partial class EventHub : Node
     private LivesController _livesController;
     [Export]
     private ScoreController _scoreController;
+    [Export]
+    private GamePlayController _gamePlayController;
 
     public override void _Ready()
     {
@@ -47,6 +52,7 @@ public partial class EventHub : Node
         Debug.Assert(_smallSaucerController != null);
         Debug.Assert(_livesController != null);
         Debug.Assert(_scoreController != null);
+        Debug.Assert(_gamePlayController != null);
 
         _playerController.Exploding += OnPlayerExploding;
         _playerController.Exploded += OnPlayerExploded;
@@ -57,12 +63,27 @@ public partial class EventHub : Node
         _largeSaucerController.Collided += OnLargeSaucerCollided;
         _smallSaucerController.Collided += OnSmallSaucerCollided;
 
-
         _scoreController.ScoreIncreased += OnScoreIncreased;
 
         _livesController.LivesIncreased += OnLivesIncreased;
         _livesController.LivesDecreased += OnLivesDecreased;
 
+        _gamePlayController.GameOver += OnGameOver;
+        _gamePlayController.NewGameStarted += OnNewGameStarted;
+    }
+
+    private void OnGameOver()
+    {
+        Logger.I.SignalReceived(this, _gamePlayController, GamePlayController.SignalName.GameOver);
+        Logger.I.SignalSent(this, GamePlayController.SignalName.GameOver);
+        EmitSignal(SignalName.GameOver);
+    }
+
+    private void OnNewGameStarted()
+    {
+        Logger.I.SignalReceived(this, _gamePlayController, GamePlayController.SignalName.NewGameStarted);
+        Logger.I.SignalSent(this, GamePlayController.SignalName.NewGameStarted);
+        EmitSignal(SignalName.NewGameStarted);
     }
 
     private void OnLivesDecreased(int newLives)

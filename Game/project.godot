@@ -36,6 +36,12 @@ Screen="*res://Scripts/Screen.cs"
 GodotLogger="*res://Logger/GodotLogger.tscn"
 Resources="*res://Scenes/Main/Resources.cs"
 
+[debug]
+
+shapes/collision/shape_color=Color(1, 1, 0, 0.564706)
+shapes/collision/contact_color=Color(1, 0, 0, 0.831373)
+shapes/collision/draw_2d_outlines=false
+
 [display]
 
 window/size/viewport_width=1920

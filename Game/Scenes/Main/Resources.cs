@@ -43,7 +43,7 @@ public partial class Resources : Node
 
     public override void _Ready()
     {
-        _background = (Panel)GetNode("/root/Main/Background");
+        _background = (Panel)GetNode("/root/Main/Background");  // TODO
     }
 
     public static void SwitchTheme(Themes theme)
@@ -52,11 +52,11 @@ public partial class Resources : Node
         {
             case Themes.Classic:
                 _I.GetTree().CallGroup(_THEMEABLE_GROUP, Control.MethodName.SetTheme, _classicTheme);
-                _background.Hide();
+                _background?.Hide();     // TODO
                 break;
             case Themes.Modern:
                 _I.GetTree().CallGroup(_THEMEABLE_GROUP, Control.MethodName.SetTheme, _modernTheme);
-                _background.Show();
+                _background?.Show();   // TODO
                 break;
         }
     }

@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://cr32w438ac87u"]
+
+[ext_resource type="Script" path="res://Scenes/GamePlay/Score.cs" id="1_saou4"]
+
+[node name="Score" type="Label"]
+offset_left = 20.0
+offset_right = 170.0
+offset_bottom = 85.0
+theme_type_variation = &"PlayerScore"
+text = "00000"
+script = ExtResource("1_saou4")

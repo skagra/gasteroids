@@ -1,68 +1,15 @@
-[gd_scene load_steps=7 format=3 uid="uid://gkqgdo51ear1"]
+[gd_scene load_steps=4 format=3 uid="uid://gkqgdo51ear1"]
 
 [ext_resource type="Script" path="res://Scenes/Splash/Splash.cs" id="1_c4el8"]
 [ext_resource type="Theme" uid="uid://cphlitqn3odss" path="res://Themes/Modern.tres" id="1_wn4t5"]
-[ext_resource type="AudioStream" uid="uid://dwi71lvpsurib" path="res://Audio/splash.mp3" id="2_28vn3"]
-
-[sub_resource type="Animation" id="Animation_opc2y"]
-resource_name = "FadeOut"
-length = 10.0
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Control:modulate")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 4.53333, 5, 10),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0.366667, 10),
-"transitions": PackedFloat32Array(1, 1),
-"values": [{
-"args": [],
-"method": &"show"
-}, {
-"args": [],
-"method": &"hide"
-}]
-}
-
-[sub_resource type="Animation" id="Animation_ylneq"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Control:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_v2ddu"]
-_data = {
-"FadeOut": SubResource("Animation_opc2y"),
-"RESET": SubResource("Animation_ylneq")
-}
+[ext_resource type="AudioStream" uid="uid://dwi71lvpsurib" path="res://Audio/splash.mp3" id="2_hd265"]
 
 [node name="Splash" type="CanvasLayer"]
 script = ExtResource("1_c4el8")
-_splashSound = ExtResource("2_28vn3")
+_splashSound = ExtResource("2_hd265")
 
 [node name="Control" type="Control" parent="."]
+modulate = Color(1, 1, 1, 0)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -115,8 +62,3 @@ offset_bottom = 570.0
 theme_type_variation = &"GitHubLabel"
 text = "https://github.com/skagra/gasteroids"
 horizontal_alignment = 1
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_v2ddu")
-}

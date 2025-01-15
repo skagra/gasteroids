@@ -22,10 +22,16 @@ public partial class ScoreController : Node
     public int SaucerSmall { get; private set; } = 1000;
 
     [Export]
-    private Ui _ui;
+    private Score _score;
 
     [Export]
     private EventHub _eventHub;
+
+    public int Score
+    {
+        get => _score.Value;
+        set => _score.Value = value;
+    }
 
     // Score table
     private readonly Dictionary<AsteroidSize, int> _asteroidScores = new();
@@ -43,17 +49,12 @@ public partial class ScoreController : Node
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        Debug.Assert(_ui != null);
+        Debug.Assert(_score != null);
         Debug.Assert(_eventHub != null);
 
         _eventHub.AsteroidCollided += OnAsteroidCollided;
         _eventHub.SmallSaucerCollided += OnSmallSaucerCollided;
         _eventHub.LargeSaucerCollided += OnLargeSaucerCollided;
-    }
-
-    public void Reset()
-    {
-        _ui.Score = 0;
     }
 
     private void OnLargeSaucerCollided(Saucer saucer, Node collidedWith)
@@ -88,7 +89,7 @@ public partial class ScoreController : Node
 
     private void IncreaseScore(int increase)
     {
-        _ui.Score += increase;
-        EmitSignal(SignalName.ScoreIncreased, _ui.Score);
+        _score.Value += increase;
+        EmitSignal(SignalName.ScoreIncreased, _score.Value);
     }
 }

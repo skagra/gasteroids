@@ -1,27 +1,17 @@
-[gd_scene load_steps=29 format=3 uid="uid://b6s1c2c0v0c81"]
+[gd_scene load_steps=20 format=3 uid="uid://b6s1c2c0v0c81"]
 
 [ext_resource type="Script" path="res://Scenes/Main/Main.cs" id="1_4mmwa"]
-[ext_resource type="Script" path="res://Scenes/Main/Scores.cs" id="2_4ldx0"]
+[ext_resource type="Script" path="res://Scenes/GamePlay/Scores.cs" id="2_4ldx0"]
+[ext_resource type="PackedScene" uid="uid://c274gsecjxlvx" path="res://Scenes/GamePlay/GamePlayController.tscn" id="2_be7cv"]
 [ext_resource type="PackedScene" uid="uid://nu2biysl40aq" path="res://Scenes/UI/UI.tscn" id="2_m8vvq"]
-[ext_resource type="PackedScene" uid="uid://bx0l2shyhmj8q" path="res://Scenes/AsteroidFieldController/AsteroidFieldController.tscn" id="3_37sgv"]
-[ext_resource type="PackedScene" uid="uid://ccd52kbej7r3l" path="res://Scenes/Player/PlayerController.tscn" id="3_c81ab"]
-[ext_resource type="PackedScene" uid="uid://cx6qi3tglyw31" path="res://Scenes/ExclusionZone/ExclusionZone.tscn" id="6_wewr6"]
-[ext_resource type="PackedScene" uid="uid://bvjd2yxqild8r" path="res://Scenes/Saucer/SaucerController.tscn" id="7_bcee1"]
-[ext_resource type="PackedScene" uid="uid://c55fufwvjpgs4" path="res://Scenes/Beats/Beats.tscn" id="7_kqb4t"]
-[ext_resource type="PackedScene" uid="uid://bs2jf8dh304n2" path="res://Scenes/Saucer/SmallSaucer.tscn" id="7_lqlai"]
-[ext_resource type="PackedScene" uid="uid://ced2kqn8jadtp" path="res://Scenes/Saucer/LargeSaucer.tscn" id="7_yvgho"]
 [ext_resource type="PackedScene" uid="uid://cu3bhbnbhqh8y" path="res://Scenes/HelpDialog/HelpDialog.tscn" id="9_4054w"]
 [ext_resource type="Texture2D" uid="uid://dorw1dk8egeyd" path="res://Graphics/Background.jpg" id="10_5m703"]
 [ext_resource type="PackedScene" uid="uid://b6kmyi73lblks" path="res://Scenes/Settings/GameSettingsDialog.tscn" id="10_kidqi"]
 [ext_resource type="PackedScene" uid="uid://67by6r3h3g0e" path="res://Controls/FadingPanelContainer/FadingPanelContainer.tscn" id="10_raqju"]
 [ext_resource type="PackedScene" uid="uid://bb8s26xmfrcas" path="res://Scenes/HighScoreTable/HighScoreTable.tscn" id="13_6i0d3"]
-[ext_resource type="PackedScene" uid="uid://bbl6psak4tgdr" path="res://Controls/ShakingCamera/ShakingCamera.tscn" id="15_pa42n"]
 [ext_resource type="PackedScene" uid="uid://gkqgdo51ear1" path="res://Scenes/Splash/Splash.tscn" id="15_ymclg"]
 [ext_resource type="Script" path="res://Scenes/Main/MainAnimationPlayer.cs" id="17_imr0y"]
 [ext_resource type="PackedScene" uid="uid://b7vwd47dqthjj" path="res://Scenes/EnterHighScore/EnterHighScore.tscn" id="17_y8o8g"]
-[ext_resource type="PackedScene" uid="uid://bs1adrwlhyxde" path="res://Scenes/Main/EventHub.tscn" id="20_vgrge"]
-[ext_resource type="PackedScene" uid="uid://bymsvp7vuq1lf" path="res://Scenes/UI/ScoreController.tscn" id="21_1maun"]
-[ext_resource type="PackedScene" uid="uid://cpdoqllpnykna" path="res://Scenes/UI/LivesController.tscn" id="22_lqa1y"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_b8eb2"]
 texture = ExtResource("10_5m703")
@@ -78,7 +68,7 @@ tracks/1/keys = {
 
 [sub_resource type="Animation" id="Animation_qwevq"]
 resource_name = "Main Loop"
-length = 60.0
+length = 35.0
 loop_mode = 1
 tracks/0/type = "method"
 tracks/0/imported = false
@@ -87,7 +77,7 @@ tracks/0/path = NodePath("HighScoreTable")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 10),
+"times": PackedFloat32Array(0, 10.1667),
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
 "args": [false],
@@ -118,7 +108,7 @@ tracks/2/path = NodePath("UI")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 30),
+"times": PackedFloat32Array(0, 16.1667),
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
 "args": [],
@@ -135,7 +125,7 @@ tracks/3/path = NodePath("UI")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 30),
+"times": PackedFloat32Array(0, 16.1667),
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
 "args": [],
@@ -145,37 +135,50 @@ tracks/3/keys = {
 "method": &"HideStartLabel"
 }]
 }
-tracks/4/type = "method"
+tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Splash")
+tracks/4/path = NodePath("Splash:Modulate")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(30),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(16.3667, 21.5, 25.7333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Splash")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(16.3, 25.7667),
+"transitions": PackedFloat32Array(1, 1),
 "values": [{
-"args": [true],
-"method": &"Activate"
+"args": [],
+"method": &"show"
+}, {
+"args": [],
+"method": &"hide"
 }]
 }
 
 [sub_resource type="Animation" id="Animation_vgpro"]
 resource_name = "Splash"
 length = 20.0
-tracks/0/type = "method"
+tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Splash")
+tracks/0/path = NodePath("Splash:Modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [false],
-"method": &"Activate"
-}]
+"times": PackedFloat32Array(0, 5.06667, 10.0333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 tracks/1/type = "method"
 tracks/1/imported = false
@@ -191,12 +194,87 @@ tracks/1/keys = {
 "method": &"PlayMainLoop"
 }]
 }
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("UI")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(10),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"ShowStartLabel"
+}]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("UI")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(10),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"ShowHelpLabel"
+}]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Splash")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.0999999, 9.96667),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"show"
+}, {
+"args": [],
+"method": &"hide"
+}]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Splash")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"PlaySound"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_3s2bx"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Splash:Modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 0)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_dba5c"]
 _data = {
 "Delayed Main Loop": SubResource("Animation_o46ww"),
 "Game Over": SubResource("Animation_rlbl8"),
 "Main Loop": SubResource("Animation_qwevq"),
+"RESET": SubResource("Animation_3s2bx"),
 "Splash": SubResource("Animation_vgpro")
 }
 
@@ -217,32 +295,6 @@ offset_bottom = 26.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_b8eb2")
-
-[node name="PlayerController" parent="." groups=["SoundFx"] instance=ExtResource("3_c81ab")]
-PlayerThrustForce = 100.0
-MissileDuration = 5.0
-MissileSpeed = 100.0
-ShakeTime = 0.5
-
-[node name="AsteroidFieldController" parent="." groups=["SoundFx"] instance=ExtResource("3_37sgv")]
-
-[node name="ExclusionZone" parent="." instance=ExtResource("6_wewr6")]
-
-[node name="EventHub" parent="." node_paths=PackedStringArray("_playerController", "_asteroidFieldController", "_largeSaucerController", "_smallSaucerController", "_livesController", "_scoreController") instance=ExtResource("20_vgrge")]
-_playerController = NodePath("../PlayerController")
-_asteroidFieldController = NodePath("../AsteroidFieldController")
-_largeSaucerController = NodePath("../LargeSaucerController")
-_smallSaucerController = NodePath("../SmallSaucerController")
-_livesController = NodePath("../LivesController")
-_scoreController = NodePath("../ScoreController")
-
-[node name="LargeSaucerController" parent="." groups=["SoundFx"] instance=ExtResource("7_bcee1")]
-_saucerScene = ExtResource("7_yvgho")
-
-[node name="SmallSaucerController" parent="." groups=["SoundFx"] instance=ExtResource("7_bcee1")]
-_saucerScene = ExtResource("7_lqlai")
-
-[node name="Beats" parent="." groups=["SoundFx"] instance=ExtResource("7_kqb4t")]
 
 [node name="FadingOverlay" parent="." instance=ExtResource("10_raqju")]
 visible = false
@@ -276,13 +328,6 @@ offset = Vector2(0, 20)
 transform = Transform2D(1, 0, 0, 1, 0, 20)
 
 [node name="Splash" parent="." instance=ExtResource("15_ymclg")]
-visible = false
-
-[node name="ShakingCamera" parent="." instance=ExtResource("15_pa42n")]
-position = Vector2(960, 540)
-anchor_mode = 1
-position_smoothing_enabled = true
-MaxRotation = 0.01
 
 [node name="MainAnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -290,10 +335,4 @@ libraries = {
 }
 script = ExtResource("17_imr0y")
 
-[node name="ScoreController" parent="." node_paths=PackedStringArray("_ui", "_eventHub") instance=ExtResource("21_1maun")]
-_ui = NodePath("../UI")
-_eventHub = NodePath("../EventHub")
-
-[node name="LivesController" parent="." node_paths=PackedStringArray("_ui", "_eventHub") instance=ExtResource("22_lqa1y")]
-_ui = NodePath("../UI")
-_eventHub = NodePath("../EventHub")
+[node name="GamePlayController" parent="." instance=ExtResource("2_be7cv")]

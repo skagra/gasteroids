@@ -9,19 +9,16 @@ public class GameSettingsBridge
     private readonly AsteroidFieldController _asteroidFieldController;
     private readonly SaucerController _largeSaucerController;
     private readonly SaucerController _smallSaucerController;
-    private readonly Beats _beats;
 
     public GameSettingsBridge(PlayerController playerController,
                               AsteroidFieldController asteroidFieldController,
                               SaucerController largeSaucerController,
-                              SaucerController smallSaucerController,
-                              Beats beats)
+                              SaucerController smallSaucerController)
     {
         _playerController = playerController;
         _asteroidFieldController = asteroidFieldController;
         _largeSaucerController = largeSaucerController;
         _smallSaucerController = smallSaucerController;
-        _beats = beats;
     }
 
     [Flags]

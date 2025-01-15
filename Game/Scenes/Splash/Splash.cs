@@ -5,54 +5,31 @@ namespace Asteroids;
 
 public partial class Splash : CanvasLayer
 {
-    [Signal]
-    public delegate void SplashDoneEventHandler();
-
     [Export]
     private AudioStream _splashSound;
 
     private AudioStreamPlayer2D _audioStreamPlayer = new();
 
-    private AnimationPlayer _animationPlayer;
+    private Control _control;
 
-    private bool _terminating = false;
+    [Export]
+    public Color Modulate
+    {
+        get => _control.Modulate;
+        set => _control.Modulate = value;
+    }
 
     public override void _Ready()
     {
-        _terminating = false;
         _audioStreamPlayer.Bus = Resources.AUDIO_BUS_NAME_FX;
         _audioStreamPlayer.Stream = _splashSound ?? throw new NullReferenceException("Splash sound not set");
         AddChild(_audioStreamPlayer);
 
-        _animationPlayer = (AnimationPlayer)FindChild("AnimationPlayer") ?? throw new NullReferenceException("AnimationPlayer not found");
-        _animationPlayer.AnimationFinished += OnAnimationFinished;
+        _control = (Control)FindChild("Control");
     }
 
-    public override void _PhysicsProcess(double delta)
+    public void PlaySound()
     {
-        if (!_terminating && Input.IsActionPressed("Skip"))
-        {
-            _terminating = true;
-            _animationPlayer.SpeedScale = 10f;
-        }
-    }
-
-    private void OnAnimationFinished(StringName animName)
-    {
-        if (Visible)
-        {
-            EmitSignal(SignalName.SplashDone);
-        }
-    }
-
-    public void Activate(bool mute = false)
-    {
-        _terminating = false;
-        _animationPlayer.SpeedScale = 1f;
-        if (!mute)
-        {
-            _audioStreamPlayer.Play();
-        }
-        _animationPlayer.Play("FadeOut");
+        _audioStreamPlayer.Play();
     }
 }
