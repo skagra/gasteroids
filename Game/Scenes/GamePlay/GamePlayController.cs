@@ -38,6 +38,9 @@ public partial class GamePlayController : Node
     [Export]
     private int _safeZoneRadius = 200;
 
+    [Export]
+    private EventHub _eventHub;
+
     public int Score { get => _scoreController.Score; }
 
     // Scene references
@@ -48,10 +51,9 @@ public partial class GamePlayController : Node
     private CollisionShape2D _exclusionZoneCollisionShape;
     private SaucerController _largeSaucerController;
     private SaucerController _smallSaucerController;
-    [Export]
-    private EventHub _eventHub;
     private ScoreController _scoreController;
     private LivesController _livesController;
+    private PowerUpController _powerUpController;
 
     // State
     private int _asteroidsCurrentInitialQuantity;
@@ -150,6 +152,7 @@ public partial class GamePlayController : Node
         _eventHub = (EventHub)FindChild("EventHub") ?? throw new NullReferenceException("EventHub not found");
         _livesController = (LivesController)FindChild("LivesController") ?? throw new NullReferenceException("LivesController not found");
         _scoreController = (ScoreController)FindChild("ScoreController") ?? throw new NullReferenceException("ScoreController not found");
+        _powerUpController = (PowerUpController)FindChild("PowerUpController") ?? throw new NullReferenceException("PowerUpController not found");
     }
 
     private void SetupSceneSignals()
@@ -161,11 +164,19 @@ public partial class GamePlayController : Node
         // Asteroids
         _eventHub.AsteroidFieldCleared += AsteroidFieldControllerOnFieldCleared;
 
+        // Power Ups
+        _eventHub.PowerUpCollected += OnPowerUpCollected;
+
         // Window resize
         GetTree().GetRoot().SizeChanged += WindowOnSizeChanged;
 
         // Callback to allow small saucer to target the player
         _smallSaucerController.TargetCallback = () => _playerController.PlayerPosition;
+    }
+
+    private void OnPowerUpCollected(PowerUpController.PowerUpType powerUpType)
+    {
+        GD.Print($"#################### Collected PowerUp {powerUpType}");
     }
 
     private void CreateDemoScreen()

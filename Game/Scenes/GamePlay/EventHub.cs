@@ -14,7 +14,7 @@ public partial class EventHub : Node
     [Signal]
     public delegate void AsteroidFieldClearedEventHandler(AsteroidFieldController asteroidFieldController);
     [Signal]
-    public delegate void PowerUpCollectedEventHandler(int powerUpType);
+    public delegate void PowerUpCollectedEventHandler(PowerUpController.PowerUpType powerUpType);
     [Signal]
     public delegate void LargeSaucerCollidedEventHandler(Saucer saucer, Node collidedWith);
     [Signal]
@@ -29,6 +29,7 @@ public partial class EventHub : Node
     public delegate void GameOverEventHandler();
     [Signal]
     public delegate void NewGameStartedEventHandler();
+
     [Export]
     private PlayerController _playerController;
     [Export]
@@ -43,6 +44,8 @@ public partial class EventHub : Node
     private ScoreController _scoreController;
     [Export]
     private GamePlayController _gamePlayController;
+    [Export]
+    private PowerUpController _powerUpController;
 
     public override void _Ready()
     {
@@ -53,6 +56,7 @@ public partial class EventHub : Node
         Debug.Assert(_livesController != null);
         Debug.Assert(_scoreController != null);
         Debug.Assert(_gamePlayController != null);
+        Debug.Assert(_powerUpController != null);
 
         _playerController.Exploding += OnPlayerExploding;
         _playerController.Exploded += OnPlayerExploded;
@@ -70,7 +74,17 @@ public partial class EventHub : Node
 
         _gamePlayController.GameOver += OnGameOver;
         _gamePlayController.NewGameStarted += OnNewGameStarted;
+
+        _powerUpController.Collected += OnPowerUpCollected;
     }
+
+    private void OnPowerUpCollected(int powerUpType)
+    {
+        Logger.I.SignalReceived(this, _powerUpController, PowerUpController.SignalName.Collected);
+        Logger.I.SignalSent(this, SignalName.PowerUpCollected, powerUpType);
+        EmitSignal(SignalName.PowerUpCollected, powerUpType);
+    }
+
 
     private void OnGameOver()
     {

@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://c274gsecjxlvx"]
+[gd_scene load_steps=17 format=3 uid="uid://c274gsecjxlvx"]
 
 [ext_resource type="Script" path="res://Scenes/GamePlay/GamePlayController.cs" id="1_6jpew"]
 [ext_resource type="PackedScene" uid="uid://ccd52kbej7r3l" path="res://Scenes/Player/PlayerController.tscn" id="3_eeena"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://dr8xaksra1yg7" path="res://Scenes/GamePlay/Lives.tscn" id="8_fq5e7"]
 [ext_resource type="PackedScene" uid="uid://bs1adrwlhyxde" path="res://Scenes/GamePlay/EventHub.tscn" id="9_rd837"]
 [ext_resource type="PackedScene" uid="uid://bymsvp7vuq1lf" path="res://Scenes/GamePlay/ScoreController.tscn" id="10_0e2v8"]
+[ext_resource type="PackedScene" uid="uid://wgxodoft2v27" path="res://Scenes/Powerup/PowerUpController.tscn" id="10_8dsrg"]
 [ext_resource type="PackedScene" uid="uid://bx0l2shyhmj8q" path="res://Scenes/AsteroidFieldController/AsteroidFieldController.tscn" id="11_gdox8"]
 [ext_resource type="PackedScene" uid="uid://cr32w438ac87u" path="res://Scenes/GamePlay/Score.tscn" id="11_kjx34"]
 [ext_resource type="PackedScene" uid="uid://cpdoqllpnykna" path="res://Scenes/GamePlay/LivesController.tscn" id="11_mdw5c"]
@@ -24,7 +25,7 @@ _eventHub = NodePath("EventHub")
 
 [node name="Beats" parent="." groups=["SoundFx"] instance=ExtResource("5_lc5xf")]
 
-[node name="EventHub" parent="." node_paths=PackedStringArray("_playerController", "_asteroidFieldController", "_largeSaucerController", "_smallSaucerController", "_livesController", "_scoreController", "_gamePlayController") instance=ExtResource("9_rd837")]
+[node name="EventHub" parent="." node_paths=PackedStringArray("_playerController", "_asteroidFieldController", "_largeSaucerController", "_smallSaucerController", "_livesController", "_scoreController", "_gamePlayController", "_powerUpController") instance=ExtResource("9_rd837")]
 _playerController = NodePath("../PlayerController")
 _asteroidFieldController = NodePath("../AsteroidFieldController")
 _largeSaucerController = NodePath("../LargeSaucerController")
@@ -32,6 +33,7 @@ _smallSaucerController = NodePath("../SmallSaucerController")
 _livesController = NodePath("../LivesController")
 _scoreController = NodePath("../ScoreController")
 _gamePlayController = NodePath("..")
+_powerUpController = NodePath("../PowerUpController")
 
 [node name="ExclusionZone" parent="." instance=ExtResource("4_n7pqx")]
 
@@ -44,6 +46,9 @@ _eventHub = NodePath("../EventHub")
 
 [node name="PlayerController" parent="." groups=["SoundFx"] instance=ExtResource("3_eeena")]
 ShakeTime = 0.5
+
+[node name="PowerUpController" parent="." node_paths=PackedStringArray("_eventHub") instance=ExtResource("10_8dsrg")]
+_eventHub = NodePath("../EventHub")
 
 [node name="ScoreController" parent="." node_paths=PackedStringArray("_score", "_eventHub") instance=ExtResource("10_0e2v8")]
 _score = NodePath("../CanvasLayer/Score")

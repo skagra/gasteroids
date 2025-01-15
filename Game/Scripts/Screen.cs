@@ -50,4 +50,10 @@ public partial class Screen : Node
 
     public static float Bottom { get => _viewportRect.End.Y; }
 
+    public static bool IsOnScreen(Vector2 position)
+    {
+        return position.X > Left && position.X < Right &&
+               position.Y > Top && position.Y < Bottom;
+    }
+
 }
