@@ -20,7 +20,6 @@ public partial class Main : Node
     private MainAnimationPlayer _mainAnimationPlayer;
     private Ui _ui;
     private EnterHighScore _enterHighScore;
-    private Scores _scores;
     private EventHub _eventHub;
     private GamePlayController _gamePlayController;
 
@@ -151,7 +150,6 @@ public partial class Main : Node
         _mainAnimationPlayer = (MainAnimationPlayer)FindChild("MainAnimationPlayer") ?? throw new NullReferenceException("MainAnimationPlayer not found");
         _ui = (Ui)FindChild("UI") ?? throw new NullReferenceException("UI not found");
         _enterHighScore = (EnterHighScore)FindChild("EnterHighScore") ?? throw new NullReferenceException("EnterHighScore not found");
-        _scores = (Scores)FindChild("Scores") ?? throw new NullReferenceException("Scores not found"); // ??
         _eventHub = (EventHub)FindChild("EventHub") ?? throw new NullReferenceException("EventHub not found");
         _gamePlayController = (GamePlayController)FindChild("GamePlayController") ?? throw new NullReferenceException("GamePlayController not found");
     }

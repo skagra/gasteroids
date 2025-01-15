@@ -1,7 +1,6 @@
-[gd_scene load_steps=20 format=3 uid="uid://b6s1c2c0v0c81"]
+[gd_scene load_steps=19 format=3 uid="uid://b6s1c2c0v0c81"]
 
 [ext_resource type="Script" path="res://Scenes/Main/Main.cs" id="1_4mmwa"]
-[ext_resource type="Script" path="res://Scenes/GamePlay/Scores.cs" id="2_4ldx0"]
 [ext_resource type="PackedScene" uid="uid://c274gsecjxlvx" path="res://Scenes/GamePlay/GamePlayController.tscn" id="2_be7cv"]
 [ext_resource type="PackedScene" uid="uid://nu2biysl40aq" path="res://Scenes/UI/UI.tscn" id="2_m8vvq"]
 [ext_resource type="PackedScene" uid="uid://cu3bhbnbhqh8y" path="res://Scenes/HelpDialog/HelpDialog.tscn" id="9_4054w"]
@@ -280,9 +279,6 @@ _data = {
 
 [node name="Main" type="Node" groups=["Player"]]
 script = ExtResource("1_4mmwa")
-
-[node name="Scores" type="Node" parent="."]
-script = ExtResource("2_4ldx0")
 
 [node name="Background" type="Panel" parent="."]
 anchors_preset = 15
