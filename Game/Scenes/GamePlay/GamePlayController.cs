@@ -193,7 +193,7 @@ public partial class GamePlayController : Node
 
     private void SetGamePlayState(GamePlayState gamePlayState)
     {
-        Logger.I.Debug("Game play state changed to {1}", gamePlayState);
+        Logger.I.Debug("Game play state changed to {0}", gamePlayState);
         _gamePlayState = gamePlayState;
     }
 
