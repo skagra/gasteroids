@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://c274gsecjxlvx"]
+[gd_scene load_steps=19 format=3 uid="uid://c274gsecjxlvx"]
 
 [ext_resource type="Script" path="res://Scenes/GamePlay/GamePlayController.cs" id="1_6jpew"]
 [ext_resource type="PackedScene" uid="uid://ccd52kbej7r3l" path="res://Scenes/Player/PlayerController.tscn" id="3_eeena"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://ced2kqn8jadtp" path="res://Scenes/Saucer/LargeSaucer.tscn" id="7_3yhdp"]
 [ext_resource type="PackedScene" uid="uid://bs2jf8dh304n2" path="res://Scenes/Saucer/SmallSaucer.tscn" id="8_4y6tj"]
 [ext_resource type="PackedScene" uid="uid://dr8xaksra1yg7" path="res://Scenes/GamePlay/Lives.tscn" id="8_fq5e7"]
+[ext_resource type="AudioStream" uid="uid://djk4g0usm5oip" path="res://Audio/extraShip.wav" id="9_jawve"]
 [ext_resource type="PackedScene" uid="uid://bs1adrwlhyxde" path="res://Scenes/GamePlay/EventHub.tscn" id="9_rd837"]
 [ext_resource type="PackedScene" uid="uid://bymsvp7vuq1lf" path="res://Scenes/GamePlay/ScoreController.tscn" id="10_0e2v8"]
 [ext_resource type="PackedScene" uid="uid://wgxodoft2v27" path="res://Scenes/Powerup/PowerUpController.tscn" id="10_8dsrg"]
@@ -41,9 +42,10 @@ _powerUpController = NodePath("../PowerUpController")
 [node name="LargeSaucerController" parent="." groups=["SoundFx"] instance=ExtResource("6_opifu")]
 _saucerScene = ExtResource("7_3yhdp")
 
-[node name="LivesController" parent="." node_paths=PackedStringArray("_lives", "_eventHub") instance=ExtResource("11_mdw5c")]
+[node name="LivesController" parent="." node_paths=PackedStringArray("_lives", "_eventHub") groups=["SoundFx"] instance=ExtResource("11_mdw5c")]
 _lives = NodePath("../CanvasLayer/Lives")
 _eventHub = NodePath("../EventHub")
+_extraLifeSound = ExtResource("9_jawve")
 
 [node name="PlayerController" parent="." groups=["SoundFx"] instance=ExtResource("3_eeena")]
 ShakeTime = 0.5

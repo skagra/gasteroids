@@ -6,27 +6,9 @@ namespace Asteroids;
 
 public partial class Lives : Node2D
 {
-    [Export]
-    private AudioStream _extraLifeSound;
-
     private PackedScene _lifeScene = Resources.LifeScene;
 
-    private readonly AudioStreamPlayer2D _extraLifeSoundPlayer = new();
-
     private readonly List<TextureRect> _lives = new();
-
-    public override void _Ready()
-    {
-        _extraLifeSoundPlayer.Bus = Resources.AUDIO_BUS_NAME_FX;
-        _extraLifeSoundPlayer.Stream = _extraLifeSound ?? throw new NullReferenceException("Extra life sound not set");
-        AddChild(_extraLifeSoundPlayer);
-    }
-
-    private bool _fxEnabled = false;
-    public void EnableFx(bool enable)
-    {
-        _fxEnabled = enable;
-    }
 
     public int Value
     {
@@ -50,11 +32,6 @@ public partial class Lives : Node2D
 
     public void AddLife(bool mute = false)
     {
-        if (!mute && _fxEnabled)
-        {
-            _extraLifeSoundPlayer.Play();
-        }
-
         var newLife = _lifeScene.Instantiate<TextureRect>();
         // Y sizes are used for width because the image is rotated 270 degrees
         var width = newLife.Size.Y * newLife.Scale.Y;
