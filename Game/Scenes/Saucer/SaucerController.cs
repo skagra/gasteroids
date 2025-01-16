@@ -105,7 +105,7 @@ public partial class SaucerController : Node
         {
             if (_saucer.IsActive)
             {
-                if (GD.Randi() % MissileSpawnRandomness == 0)
+                if ((GD.Randi() % MissileSpawnRandomness) == 0)
                 {
                     SpawnMissile();
                 }

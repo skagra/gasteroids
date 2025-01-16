@@ -14,6 +14,8 @@ public partial class Player : Area2D
 
     private const string _ANIMATION_THRUST = "Thrust";
 
+    private readonly Vector2 PoweredUpScale = new(1.3f, 1.3f);
+
     [Signal]
     public delegate void ShootEventHandler(Vector2 shipPosition, Vector2 shipLinearVelocity, float shipRotation);
 
@@ -32,6 +34,7 @@ public partial class Player : Area2D
     public float LinearDampening { get; set; } = 1.5f;
 
     public Func<int> GetAsteroidsCount { get; set; }
+    public bool PoweredUp { get; set; } = false;
 
     public Vector2 LinearVelocity { get; private set; }
 
@@ -127,6 +130,15 @@ public partial class Player : Area2D
     {
         if (_isActive)
         {
+            if (PoweredUp)
+            {
+                _sprite.Scale = PoweredUpScale;
+            }
+            else
+            {
+                _sprite.Scale = Vector2.One;
+            }
+
             var variableGravity = GravitationalPullCallback?.Invoke(Position) ?? Vector2.Zero;
             LinearVelocity += variableGravity * (float)delta;
 

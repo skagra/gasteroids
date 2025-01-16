@@ -1,0 +1,13 @@
+[gd_scene load_steps=4 format=3 uid="uid://crqgpav4owl5q"]
+
+[ext_resource type="PackedScene" uid="uid://b1gqrp1snc8i2" path="res://Scenes/Powerup/PowerUp.tscn" id="1_jkf8i"]
+[ext_resource type="Texture2D" uid="uid://bjawenqnqjwi2" path="res://Graphics/PowerUps.png" id="2_nym0t"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_myopo"]
+atlas = ExtResource("2_nym0t")
+region = Rect2(172.492, 24.5196, 91.6392, 90.7892)
+
+[node name="MultiShotPowerUp" instance=ExtResource("1_jkf8i")]
+
+[node name="Sprite2D" parent="." index="0"]
+texture = SubResource("AtlasTexture_myopo")

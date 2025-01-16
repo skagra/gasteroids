@@ -1,0 +1,13 @@
+[gd_scene load_steps=4 format=3 uid="uid://l2kkj1ubqufv"]
+
+[ext_resource type="PackedScene" uid="uid://b1gqrp1snc8i2" path="res://Scenes/Powerup/PowerUp.tscn" id="1_2x4uf"]
+[ext_resource type="Texture2D" uid="uid://bjawenqnqjwi2" path="res://Graphics/PowerUps.png" id="2_2xpx0"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5umia"]
+atlas = ExtResource("2_2xpx0")
+region = Rect2(307.272, 26.6739, 98.1507, 89.8808)
+
+[node name="ReflectiveShotPowerUp" instance=ExtResource("1_2x4uf")]
+
+[node name="Sprite2D" parent="." index="0"]
+texture = SubResource("AtlasTexture_5umia")

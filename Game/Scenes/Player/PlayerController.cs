@@ -1,11 +1,14 @@
 using System;
 using System.Diagnostics;
 using Godot;
+using static Asteroids.Missile;
 
 namespace Asteroids;
 
 public partial class PlayerController : Node
 {
+    private const float _MULTI_SHOT_ROTATION = 0.25f;
+
     [Signal]
     public delegate void ExplodingEventHandler(PlayerController playerController);
 
@@ -39,6 +42,27 @@ public partial class PlayerController : Node
     [Export]
     public float LinearDampening { get; set; }
 
+    public bool MultiShot { get; set; } = false;
+
+    private ShotModeType _shotMode;
+
+    public ShotModeType ShotMode
+    {
+        get => _shotMode;
+        set
+        {
+            _missileController.ShotMode = value;
+            _cwMissileController.ShotMode = value;
+            _acwMissileController.ShotMode = value;
+        }
+    }
+
+    public bool PoweredUp
+    {
+        get => _player.PoweredUp;
+        set => _player.PoweredUp = value;
+    }
+
     public Vector2 PlayerPosition
     {
         get => _player.Position;
@@ -58,9 +82,11 @@ public partial class PlayerController : Node
 
     private Player _player;
     private MissileController _missileController;
+    private MissileController _acwMissileController;
+    private MissileController _cwMissileController;
     private AudioStreamPlayer2D _explosionPlayer = new();
     private ShakingCamera _camera;
-    private Timer _shakeTimer = new Timer();
+    private Timer _shakeTimer = new();
 
     private bool _fxEnabled = true;
 
@@ -79,6 +105,8 @@ public partial class PlayerController : Node
 
         _player = GetNode<Player>("Player") ?? throw new NullReferenceException("Player not found");
         _missileController = GetNode<MissileController>("MissileController");
+        _cwMissileController = GetNode<MissileController>("CWMissileController");
+        _acwMissileController = GetNode<MissileController>("ACWMissileController");
 
         _player.Collided += PlayerOnCollided;
         _player.Shoot += PlayerOnShoot;
@@ -86,6 +114,8 @@ public partial class PlayerController : Node
         _player.HyperspaceAccident += PlayerOnHyperspaceAccident;
 
         _missileController.Collided += MissileControllerOnCollided;
+        _cwMissileController.Collided += MissileControllerOnCollided;
+        _acwMissileController.Collided += MissileControllerOnCollided;
 
         if (GetParent() is Window)
         {
@@ -101,6 +131,8 @@ public partial class PlayerController : Node
     {
         _fxEnabled = enable;
         _missileController.EnableFx(enable);
+        _cwMissileController.EnableFx(enable);
+        _acwMissileController.EnableFx(enable);
         _player.EnableFx(enable);
     }
 
@@ -109,9 +141,18 @@ public partial class PlayerController : Node
         _player.ThrustForce = PlayerThrustForce;
         _player.RotationSpeed = PlayerRotationSpeed;
         _player.LinearDampening = LinearDampening;
+
         _missileController.MissileCount = MissileCount;
         _missileController.MissileDuration = MissileDuration;
         _missileController.MissileSpeed = MissileSpeed;
+
+        _cwMissileController.MissileCount = MissileCount;
+        _cwMissileController.MissileDuration = MissileDuration;
+        _cwMissileController.MissileSpeed = MissileSpeed;
+
+        _acwMissileController.MissileCount = MissileCount;
+        _acwMissileController.MissileDuration = MissileDuration;
+        _acwMissileController.MissileSpeed = MissileSpeed;
 
         _player.Activate(position);
     }
@@ -125,6 +166,11 @@ public partial class PlayerController : Node
     {
         Logger.I.SignalReceived(this, _player, Player.SignalName.Shoot, position, shipLinearVelocity, shipRotation);
         _missileController.SpawnMissile(position, shipLinearVelocity, shipRotation);
+        if (MultiShot)
+        {
+            _cwMissileController.SpawnMissile(position, shipLinearVelocity, shipRotation + _MULTI_SHOT_ROTATION);
+            _acwMissileController.SpawnMissile(position, shipLinearVelocity, shipRotation - _MULTI_SHOT_ROTATION);
+        }
     }
 
     private void MissileControllerOnCollided(Missile missile, Node collidedWith)
@@ -182,6 +228,5 @@ public partial class PlayerController : Node
 
         EmitSignal(SignalName.Exploded, this);
         Logger.I.SignalSent(this, SignalName.Exploded);
-
     }
 }

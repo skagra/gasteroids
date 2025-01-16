@@ -63,13 +63,18 @@ public partial class LivesController : Node
         }
     }
 
+    public void AddLife()
+    {
+        _lives.AddLife();
+        EmitSignal(SignalName.LivesIncreased, _lives.Value);
+    }
+
     private void OnScoreIncreased(int newScore)
     {
         if (newScore > _nextExtraLifeThreshold && _lives.Value < _maxLives)
         {
-            _lives.AddLife();
+            AddLife();
             _nextExtraLifeThreshold += ExtraLifeThreshold;
-            EmitSignal(SignalName.LivesIncreased, _lives.Value);
         }
     }
 }

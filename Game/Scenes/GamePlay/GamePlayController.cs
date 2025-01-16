@@ -3,6 +3,8 @@ using Godot;
 
 namespace Asteroids;
 
+using static Asteroids.Missile;
+using static Asteroids.PowerUpController;
 using SettingsPresets = GameSettingsPresets.SettingsPresets;
 
 public partial class GamePlayController : Node
@@ -174,9 +176,28 @@ public partial class GamePlayController : Node
         _smallSaucerController.TargetCallback = () => _playerController.PlayerPosition;
     }
 
-    private void OnPowerUpCollected(PowerUpController.PowerUpType powerUpType)
+    private void OnPowerUpCollected(PowerUpType powerUpType)
     {
-        GD.Print($"#################### Collected PowerUp {powerUpType}");
+        _playerController.MultiShot = false;
+        _playerController.ShotMode = ShotModeType.Wrap;
+        _playerController.PoweredUp = false;
+
+        switch (powerUpType)
+        {
+            case PowerUpType.MultiShot:
+                _playerController.MultiShot = true;
+                _playerController.PoweredUp = true;
+                break;
+            case PowerUpType.ReflectiveShot:
+                _playerController.ShotMode = ShotModeType.Reflect;
+                _playerController.PoweredUp = true;
+                break;
+            case PowerUpType.ExtraLife:
+                _livesController.AddLife();
+                break;
+            default:
+                break;
+        }
     }
 
     private void CreateDemoScreen()
@@ -332,6 +353,11 @@ public partial class GamePlayController : Node
 
         // Stop playing the beats sounds
         _beats.Stop();
+
+        // Lose power ups if any
+        _playerController.PoweredUp = false;
+        _playerController.MultiShot = false;
+        _playerController.ShotMode = ShotModeType.Wrap;
 
         // If we have no lives left then flag it
         if (newLives == 0)

@@ -16,7 +16,7 @@ public partial class PowerUp : Area2D
     private AudioStream _collectedSound;
 
     [Export]
-    private float _powerUpdDuration = 5f;
+    private float _powerUpDuration = 5f;
 
     public float _timer;
 
@@ -43,6 +43,12 @@ public partial class PowerUp : Area2D
         }
     }
 
+    private bool _fxEnabled = false;
+    public void EnableFx(bool enable)
+    {
+        _fxEnabled = enable;
+    }
+
     private void StartDone()
     {
         _animationPlayer.Play("Pop");
@@ -53,7 +59,10 @@ public partial class PowerUp : Area2D
         if (Identities.IsPlayer(area))
         {
             _audioStreamPlayer.Stream = _collectedSound;
-            _audioStreamPlayer.Play();
+            if (_fxEnabled)
+            {
+                _audioStreamPlayer.Play();
+            }
             StartDone();
             EmitSignal(SignalName.Collected, this, area);
         }
@@ -66,7 +75,8 @@ public partial class PowerUp : Area2D
 
     public override void _Process(double delta)
     {
-        if (!Screen.IsOnScreen(Position) || _timer > _powerUpdDuration)
+        _timer += (float)delta;
+        if (!Screen.IsOnScreen(Position) || _timer > _powerUpDuration)
         {
             StartDone();
         }

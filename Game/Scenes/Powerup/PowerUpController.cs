@@ -6,15 +6,19 @@ namespace Asteroids;
 
 public partial class PowerUpController : Node
 {
+    private const int _POWER_UP_THRESHOLD = 10;
+
     [Signal]
     public delegate void CollectedEventHandler(int powerUpType);
 
     [Export]
     public EventHub _eventHub;
 
-    public enum PowerUpType { ExtraLife };
+    public enum PowerUpType { ExtraLife, MultiShot, ReflectiveShot };
 
-    public PackedScene _extraLifePowerUpPrefab = GD.Load<PackedScene>("res://Scenes/Powerup/PowerUp.tscn");
+    public PackedScene _extraLifePowerUpPrefab = GD.Load<PackedScene>("res://Scenes/Powerup/ExtraLifePowerUp.tscn");
+    public PackedScene _multiShotPowerUpPrefab = GD.Load<PackedScene>("res://Scenes/Powerup/MultiShotPowerUp.tscn");
+    public PackedScene _reflectiveShotPowerUpPrefab = GD.Load<PackedScene>("res://Scenes/Powerup/ReflectiveShotPowerUp.tscn");
 
     private class PowerUpDetails
     {
@@ -37,7 +41,7 @@ public partial class PowerUpController : Node
     {
         if (Identities.IsPlayerMissile(collidedWith))
         {
-            if (GD.Randi() % 2 == 0)  // TODO
+            if ((GD.Randi() % _POWER_UP_THRESHOLD) == 0)
             {
                 SpawnPowerUp(asteroid.Position);
             }
@@ -50,6 +54,8 @@ public partial class PowerUpController : Node
         var powerUp = powerUpType switch
         {
             PowerUpType.ExtraLife => _extraLifePowerUpPrefab.Instantiate<PowerUp>(),
+            PowerUpType.MultiShot => _multiShotPowerUpPrefab.Instantiate<PowerUp>(),
+            PowerUpType.ReflectiveShot => _reflectiveShotPowerUpPrefab.Instantiate<PowerUp>(),
             _ => throw new NotImplementedException()
         };
         powerUp.Position = location;

@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using static Asteroids.Missile;
 
 namespace Asteroids;
 
@@ -31,6 +32,17 @@ public partial class MissileController : Node
 
     [Export]
     private PackedScene _missileScene;
+
+    private ShotModeType _shotMode;
+    public ShotModeType ShotMode
+    {
+        get => _shotMode;
+        set
+        {
+            _dormantMissiles.ForEach(missile => missile.ShotMode = value);
+            _activeMissiles.ForEach(missileDetails => missileDetails.Missile.ShotMode = value);
+        }
+    }
 
     private sealed class ActiveMissile
     {
