@@ -331,4 +331,5 @@ libraries = {
 }
 script = ExtResource("17_imr0y")
 
-[node name="GamePlayController" parent="." instance=ExtResource("2_be7cv")]
+[node name="GamePlayController" parent="." node_paths=PackedStringArray("_ui") instance=ExtResource("2_be7cv")]
+_ui = NodePath("../UI")

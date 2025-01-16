@@ -210,6 +210,10 @@ public partial class Main : Node
         _highScoreTable.AddScore(name, _gamePlayController.Score);
         HighScorePersistence.Save(_highScoreTable.GetScores(), _HIGH_SCORE_SAVE_PATH);
         _enterHighScore.Hide();
+        if (_gamePlayController.Score > _ui.HighScore)
+        {
+            _ui.HighScore = _gamePlayController.Score;
+        }
 
         _uiUtils.ShowAndHide(ViewableElements.FadingOverlay, ViewableElements.FadingOverlay);
         _mainAnimationPlayer.PlayHighScore();

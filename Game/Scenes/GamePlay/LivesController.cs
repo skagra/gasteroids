@@ -12,8 +12,6 @@ public partial class LivesController : Node
     public delegate void LivesDecreasedEventHandler(int newLives);
 
     [Export]
-    private Lives _lives;
-    [Export]
     private EventHub _eventHub;
     [Export]
     public int ExtraLifeThreshold { get; set; } = 1000;
@@ -29,10 +27,12 @@ public partial class LivesController : Node
     private int _nextExtraLifeThreshold;
     private readonly AudioStreamPlayer2D _extraLifeSoundPlayer = new();
 
+    public Ui UI { get; set; }
+
     public int Lives
     {
-        get => _lives.Value;
-        set => _lives.Value = value;
+        get => UI.Lives;
+        set => UI.Lives = value;
     }
 
     private bool _fxEnabled = false;
@@ -43,7 +43,6 @@ public partial class LivesController : Node
 
     public override void _Ready()
     {
-        Debug.Assert(_lives != null);
         Debug.Assert(_eventHub != null);
 
         _extraLifeSoundPlayer.Bus = Resources.AUDIO_BUS_NAME_FX;
@@ -52,13 +51,11 @@ public partial class LivesController : Node
 
         _eventHub.ScoreIncreased += OnScoreIncreased;
         _eventHub.PlayerExploding += OnPlayerExploding;
-
-        Reset();
     }
 
     private void Reset()
     {
-        _lives.Value = _newGameLives;
+        UI.Lives = _newGameLives;
         _nextExtraLifeThreshold = ExtraLifeThreshold;
     }
 
@@ -66,8 +63,8 @@ public partial class LivesController : Node
     {
         if (!_infiniteLives)
         {
-            _lives.RemoveLife();
-            EmitSignal(SignalName.LivesDecreased, _lives.Value);
+            UI.Lives--;
+            EmitSignal(SignalName.LivesDecreased, UI.Lives);
         }
     }
 
@@ -78,13 +75,13 @@ public partial class LivesController : Node
             _extraLifeSoundPlayer.Play();
         }
 
-        _lives.AddLife();
-        EmitSignal(SignalName.LivesIncreased, _lives.Value);
+        UI.AddLife();
+        EmitSignal(SignalName.LivesIncreased, UI.Lives);
     }
 
     private void OnScoreIncreased(int newScore)
     {
-        if (newScore > _nextExtraLifeThreshold && _lives.Value < _maxLives)
+        if (newScore > _nextExtraLifeThreshold && UI.Lives < _maxLives)
         {
             AddLife();
             _nextExtraLifeThreshold += ExtraLifeThreshold;

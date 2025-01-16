@@ -41,6 +41,9 @@ public partial class GamePlayController : Node
     private int _safeZoneRadius = 200;
 
     [Export]
+    private Ui _ui;
+
+    [Export]
     private EventHub _eventHub;
 
     public int Score { get => _scoreController.Score; }
@@ -80,6 +83,10 @@ public partial class GamePlayController : Node
 
         // Signals
         SetupSceneSignals();
+
+        // Pass reference to UI
+        _scoreController.UI = _ui;
+        _livesController.UI = _ui;
 
         // Asteroids count callback - used in hyperspace accident calculation
         _playerController.GetAsteroidsCount = () => _asteroidFieldController.AsteroidCount;
