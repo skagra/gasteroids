@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using Godot;
 
 namespace Asteroids;
@@ -13,9 +12,6 @@ public partial class PowerUp : Area2D
     public delegate void DoneEventHandler(PowerUp powerUp);
 
     [Export]
-    private AudioStream _collectedSound;
-
-    [Export]
     private float _powerUpDuration = 5f;
 
     public float _timer;
@@ -26,10 +22,7 @@ public partial class PowerUp : Area2D
 
     public override void _Ready()
     {
-        Debug.Assert(_collectedSound != null);
         _animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer") ?? throw new NullReferenceException("AnimationPlayer not found");
-        _audioStreamPlayer = new AudioStreamPlayer();
-        AddChild(_audioStreamPlayer);
 
         _timer = 0f;
 
@@ -43,12 +36,6 @@ public partial class PowerUp : Area2D
         }
     }
 
-    private bool _fxEnabled = false;
-    public void EnableFx(bool enable)
-    {
-        _fxEnabled = enable;
-    }
-
     private void StartDone()
     {
         _animationPlayer.Play("Pop");
@@ -58,11 +45,6 @@ public partial class PowerUp : Area2D
     {
         if (Identities.IsPlayer(area))
         {
-            _audioStreamPlayer.Stream = _collectedSound;
-            if (_fxEnabled)
-            {
-                _audioStreamPlayer.Play();
-            }
             StartDone();
             EmitSignal(SignalName.Collected, this, area);
         }

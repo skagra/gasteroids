@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Godot;
 
 namespace Asteroids;
@@ -12,13 +13,16 @@ public partial class PowerUpController : Node
     public delegate void CollectedEventHandler(int powerUpType);
 
     [Export]
+    private AudioStream _collectedSound;
+    [Export]
     public EventHub _eventHub;
 
     public enum PowerUpType { ExtraLife, MultiShot, ReflectiveShot };
 
-    public PackedScene _extraLifePowerUpPrefab = GD.Load<PackedScene>("res://Scenes/Powerup/ExtraLifePowerUp.tscn");
-    public PackedScene _multiShotPowerUpPrefab = GD.Load<PackedScene>("res://Scenes/Powerup/MultiShotPowerUp.tscn");
-    public PackedScene _reflectiveShotPowerUpPrefab = GD.Load<PackedScene>("res://Scenes/Powerup/ReflectiveShotPowerUp.tscn");
+    private AudioStreamPlayer _audioStreamPlayer;
+    private PackedScene _extraLifePowerUpPrefab = GD.Load<PackedScene>("res://Scenes/Powerup/ExtraLifePowerUp.tscn");
+    private PackedScene _multiShotPowerUpPrefab = GD.Load<PackedScene>("res://Scenes/Powerup/MultiShotPowerUp.tscn");
+    private PackedScene _reflectiveShotPowerUpPrefab = GD.Load<PackedScene>("res://Scenes/Powerup/ReflectiveShotPowerUp.tscn");
 
     private class PowerUpDetails
     {
@@ -28,8 +32,21 @@ public partial class PowerUpController : Node
 
     private List<PowerUpDetails> _activePowerUps = new();
 
+    private bool _fxEnabled = false;
+    public void EnableFx(bool enable)
+    {
+        _fxEnabled = enable;
+    }
+
     public override void _Ready()
     {
+        Debug.Assert(_collectedSound != null);
+        _audioStreamPlayer = new()
+        {
+            Stream = _collectedSound
+        };
+        AddChild(_audioStreamPlayer);
+
         _eventHub.AsteroidCollided += OnAsteroidCollided;
         if (GetParent() is Window)
         {
@@ -87,6 +104,10 @@ public partial class PowerUpController : Node
 
     private void PowerUpOnCollected(PowerUp powerUp, Area2D collidedWith)
     {
+        if (_fxEnabled)
+        {
+            _audioStreamPlayer.Play();
+        }
         var powerUpDetails = _activePowerUps.Find(ap => ap.PowerUp == powerUp);
         EmitSignal(SignalName.Collected, (int)powerUpDetails.PowerUpType);
     }

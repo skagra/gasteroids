@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://Scenes/GamePlay/Lives.cs" id="1_qaqm3"]
 [ext_resource type="AudioStream" uid="uid://djk4g0usm5oip" path="res://Audio/extraShip.wav" id="2_soy7h"]
 
-[node name="Lives" type="Node2D"]
+[node name="Lives" type="Node2D" groups=["SoundFx"]]
 position = Vector2(25, 71)
 script = ExtResource("1_qaqm3")
 _extraLifeSound = ExtResource("2_soy7h")

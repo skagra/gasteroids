@@ -1,8 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://b1gqrp1snc8i2"]
+[gd_scene load_steps=8 format=3 uid="uid://b1gqrp1snc8i2"]
 
 [ext_resource type="Script" path="res://Scenes/Powerup/PowerUp.cs" id="1_n6308"]
 [ext_resource type="Texture2D" uid="uid://bjawenqnqjwi2" path="res://Graphics/PowerUps.png" id="2_lwk7v"]
-[ext_resource type="AudioStream" uid="uid://cw4qfbx8oe8ji" path="res://Audio/powerUp.mp3" id="2_x5rvj"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_sdxex"]
 atlas = ExtResource("2_lwk7v")
@@ -149,11 +148,10 @@ _data = {
 "RESET": SubResource("Animation_javnx")
 }
 
-[node name="Powerup" type="Area2D" groups=["SoundFx"]]
+[node name="Powerup" type="Area2D"]
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("1_n6308")
-_collectedSound = ExtResource("2_x5rvj")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = SubResource("AtlasTexture_sdxex")

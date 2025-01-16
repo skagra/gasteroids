@@ -22,6 +22,12 @@ public partial class Lives : Node2D
         AddChild(_extraLifeSoundPlayer);
     }
 
+    private bool _fxEnabled = false;
+    public void EnableFx(bool enable)
+    {
+        _fxEnabled = enable;
+    }
+
     public int Value
     {
         get => _lives.Count;
@@ -44,7 +50,7 @@ public partial class Lives : Node2D
 
     public void AddLife(bool mute = false)
     {
-        if (!mute)
+        if (!mute && _fxEnabled)
         {
             _extraLifeSoundPlayer.Play();
         }

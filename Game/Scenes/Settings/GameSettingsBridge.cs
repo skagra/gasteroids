@@ -37,8 +37,11 @@ public class GameSettingsBridge
             Resources.SwitchTheme(value.Theme);
         }
 
+        GD.Print("Applying " + value.SoundEnabled);
+
         if ((ignoreFields & Fields.Sound) == 0)
         {
+            GD.Print("Calling EnableNewSoundFx");
             Resources.EnableNewSoundFx(value.SoundEnabled);
         }
 

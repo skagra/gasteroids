@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using Godot;
 
 namespace Asteroids;
@@ -63,6 +65,7 @@ public partial class Resources : Node
 
     public static void EnableNewSoundFx(bool enable)
     {
+        GD.Print("Calling group " + String.Join(", ", _I.GetTree().GetNodesInGroup("SoundFx").Select(n => n.Name)));
         _I.GetTree().CallGroup("SoundFx", "EnableFx", enable);
     }
 }

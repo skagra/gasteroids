@@ -2,5 +2,5 @@
 
 [ext_resource type="Script" path="res://Scenes/Powerup/PowerUpController.cs" id="1_u3rt2"]
 
-[node name="PowerUpController" type="Node"]
+[node name="PowerUpController" type="Node" groups=["SoundFx"]]
 script = ExtResource("1_u3rt2")

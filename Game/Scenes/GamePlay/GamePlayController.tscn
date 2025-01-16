@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://c274gsecjxlvx"]
+[gd_scene load_steps=18 format=3 uid="uid://c274gsecjxlvx"]
 
 [ext_resource type="Script" path="res://Scenes/GamePlay/GamePlayController.cs" id="1_6jpew"]
 [ext_resource type="PackedScene" uid="uid://ccd52kbej7r3l" path="res://Scenes/Player/PlayerController.tscn" id="3_eeena"]
@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://bx0l2shyhmj8q" path="res://Scenes/AsteroidFieldController/AsteroidFieldController.tscn" id="11_gdox8"]
 [ext_resource type="PackedScene" uid="uid://cr32w438ac87u" path="res://Scenes/GamePlay/Score.tscn" id="11_kjx34"]
 [ext_resource type="PackedScene" uid="uid://cpdoqllpnykna" path="res://Scenes/GamePlay/LivesController.tscn" id="11_mdw5c"]
+[ext_resource type="AudioStream" uid="uid://cw4qfbx8oe8ji" path="res://Audio/powerUp.mp3" id="11_w3vv8"]
 [ext_resource type="PackedScene" uid="uid://bbl6psak4tgdr" path="res://Controls/ShakingCamera/ShakingCamera.tscn" id="12_pu3nw"]
 [ext_resource type="Theme" uid="uid://cphlitqn3odss" path="res://Themes/Modern.tres" id="15_xjn75"]
 
@@ -48,6 +49,7 @@ _eventHub = NodePath("../EventHub")
 ShakeTime = 0.5
 
 [node name="PowerUpController" parent="." node_paths=PackedStringArray("_eventHub") instance=ExtResource("10_8dsrg")]
+_collectedSound = ExtResource("11_w3vv8")
 _eventHub = NodePath("../EventHub")
 
 [node name="ScoreController" parent="." node_paths=PackedStringArray("_score", "_eventHub") instance=ExtResource("10_0e2v8")]
