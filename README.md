@@ -16,6 +16,7 @@ While Asteroids remains the core of the game this version is highly configurable
 * You may select either a modern UI theme, or a classic theme which matches the original game.
 * The gravitational pull of each asteroid on the player ship is modelled.
 * There are many small tweaks such as rotating asteroids, UI fade-ins and camera shake.
+* Various *Power Ups* may be collected, such as multi-shot and reflective-shot.
 * Much of the behaviour of the player ship, asteroids and saucers may be customized via difficulty-based presets.  In addition  individual game play settings may be tweaked e.g. the rate of player ship acceleration, the frequency at which saucers spawn and the magnitude of gravitational pull.
 
 Find out [How to Play](docs/howtoplay.md), see the [Credits](docs/credits.md) where I've pulled in 3rd party graphics, fonts and sounds, and consult the [References](docs/references.md) I found useful during development.  

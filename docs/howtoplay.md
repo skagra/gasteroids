@@ -11,6 +11,8 @@ Periodically an enemy saucer will appear and attempt to destroy your ship.  Ther
 
 As a last resort you may make a hyperspace jump.  This is fraught with danger, your ship could spontaneously explode or you might rematerialize inside an asteroid.
 
+Sometimes destroying an asteroid causes a *Power Up* to spawn, pilot your ship over the *Power Up* to collect it.
+
 Of course your ship is destroyed should you collide with an asteroid or a saucer or be hit by a saucer's missile.
 
 Once all asteroids have been destroyed a new, more difficult, asteroid field spawns.
@@ -23,6 +25,7 @@ The game is controlled with the keyboard.
 * *Configuration Settings* - C
 * *Help* - H
 * *Quit Game* - Escape
+* "Pause/UnPause* - P
 
 ### Game Play
 
