@@ -53,7 +53,7 @@ public partial class LivesController : Node
         _eventHub.PlayerExploding += OnPlayerExploding;
     }
 
-    private void Reset()
+    public void Reset()
     {
         UI.Lives = _newGameLives;
         _nextExtraLifeThreshold = ExtraLifeThreshold;

@@ -59,6 +59,7 @@ public partial class GamePlayController : Node
     private ScoreController _scoreController;
     private LivesController _livesController;
     private PowerUpController _powerUpController;
+    private PausedController _pausedController;
 
     // State
     private int _asteroidsCurrentInitialQuantity;
@@ -87,6 +88,7 @@ public partial class GamePlayController : Node
         // Pass reference to UI
         _scoreController.UI = _ui;
         _livesController.UI = _ui;
+        _pausedController.UI = _ui;
 
         // Asteroids count callback - used in hyperspace accident calculation
         _playerController.GetAsteroidsCount = () => _asteroidFieldController.AsteroidCount;
@@ -113,6 +115,16 @@ public partial class GamePlayController : Node
         if (GetParent() is Window)
         {
             NewGame(GameSettingsPresets.GetSettings(SettingsPresets.Normal));
+        }
+    }
+
+    public override void _UnhandledKeyInput(InputEvent inputEvent)
+    {
+        if (inputEvent.IsActionPressed("Pause") && _gamePlayState != GamePlayState.NotPlaying)
+        {
+            _ui.ShowPausedLabel();
+            GetTree().Paused = true;
+            GetViewport().SetInputAsHandled();
         }
     }
 
@@ -162,6 +174,7 @@ public partial class GamePlayController : Node
         _livesController = (LivesController)FindChild("LivesController") ?? throw new NullReferenceException("LivesController not found");
         _scoreController = (ScoreController)FindChild("ScoreController") ?? throw new NullReferenceException("ScoreController not found");
         _powerUpController = (PowerUpController)FindChild("PowerUpController") ?? throw new NullReferenceException("PowerUpController not found");
+        _pausedController = (PausedController)FindChild("PausedController") ?? throw new NullReferenceException("PausedController not found");
     }
 
     private void SetupSceneSignals()
@@ -200,6 +213,7 @@ public partial class GamePlayController : Node
                 _playerController.PoweredUp = true;
                 break;
             case PowerUpType.ExtraLife:
+                GD.Print("CALLING ADDLIFE FROM ON POWER COLLECTED");
                 _livesController.AddLife();
                 break;
             default:
@@ -243,6 +257,7 @@ public partial class GamePlayController : Node
         _maxAsteroids = gameSettings.AsteroidsMaxQuantity;
 
         // Starting lives
+        _livesController.Reset();
         _livesController.Lives = gameSettings.PlayerStartingLives;
 
         // Reset score to 0

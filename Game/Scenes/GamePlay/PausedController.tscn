@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://u4lt71870ws5"]
+
+[ext_resource type="Script" path="res://Scenes/GamePlay/PausedController.cs" id="1_wxbvm"]
+
+[node name="PausedController" type="Node"]
+process_mode = 2
+script = ExtResource("1_wxbvm")

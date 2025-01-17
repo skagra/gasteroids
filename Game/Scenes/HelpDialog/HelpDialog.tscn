@@ -75,6 +75,17 @@ size_flags_horizontal = 3
 text = "H"
 horizontal_alignment = 2
 
+[node name="Pause Label" type="Label" parent="FadingPanelContainer/Help VBox/Controls/Controls"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Pause/Unpause"
+
+[node name="Paul Key" type="Label" parent="FadingPanelContainer/Help VBox/Controls/Controls"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "P"
+horizontal_alignment = 2
+
 [node name="Game Play Category Heading" type="Label" parent="FadingPanelContainer/Help VBox/Controls"]
 layout_mode = 2
 size_flags_horizontal = 3
