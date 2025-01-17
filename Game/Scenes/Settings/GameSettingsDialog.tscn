@@ -138,6 +138,19 @@ text = "Player Ships"
 layout_mode = 2
 columns = 2
 
+[node name="Power Up Enabled Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Ship Category Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tooltip_text = "Select infinite ships to never lose a life!"
+mouse_filter = 0
+text = "Power Ups Enabled"
+
+[node name="Power Up Enabled" type="CheckBox" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Ship Category Container"]
+layout_mode = 2
+size_flags_horizontal = 8
+button_pressed = true
+
 [node name="Player Infinite Lives Label" type="Label" parent="FadingPanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Ship Category Container"]
 layout_mode = 2
 size_flags_horizontal = 3

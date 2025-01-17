@@ -15,23 +15,24 @@ public partial class GameSettingsDialog : CanvasLayer
     private FadingPanelContainer _fadingPanelContainer;
 
     // Pre-canned configurations
-    OptionButton _configurationSet;
+    private OptionButton _configurationSet;
 
     // Theme
-    OptionButton _theme;
+    private OptionButton _theme;
 
     // Sound
     private CheckBox _soundEnabled;
 
     // Player ships
-    CheckBox _playerInfiniteLives;
-    SpinBox _playerStartingLives;
-    SpinBox _playerMaxLives;
-    SpinBox _playerExtraLifeScoreThreshold;
+    private CheckBox _powerUpEnabled;
+    private CheckBox _playerInfiniteLives;
+    private SpinBox _playerStartingLives;
+    private SpinBox _playerMaxLives;
+    private SpinBox _playerExtraLifeScoreThreshold;
 
-    HSlider _shipAcceleration;
-    HSlider _shipTurnSpeed;
-    HSlider _shipLinearDampening;
+    private HSlider _shipAcceleration;
+    private HSlider _shipTurnSpeed;
+    private HSlider _shipLinearDampening;
 
     // Asteroids
     private CheckBox _asteroidsRotationEnabled;
@@ -81,6 +82,7 @@ public partial class GameSettingsDialog : CanvasLayer
 
         _soundEnabled = (CheckBox)FindChild("Sound Enabled");
 
+        _powerUpEnabled = (CheckBox)FindChild("Power Up Enabled");
         _playerInfiniteLives = (CheckBox)FindChild("Player Infinite Lives");
         _playerStartingLives = (SpinBox)FindChild("Player Starting Lives");
         _playerMaxLives = (SpinBox)FindChild("Player Max Lives");
@@ -149,6 +151,7 @@ public partial class GameSettingsDialog : CanvasLayer
 
             SoundEnabled = _soundEnabled.ButtonPressed,
 
+            PowerUpsEnabled = _powerUpEnabled.ButtonPressed,
             PlayerInfiniteLives = _playerInfiniteLives.ButtonPressed,
             PlayerStartingLives = (int)_playerStartingLives.Value,
             PlayerMaxLives = (int)_playerMaxLives.Value,
@@ -196,6 +199,7 @@ public partial class GameSettingsDialog : CanvasLayer
 
         _soundEnabled.ButtonPressed = ActiveSettings.SoundEnabled;
 
+        _powerUpEnabled.ButtonPressed = ActiveSettings.PowerUpsEnabled;
         _playerInfiniteLives.ButtonPressed = ActiveSettings.PlayerInfiniteLives;
         _playerStartingLives.Value = ActiveSettings.PlayerStartingLives;
         _playerMaxLives.Value = ActiveSettings.PlayerMaxLives;

@@ -22,6 +22,7 @@ public static class GameSettingsPresets
 
         SoundEnabled = true,
 
+        PowerUpsEnabled = false,
         PlayerInfiniteLives = false,
         PlayerStartingLives = 3,
         PlayerMaxLives = 6,
@@ -66,6 +67,7 @@ public static class GameSettingsPresets
 
         SoundEnabled = true,
 
+        PowerUpsEnabled = true,
         PlayerInfiniteLives = false,
         PlayerStartingLives = 3,
         PlayerMaxLives = 6,
@@ -110,6 +112,7 @@ public static class GameSettingsPresets
 
         SoundEnabled = true,
 
+        PowerUpsEnabled = true,
         PlayerInfiniteLives = false,
         PlayerStartingLives = 3,
         PlayerMaxLives = 6,
@@ -154,6 +157,7 @@ public static class GameSettingsPresets
 
         SoundEnabled = true,
 
+        PowerUpsEnabled = true,
         PlayerInfiniteLives = false,
         PlayerStartingLives = 3,
         PlayerMaxLives = 6,
@@ -198,6 +202,7 @@ public static class GameSettingsPresets
 
         SoundEnabled = true,
 
+        PowerUpsEnabled = true,
         PlayerInfiniteLives = false,
         PlayerStartingLives = 3,
         PlayerMaxLives = 6,
@@ -242,6 +247,7 @@ public static class GameSettingsPresets
 
         SoundEnabled = false,
 
+        PowerUpsEnabled = false,
         PlayerInfiniteLives = false,
         PlayerStartingLives = 3,
         PlayerMaxLives = 6,

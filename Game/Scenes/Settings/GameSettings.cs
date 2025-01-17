@@ -12,6 +12,7 @@ public class GameSettings
 
         Theme = configSettings.Theme;
 
+        PowerUpsEnabled = configSettings.PowerUpsEnabled;
         PlayerInfiniteLives = configSettings.PlayerInfiniteLives;
         PlayerStartingLives = configSettings.PlayerStartingLives;
         PlayerMaxLives = configSettings.PlayerMaxLives;
@@ -58,6 +59,7 @@ public class GameSettings
     public bool SoundEnabled { get; set; }
 
     // Player ships
+    public bool PowerUpsEnabled { get; set; }
     public bool PlayerInfiniteLives { get; set; }
     public int PlayerStartingLives { get; set; }
     public int PlayerMaxLives { get; set; }
@@ -103,5 +105,4 @@ public class GameSettings
     public int SmallSaucerMaxMissiles { get; set; }
     public float SmallSaucerMissilesSpeed { get; set; }
     public float SmallSaucerMissilesLifespan { get; set; }
-
 }

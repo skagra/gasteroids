@@ -9,16 +9,19 @@ public class GameSettingsBridge
     private readonly AsteroidFieldController _asteroidFieldController;
     private readonly SaucerController _largeSaucerController;
     private readonly SaucerController _smallSaucerController;
+    private readonly PowerUpController _powerUpController;
 
     public GameSettingsBridge(PlayerController playerController,
                               AsteroidFieldController asteroidFieldController,
                               SaucerController largeSaucerController,
-                              SaucerController smallSaucerController)
+                              SaucerController smallSaucerController,
+                              PowerUpController powerUpController)
     {
         _playerController = playerController;
         _asteroidFieldController = asteroidFieldController;
         _largeSaucerController = largeSaucerController;
         _smallSaucerController = smallSaucerController;
+        _powerUpController = powerUpController;
     }
 
     [Flags]
@@ -42,6 +45,7 @@ public class GameSettingsBridge
             Resources.EnableNewSoundFx(value.SoundEnabled);
         }
 
+        _powerUpController.Enabled = value.PowerUpsEnabled;
         _playerController.PlayerThrustForce = value.ShipAcceleration;
         _playerController.PlayerRotationSpeed = value.ShipTurnSpeed;
         _playerController.LinearDampening = value.ShipLinearDampening;

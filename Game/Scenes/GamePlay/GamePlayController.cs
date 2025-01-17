@@ -103,7 +103,8 @@ public partial class GamePlayController : Node
 
         // Create settings bridge
         _settingsBridge = new GameSettingsBridge(_playerController, _asteroidFieldController,
-                                                 _largeSaucerController, _smallSaucerController);
+                                                 _largeSaucerController, _smallSaucerController,
+                                                 _powerUpController);
 
         // Not playing yet
         SetGamePlayState(GamePlayState.NotPlaying);

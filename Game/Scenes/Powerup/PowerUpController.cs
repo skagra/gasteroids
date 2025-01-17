@@ -32,6 +32,8 @@ public partial class PowerUpController : Node
 
     private List<PowerUpDetails> _activePowerUps = new();
 
+    public bool Enabled { get; set; } = true;
+
     private bool _fxEnabled = false;
     public void EnableFx(bool enable)
     {
@@ -56,7 +58,7 @@ public partial class PowerUpController : Node
 
     private void OnAsteroidCollided(Asteroid asteroid, AsteroidSize size, Node collidedWith)
     {
-        if (Identities.IsPlayerMissile(collidedWith))
+        if (Enabled && Identities.IsPlayerMissile(collidedWith))
         {
             if ((GD.Randi() % _POWER_UP_THRESHOLD) == 0)
             {
