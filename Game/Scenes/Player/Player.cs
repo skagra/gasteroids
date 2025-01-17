@@ -14,6 +14,8 @@ public partial class Player : Area2D
 
     private const string _ANIMATION_THRUST = "Thrust";
 
+    private const float _MAX_SPEED = 1500f;
+
     private readonly Vector2 PoweredUpScale = new(1.3f, 1.3f);
 
     [Signal]
@@ -122,7 +124,6 @@ public partial class Player : Area2D
             {
                 FirePressed();
             }
-
         }
     }
 
@@ -164,6 +165,11 @@ public partial class Player : Area2D
             if (Input.IsActionJustPressed(_ACTION_HYPERSPACE))
             {
                 HyperspacePressed();
+            }
+
+            if (LinearVelocity.Length() > _MAX_SPEED)
+            {
+                LinearVelocity = LinearVelocity.Normalized() * _MAX_SPEED;
             }
 
         }
