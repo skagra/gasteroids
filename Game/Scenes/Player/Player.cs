@@ -29,11 +29,11 @@ public partial class Player : Area2D
 
     [ExportCategory("General Settings")]
     [Export]
-    public float ThrustForce { get; set; } = 100;
+    public float ThrustForce { get; set; } = 100f;
     [Export]
     public float RotationSpeed { get; set; } = 5.0f;
     [Export]
-    public float LinearDampening { get; set; } = 1.5f;
+    public float LinearDampening { get; set; } = 100f;
 
     public Func<int> GetAsteroidsCount { get; set; }
     public bool PoweredUp { get; set; } = false;

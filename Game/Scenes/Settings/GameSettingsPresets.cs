@@ -34,7 +34,7 @@ public static class GameSettingsPresets
 
         PlayerMaxMissiles = 8,
         PlayerMissilesSpeed = 550,
-        PlayerMissilesLifespan = 2f,
+        PlayerMissilesLifespan = 200f,
 
         AsteroidsRotationEnabled = false,
         AsteroidsInitialQuantity = 4,
@@ -75,7 +75,7 @@ public static class GameSettingsPresets
 
         ShipAcceleration = 400f,
         ShipTurnSpeed = 4f,
-        ShipLinearDampening = 1.5f,
+        ShipLinearDampening = 350f,
 
         PlayerMaxMissiles = 8,
         PlayerMissilesSpeed = 550,
@@ -120,7 +120,7 @@ public static class GameSettingsPresets
 
         ShipAcceleration = 550f,
         ShipTurnSpeed = 5f,
-        ShipLinearDampening = 200f,
+        ShipLinearDampening = 150f,
 
         PlayerMaxMissiles = 8,
         PlayerMissilesSpeed = 550,
@@ -169,7 +169,7 @@ public static class GameSettingsPresets
 
         PlayerMaxMissiles = 8,
         PlayerMissilesSpeed = 550,
-        PlayerMissilesLifespan = 2f,
+        PlayerMissilesLifespan = 100f,
 
         AsteroidsRotationEnabled = true,
         AsteroidsInitialQuantity = 6,
@@ -210,7 +210,7 @@ public static class GameSettingsPresets
 
         ShipAcceleration = 900,
         ShipTurnSpeed = 8f,
-        ShipLinearDampening = 0.2f,
+        ShipLinearDampening = 50f,
 
         PlayerMaxMissiles = 8,
         PlayerMissilesSpeed = 550,
