@@ -213,7 +213,6 @@ public partial class GamePlayController : Node
                 _playerController.PoweredUp = true;
                 break;
             case PowerUpType.ExtraLife:
-                GD.Print("CALLING ADDLIFE FROM ON POWER COLLECTED");
                 _livesController.AddLife();
                 break;
             default:
