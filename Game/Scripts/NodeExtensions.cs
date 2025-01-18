@@ -1,5 +1,4 @@
 using Godot;
-using static Godot.Node;
 
 namespace Asteroids;
 
@@ -21,11 +20,11 @@ public static class GodotExtensions
 
     public static void Enable(this Node node, bool enable)
     {
-        node.ProcessMode = enable ? ProcessModeEnum.Inherit : ProcessModeEnum.Disabled;
+        node.ProcessMode = enable ? Node.ProcessModeEnum.Inherit : Node.ProcessModeEnum.Disabled;
     }
 
     public static void EnableDeferred(this Node node, bool enable)
     {
-        node.SetDeferred(Node.PropertyName.ProcessMode, enable ? (int)ProcessModeEnum.Inherit : (int)ProcessModeEnum.Disabled);
+        node.SetDeferred(Node.PropertyName.ProcessMode, enable ? (int)Node.ProcessModeEnum.Inherit : (int)Node.ProcessModeEnum.Disabled);
     }
 }
