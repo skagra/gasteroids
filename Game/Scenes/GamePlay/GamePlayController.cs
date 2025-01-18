@@ -19,7 +19,7 @@ public partial class GamePlayController : Node
     [Export]
     private int _asteroidsNewSheetDelta = 2;
     [Export]
-    private float _asteroidsSpeedDelta = 1.2f;
+    private float _asteroidsSpeedDelta = 1.1f;
 
     [ExportCategory("Saucers")]
     [Export]
@@ -104,7 +104,7 @@ public partial class GamePlayController : Node
         // Create settings bridge
         _settingsBridge = new GameSettingsBridge(_playerController, _asteroidFieldController,
                                                  _largeSaucerController, _smallSaucerController,
-                                                 _powerUpController);
+                                                 _powerUpController, _livesController);
 
         // Not playing yet
         SetGamePlayState(GamePlayState.NotPlaying);

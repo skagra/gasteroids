@@ -27,7 +27,7 @@ public partial class Saucer : Area2D
 
     private float _pathTimer;
     private float _pathDuration;
-    private AudioStreamPlayer2D _saucerSoundPlayer = new();
+    private AudioStreamPlayer _saucerSoundPlayer = new();
 
     private Vector2 _velocity;
     public Vector2 Velocity { get => _velocity; }
@@ -149,7 +149,8 @@ public partial class Saucer : Area2D
             if (_fxEnabled && !_saucerSoundPlayer.IsPlaying())
             {
                 _saucerSoundPlayer.Play();
-            };
+            }
+            ;
             if ((_direction == Direction.LeftToRight && Position.X >= Screen.Right) ||
                 (_direction == Direction.RightToLeft && Position.X <= Screen.Left))
             {

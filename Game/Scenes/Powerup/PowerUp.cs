@@ -18,8 +18,6 @@ public partial class PowerUp : Area2D
 
     private AnimationPlayer _animationPlayer;
 
-    private AudioStreamPlayer _audioStreamPlayer;
-
     public override void _Ready()
     {
         _animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer") ?? throw new NullReferenceException("AnimationPlayer not found");

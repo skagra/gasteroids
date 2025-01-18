@@ -29,6 +29,9 @@ public partial class Player : Area2D
 
     [ExportCategory("General Settings")]
     [Export]
+    private AudioStream _thrustAudioStream;
+
+    [Export]
     public float ThrustForce { get; set; } = 100f;
     [Export]
     public float RotationSpeed { get; set; } = 5.0f;
@@ -43,7 +46,7 @@ public partial class Player : Area2D
     private AnimatedSprite2D _sprite;
     private CollisionPolygon2D _collisionPolygon;
     private Vector2 _spriteSize;
-    private AudioStreamPlayer2D _thrustAudioStream;
+    private AudioStreamPlayer _thrustAudioStreamPlayer;
 
     private bool _isActive = false;
     private bool _hasCollidedThisFrame = false;
@@ -58,8 +61,12 @@ public partial class Player : Area2D
     {
         _sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D") ?? throw new NullReferenceException("AnimatedSprite2D not found");
         _collisionPolygon = GetNode<CollisionPolygon2D>("CollisionPolygon2D") ?? throw new NullReferenceException("CollisionPolygon2D not found");
-        _thrustAudioStream = GetNode<AudioStreamPlayer2D>("ThrustAudioPlayer") ?? throw new NullReferenceException("ThrustAudioPlayer not found");
-        _thrustAudioStream.Bus = Resources.AUDIO_BUS_NAME_FX;
+        _thrustAudioStreamPlayer = new()
+        {
+            Stream = _thrustAudioStream,
+            Bus = Resources.AUDIO_BUS_NAME_FX
+        };
+        AddChild(_thrustAudioStreamPlayer);
 
         AreaEntered += Area2DAreaEntered;
 
@@ -206,9 +213,9 @@ public partial class Player : Area2D
 
     private void ThrustPressed(double delta)
     {
-        if (!_thrustAudioStream.Playing && _fxEnabled)
+        if (!_thrustAudioStreamPlayer.Playing && _fxEnabled)
         {
-            _thrustAudioStream.Play();
+            _thrustAudioStreamPlayer.Play();
         }
 
         var acceleration = ThrustForce * (float)delta;

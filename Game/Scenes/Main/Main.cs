@@ -31,8 +31,6 @@ public partial class Main : Node
     private enum PreGameState { Passive, Playing, ShowingConfigDialog, ShowingHelpDialog, EnteringHighScore };
     private PreGameState _preGameState;
 
-    // Game settings
-    // private GameSettingsBridge _settingsBridge; TODO
     private GameSettings _gameSettings;
 
     // UI hide and show utils

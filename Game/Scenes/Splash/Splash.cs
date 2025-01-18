@@ -8,7 +8,7 @@ public partial class Splash : CanvasLayer
     [Export]
     private AudioStream _splashSound;
 
-    private AudioStreamPlayer2D _audioStreamPlayer = new();
+    private AudioStreamPlayer _audioStreamPlayer = new();
 
     private Control _control;
 

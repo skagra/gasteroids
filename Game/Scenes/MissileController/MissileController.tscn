@@ -6,4 +6,4 @@
 [node name="MissileController" type="Node"]
 script = ExtResource("1_2yk4v")
 MissileDuration = 0.75
-_missileExplosionSound = ExtResource("2_gt2jk")
+_missileSound = ExtResource("2_gt2jk")

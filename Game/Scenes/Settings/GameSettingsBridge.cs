@@ -10,18 +10,21 @@ public class GameSettingsBridge
     private readonly SaucerController _largeSaucerController;
     private readonly SaucerController _smallSaucerController;
     private readonly PowerUpController _powerUpController;
+    private readonly LivesController _livesController;
 
     public GameSettingsBridge(PlayerController playerController,
                               AsteroidFieldController asteroidFieldController,
                               SaucerController largeSaucerController,
                               SaucerController smallSaucerController,
-                              PowerUpController powerUpController)
+                              PowerUpController powerUpController,
+                              LivesController livesController)
     {
         _playerController = playerController;
         _asteroidFieldController = asteroidFieldController;
         _largeSaucerController = largeSaucerController;
         _smallSaucerController = smallSaucerController;
         _powerUpController = powerUpController;
+        _livesController = livesController;
     }
 
     [Flags]
@@ -49,6 +52,8 @@ public class GameSettingsBridge
         _playerController.PlayerThrustForce = value.ShipAcceleration;
         _playerController.PlayerRotationSpeed = value.ShipTurnSpeed;
         _playerController.LinearDampening = value.ShipLinearDampening;
+
+        _livesController.InfiniteLives = value.PlayerInfiniteLives;
 
         _asteroidFieldController.IsRotationEnabled = value.AsteroidsRotationEnabled;
         _asteroidFieldController.MinSpeed = value.AsteroidsMinSpeed;

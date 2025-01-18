@@ -57,6 +57,8 @@ _eventHub = NodePath("../EventHub")
 position = Vector2(960, 540)
 anchor_mode = 1
 ignore_rotation = false
+MaxOffsetX = 15.0
+MaxOffsetY = 15.0
 MaxRotation = 0.01
 
 [node name="SmallSaucerController" parent="." groups=["SoundFx"] instance=ExtResource("6_opifu")]

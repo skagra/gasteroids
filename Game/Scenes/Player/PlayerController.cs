@@ -84,7 +84,7 @@ public partial class PlayerController : Node
     private MissileController _missileController;
     private MissileController _acwMissileController;
     private MissileController _cwMissileController;
-    private AudioStreamPlayer2D _explosionPlayer = new();
+    private AudioStreamPlayer _explosionPlayer = new();
     private ShakingCamera _camera;
     private Timer _shakeTimer = new();
 
@@ -107,6 +107,10 @@ public partial class PlayerController : Node
         _missileController = GetNode<MissileController>("MissileController");
         _cwMissileController = GetNode<MissileController>("CWMissileController");
         _acwMissileController = GetNode<MissileController>("ACWMissileController");
+
+        _missileController.Muted = false;
+        _cwMissileController.Muted = true;
+        _cwMissileController.Muted = true;
 
         _player.Collided += PlayerOnCollided;
         _player.Shoot += PlayerOnShoot;

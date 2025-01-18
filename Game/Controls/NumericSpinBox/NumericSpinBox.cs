@@ -8,7 +8,7 @@ public partial class NumericSpinBox : SpinBox
     [Export]
     private AudioStream _errorBeep;
 
-    private AudioStreamPlayer2D _audioStreamPlayer = new();
+    private AudioStreamPlayer _audioStreamPlayer = new();
 
     private LineEdit _lineEdit;
 

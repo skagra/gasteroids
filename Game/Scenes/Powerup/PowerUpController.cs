@@ -45,7 +45,8 @@ public partial class PowerUpController : Node
         Debug.Assert(_collectedSound != null);
         _audioStreamPlayer = new()
         {
-            Stream = _collectedSound
+            Stream = _collectedSound,
+            Bus = Resources.AUDIO_BUS_NAME_FX
         };
         AddChild(_audioStreamPlayer);
 

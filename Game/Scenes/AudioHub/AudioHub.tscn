@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dwi4y2h6pu5e0"]
+
+[ext_resource type="Script" path="res://Scenes/AudioHub/AudioHub.cs" id="1_ow33x"]
+
+[node name="AudioHub" type="Node"]
+script = ExtResource("1_ow33x")

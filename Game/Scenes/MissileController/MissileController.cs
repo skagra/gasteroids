@@ -26,12 +26,14 @@ public partial class MissileController : Node
     public float MissileSpeed { get; set; } = 200;
 
     [Export]
-    private AudioStream _missileExplosionSound;
+    private AudioStream _missileSound;
 
     private int _missileCount = 5;
 
     [Export]
     private PackedScene _missileScene;
+
+    public bool Muted { get; set; } = false;
 
     private ShotModeType _shotMode;
     public ShotModeType ShotMode
@@ -56,7 +58,7 @@ public partial class MissileController : Node
     // Missiles on screen
     private readonly List<ActiveMissile> _activeMissiles = new();
 
-    private AudioStreamPlayer2D _shootAudioStream = new();
+    private AudioStreamPlayer _shootAudioStream = new();
 
     private bool _fxEnabled = true;
 
@@ -68,7 +70,7 @@ public partial class MissileController : Node
     public override void _Ready()
     {
         _shootAudioStream.Bus = Resources.AUDIO_BUS_NAME_FX;
-        _shootAudioStream.Stream = _missileExplosionSound ?? throw new NullReferenceException("Missile explosion sound not set");
+        _shootAudioStream.Stream = _missileSound ?? throw new NullReferenceException("Missile explosion sound not set");
         AddChild(_shootAudioStream);
 
         SetUpMissiles();
@@ -127,7 +129,7 @@ public partial class MissileController : Node
         // Remove missile from the dormant list and add to the active list
         if (_dormantMissiles.Count > 0)
         {
-            if (_fxEnabled)
+            if (_fxEnabled && !Muted)
             {
                 _shootAudioStream.Play();
             }

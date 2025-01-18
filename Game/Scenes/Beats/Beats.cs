@@ -23,7 +23,7 @@ public partial class Beats : Node
     private bool _playing = false;
     private float _gapTimer;
     private float _increaseSpeedTimer;
-    private AudioStreamPlayer2D _beatsAudioStream = new();
+    private AudioStreamPlayer _beatsAudioStream = new();
     private int _currentSample = 1;
     private bool _fxEnabled = true;
 

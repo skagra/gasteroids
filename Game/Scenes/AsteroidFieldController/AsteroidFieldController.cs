@@ -90,9 +90,9 @@ public partial class AsteroidFieldController : Node
     // List of all active asteroids
     private readonly List<AsteroidDetails> _activeAsteroids = new();
 
-    private readonly AudioStreamPlayer2D _audioStreamPlayerBangLarge = new();
-    private readonly AudioStreamPlayer2D _audioStreamPlayerBangMedium = new();
-    private readonly AudioStreamPlayer2D _audioStreamPlayerBangSmall = new();
+    private readonly AudioStreamPlayer _audioStreamPlayerBangLarge = new();
+    private readonly AudioStreamPlayer _audioStreamPlayerBangMedium = new();
+    private readonly AudioStreamPlayer _audioStreamPlayerBangSmall = new();
 
     // Asteroid id used to give spawned asteroids friendly names
     private int _asteroidId = 1;

@@ -20,12 +20,12 @@ public partial class LivesController : Node
     [Export]
     private int _newGameLives = 3;
     [Export]
-    private bool _infiniteLives = false;
+    public bool InfiniteLives { get; set; } = false;
     [Export]
     private AudioStream _extraLifeSound;
 
     private int _nextExtraLifeThreshold;
-    private readonly AudioStreamPlayer2D _extraLifeSoundPlayer = new();
+    private readonly AudioStreamPlayer _extraLifeSoundPlayer = new();
 
     public Ui UI { get; set; }
 
@@ -61,7 +61,7 @@ public partial class LivesController : Node
 
     private void OnPlayerExploding(PlayerController playerController)
     {
-        if (!_infiniteLives)
+        if (!InfiniteLives)
         {
             UI.Lives--;
             EmitSignal(SignalName.LivesDecreased, UI.Lives);

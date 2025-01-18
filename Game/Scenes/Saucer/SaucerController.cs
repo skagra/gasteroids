@@ -57,7 +57,7 @@ public partial class SaucerController : Node
 
     private float _spawnTimer;
 
-    private readonly AudioStreamPlayer2D _explosionPlayer = new();
+    private readonly AudioStreamPlayer _explosionPlayer = new();
 
     public Func<Vector2> TargetCallback
     {
