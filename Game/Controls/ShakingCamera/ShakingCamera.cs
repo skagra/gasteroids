@@ -16,7 +16,7 @@ public partial class ShakingCamera : Camera2D
     public override void _Ready()
     {
         IgnoreRotation = false;
-        SetPhysicsProcess(false);
+        Deactivate();
         if (GetParent() is Window)
         {
             var panel = new PanelContainer();
@@ -33,15 +33,15 @@ public partial class ShakingCamera : Camera2D
     public void Activate()
     {
         this.Enable(true);
+        SetPhysicsProcess(true);
         _isActive = true;
     }
 
     public void Deactivate()
     {
-        SetPhysicsProcess(false);
+        this.Enable(false);
         Offset = Vector2.Zero;
         Rotation = 0f;
-        SetPhysicsProcess(false);
     }
 
     public override void _PhysicsProcess(double delta)
